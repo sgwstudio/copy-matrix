@@ -1,139 +1,211 @@
-<div align=center>
+# AI Copywriting Platform with Brand Voice Consistency
 
-[![ntl-badge]][ntl-link] ![views] ![stars] ![forks] ![issues] ![license] ![repo-size]
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="public/nextjs-light.svg">
-  <source media="(prefers-color-scheme: light)" srcset="public/nextjs-dark.svg">
-  <img alt="Next.js">
-</picture>
-
-# Next.js Starter Template
-
-### A Minimal Next.js Starter Template with TypeScript, Tailwind CSS, and pre-configured with ESLint, Prettier, and Husky.
-
-</div>
+A sophisticated AI-powered copywriting platform that maintains brand voice consistency across multiple marketing channels through intelligent matrix-based tone and voice management.
 
 ## Features
 
-- ⚡ **[Next.js](https://nextjs.org/)** - A React Framework for Production
-- 🔥 **[App Router](https://nextjs.org/docs/app)** - It is a new paradigm for building applications using React's latest features.
-- 🎨 **[Tailwind CSS](https://tailwindcss.com/)** - A Utility-First CSS Framework for Rapid UI Development
-- 📦 **[TypeScript](https://www.typescriptlang.org/)** - A typed superset of JavaScript that compiles to plain JavaScript
-- 📝 **[ESLint](https://eslint.org/)** - The pluggable linting utility for JavaScript and JSX
-- 🛠 **[Prettier](https://prettier.io/)** - An opinionated code formatter
-- 🐶 **[Husky](https://typicode.github.io/husky/#/)** - A tool that makes Git hooks easy
-- 🚫 **[lint-staged](https://github.com/okonet/lint-staged)** - Run linters against staged git files
-- 📄 **[commitlint](https://commitlint.js.org/#/)** - Lint commit messages
-- 📦 **[bun](https://bun.sh)** - A JavaScript runtime w/ Fast, disk space efficient package manager
+### 🎯 Core Features
+- **Voice Matrix System**: Sophisticated sliders to define brand voice characteristics
+- **Channel Optimization**: Generate copy optimized for different platforms (Email, LinkedIn, Instagram, Twitter, Web, Facebook, TikTok)
+- **Real-time Consistency Scoring**: Get instant feedback on voice alignment
+- **Brand Voice Learning**: Upload existing content samples to learn your brand voice
+- **Performance Analytics**: Track copy performance and engagement
+
+### 🎨 Voice Matrix Characteristics
+- **Formal vs Casual**: Control the level of formality in your content
+- **Authoritative vs Approachable**: Balance authority with approachability
+- **Professional vs Conversational**: Adjust professionalism level
+- **Serious vs Playful**: Control the tone from serious to playful
+- **Confidence Level**: Adjust confidence in messaging
+- **Enthusiasm Level**: Control enthusiasm and energy
+- **Empathy Level**: Balance directness with empathy
+
+### 📱 Supported Channels
+- **Email**: Professional, actionable email copy
+- **LinkedIn**: Industry-relevant, thought-provoking content
+- **Instagram**: Engaging, visually-appealing posts
+- **Twitter**: Concise, engaging tweets with hashtags
+- **Web**: SEO-friendly, conversion-focused copy
+- **Facebook**: Community-focused, shareable content
+- **TikTok**: Trendy, entertaining short-form content
+
+## Tech Stack
+
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **AI**: Google Gemini Flash 2.5
+- **Database**: PostgreSQL with Prisma ORM
+- **Authentication**: NextAuth.js
+- **Icons**: Lucide React
 
 ## Getting Started
 
-```bash
-bun create next-app -e "https://github.com/rajput-hemant/nextjs-template" <project-name>
+### Prerequisites
 
-npx create-next-app -e "https://github.com/rajput-hemant/nextjs-template" <project-name>
+- Node.js 22.17.0 or later
+- PostgreSQL database
+- Google Gemini API key
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd copy-matrix
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   bun install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env.local
+   ```
+   
+   Fill in your environment variables:
+   ```env
+   # Database
+   DATABASE_URL="postgresql://username:password@localhost:5432/copy_matrix"
+   
+   # NextAuth.js
+   NEXTAUTH_URL="http://localhost:3000"
+   NEXTAUTH_SECRET="your-secret-key-here"
+   
+   # Google Gemini API
+   GEMINI_API_KEY="your-gemini-api-key-here"
+   
+   # OAuth Providers (optional)
+   GOOGLE_CLIENT_ID="your-google-client-id"
+   GOOGLE_CLIENT_SECRET="your-google-client-secret"
+   ```
+
+4. **Set up the database**
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+5. **Run the development server**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   bun dev
+   ```
+
+6. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## Usage
+
+### 1. Define Your Brand Voice
+- Use the Voice Matrix sliders to define your brand characteristics
+- Upload existing content samples to help the AI learn your voice
+- Set brand guidelines for additional context
+
+### 2. Generate Copy
+- Select your target channel (Email, LinkedIn, Instagram, etc.)
+- Enter your content prompt or idea
+- Adjust the Voice Matrix to fine-tune the output
+- Click "Generate Copy" to create channel-optimized content
+
+### 3. Review and Refine
+- Check the voice consistency score
+- Review character count against channel limits
+- Use the suggestions to improve your copy
+- Copy or export the final content
+
+## API Endpoints
+
+### Generate Copy
+```http
+POST /api/generate-copy
+Content-Type: application/json
+
+{
+  "prompt": "Your content idea",
+  "channel": "email",
+  "voiceMatrix": {
+    "formalCasual": 0.5,
+    "authoritativeApproachable": -0.3,
+    "professionalConversational": 0.2,
+    "seriousPlayful": -0.1,
+    "confidence": 0.4,
+    "enthusiasm": 0.6,
+    "empathy": 0.3
+  },
+  "brandGuidelines": "Optional brand guidelines",
+  "voiceSamples": "Optional voice samples",
+  "characterLimit": 500
+}
 ```
 
-<p align="center" style="font-weight: bold;">OR</p>
+### Analyze Voice Consistency
+```http
+POST /api/analyze-voice
+Content-Type: application/json
 
-**Install `degit` globally**
-
-```bash
-bun i -g degit || pnpm i -g degit || yarn global add degit || npm i -g degit
+{
+  "content": "Your content to analyze",
+  "voiceMatrix": {
+    // Your voice matrix values
+  }
+}
 ```
 
-**Create a new project from this template**
+## Database Schema
 
-```bash
-degit rajput-hemant/nextjs-template <project-name>
-# src directory
-degit rajput-hemant/nextjs-template#src-dir <project-name>
-# tRPC
-degit rajput-hemant/nextjs-template#trpc <project-name>
+The platform uses a comprehensive database schema with the following main entities:
 
-cd <project-name>
-```
+- **Brands**: Store brand information and guidelines
+- **Voice Profiles**: Define voice matrix configurations
+- **Copy Generations**: Track generated content and performance
+- **Templates**: Reusable prompt templates for different channels
 
-**Install dependencies**
+## Contributing
 
-```bash
-bun i || pnpm i || yarn || npm i
-```
-
-**Initialize a new git repository _(Optional)_:**
-
-```bash
-git init
-git add .
-git commit --no-verify -m "init"
-```
-
-## Integrations
-
-[Kirimase](https://kirimase.dev) is a Next.js CLI tool that accelerates full-stack app development. It seamlessly integrates packages like ORM (Prisma or Drizzle), authentication (Auth.js, Clerk, Lucia, Kinde), UI components (Shadcn-UI), payments (Stripe), and email (Resend), following best practices.
-
-To add integrations to your project, run:
-
-```bash
-kirimase init
-```
-
-## Available Scripts
-
-In the project directory, you can run:
-
-| **Script**   | **Description**                                      |
-| ------------ | ---------------------------------------------------- |
-| `dev`        | Runs the app in the development mode.                |
-| `build`      | Builds the app for production to the `.next` folder. |
-| `start`      | Runs the built app in the production mode.           |
-| `preview`    | Builds and serves the app in the production mode.    |
-| `lint`       | Runs next lint on the project.                       |
-| `type-check` | Runs TypeScript type checker.                        |
-| `fmt`        | Formats the code with Prettier.                      |
-| `fmt:check`  | Checks if the code is formatted with Prettier.       |
-| `prepare`    | Installs husky git hooks.                            |
-
-## After Installation Checklist
-
-- [ ] Update `package.json` with your project details.
-- [ ] Update `README.md` with your project details.
-- [ ] Update `LICENSE` with your name and year.
-
-## Switching Package Manager
-
-This template uses [bun](https://bun.sh/docs/cli/install) as the default package manager. If you want to use `pnpm`, `npm` or `yarn`, you need to remove the `bun.lockb` file and run `pnpm i`, `npm i` or `yarn` to generate the lock file for the respective package manager.
-
-## Deployments
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/rajput-hemant/nextjs-template)
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/rajput-hemant/nextjs-template)
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Contributors:
+## Support
 
-<div align=center>
+For support, email support@copymatrix.com or join our Discord community.
 
-[![][contributors]][contributors-graph]
+## Roadmap
 
-_Note: It may take up to 24h for the [contrib.rocks][contrib-rocks] plugin to update because it's refreshed once a day._
+### Phase 1: MVP Foundation ✅
+- [x] Core Voice Matrix system
+- [x] Basic copy generation
+- [x] Channel optimization
+- [x] Real-time consistency scoring
 
-</div>
+### Phase 2: Advanced Features
+- [ ] Brand voice learning from samples
+- [ ] Performance analytics dashboard
+- [ ] A/B testing framework
+- [ ] Template management system
 
-<!----------------------------------{ Labels }--------------------------------->
+### Phase 3: Intelligence & Scale
+- [ ] ML-powered optimization
+- [ ] Predictive recommendations
+- [ ] Export integrations
+- [ ] Team collaboration features
 
-[views]: https://komarev.com/ghpvc/?username=nextjs-template&label=view%20counter&color=red&style=flat
-[repo-size]: https://img.shields.io/github/repo-size/rajput-hemant/nextjs-template
-[issues]: https://img.shields.io/github/issues-raw/rajput-hemant/nextjs-template
-[license]: https://img.shields.io/github/license/rajput-hemant/nextjs-template
-[forks]: https://img.shields.io/github/forks/rajput-hemant/nextjs-template?style=flat
-[stars]: https://img.shields.io/github/stars/rajput-hemant/nextjs-template
-[contributors]: https://contrib.rocks/image?repo=rajput-hemant/nextjs-template&max=500
-[contributors-graph]: https://github.com/rajput-hemant/nextjs-template/graphs/contributors
-[contrib-rocks]: https://contrib.rocks/preview?repo=rajput-hemant%2Fnextjs-template
-[ntl-badge]: https://api.netlify.com/api/v1/badges/6955f80c-0747-4947-a344-e7c647012cbe/deploy-status
-[ntl-link]: https://app.netlify.com/sites/react-template-vite/deploys
+---
+
+Built with ❤️ using Next.js, TypeScript, and Tailwind CSS
