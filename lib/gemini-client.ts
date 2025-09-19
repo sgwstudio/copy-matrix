@@ -1,7 +1,4 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { env } from "./env";
-
-const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
 
 export interface VoiceMatrix {
   formalCasual: number; // -1 to 1
@@ -16,10 +13,16 @@ export interface VoiceMatrix {
 export interface CopyGenerationRequest {
   prompt: string;
   channel: string;
-  voiceMatrix: VoiceMatrix;
+  voiceMatrix?: VoiceMatrix;
+  voiceSettings?: Record<string, number>;
   brandGuidelines?: string;
   voiceSamples?: string;
   characterLimit?: number;
+  mode?: string;
+  specifications?: any;
+  exampleText?: string; // Added for horoscope mode
+  zodiacSign?: string; // Added for horoscope mode
+  zodiacSigns?: string[]; // Added for multiple horoscope signs
 }
 
 export interface CopyGenerationResponse {
@@ -32,19 +35,20 @@ export interface CopyGenerationResponse {
 export class GeminiClient {
   private model: any;
 
-  constructor(userApiKey?: string) {
-    // Use user's API key if provided, otherwise fall back to env variable
-    const apiKey = userApiKey || env.GEMINI_API_KEY;
+  constructor(userApiKey: string) {
+    if (!userApiKey) {
+      throw new Error("API key is required. Please sign in and add your Gemini API key in Settings.");
+    }
     
-    console.log("🔑 GeminiClient constructor - API Key:", apiKey ? `${apiKey.substring(0, 10)}...` : "No API key");
+    console.log("🔑 GeminiClient constructor - API Key:", userApiKey ? `${userApiKey.substring(0, 10)}...` : "No API key");
     
-    if (apiKey && apiKey !== "test-key" && apiKey !== "YOUR_ACTUAL_GEMINI_API_KEY_HERE" && apiKey !== "your-gemini-api-key-here") {
+    if (userApiKey && userApiKey !== "test-key" && userApiKey !== "YOUR_ACTUAL_GEMINI_API_KEY_HERE" && userApiKey !== "your-gemini-api-key-here") {
       console.log("✅ Using real Gemini API");
-      const genAI = new GoogleGenerativeAI(apiKey);
+      const genAI = new GoogleGenerativeAI(userApiKey);
       this.model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
     } else {
-      console.log("❌ Using demo mode - no valid API key");
-      this.model = null; // Will use demo mode
+      console.log("❌ Invalid API key provided");
+      throw new Error("Invalid API key. Please check your Gemini API key in Settings.");
     }
   }
 
@@ -64,10 +68,10 @@ export class GeminiClient {
 
     console.log("✅ Using real Gemini API for generation");
 
-    const voicePrompt = this.buildVoicePrompt(request.voiceMatrix, request.brandGuidelines, request.voiceSamples);
-    const channelPrompt = this.buildChannelPrompt(request.channel, request.characterLimit);
+    const voicePrompt = this.buildVoicePrompt(request.voiceMatrix, request.voiceSettings, request.brandGuidelines, request.voiceSamples);
+    const channelPrompt = this.buildChannelPrompt(request.channel, request.characterLimit, request.mode, request.specifications);
     
-    const fullPrompt = `You are an AI copywriting assistant. Generate marketing copy that matches the specified voice and tone characteristics.
+    let fullPrompt = `You are an AI copywriting assistant. Generate marketing copy that matches the specified voice and tone characteristics.
 
 ${voicePrompt}
 
@@ -79,7 +83,107 @@ REQUIREMENTS:
 - Maintain the specified voice and tone characteristics
 - Optimize for the ${request.channel} channel
 - Keep within ${request.characterLimit || 280} characters
-- Ensure brand voice consistency
+- Ensure brand voice consistency`;
+
+    if (request.mode === "email-optimized" && request.channel === "email-pushes") {
+      fullPrompt += `
+
+RESPONSE FORMAT (JSON):
+{
+  "content": {
+    "email": {
+      "subjectLine": "Your subject line here",
+      "preheaderText": "Your preheader text here",
+      "body": {
+        "primaryHeadline": "Your headline here",
+        "openingParagraph": "Your opening paragraph here",
+        "mainContent": "Your main content here",
+        "closing": "Your closing paragraph here"
+      },
+      "callToAction": {
+        "buttonText": "Your CTA button text here"
+      }
+    },
+    "pushNotification": {
+      "pushTitle": "Your push title here",
+      "pushBody": "Your push body text here"
+    }
+  },
+  "characterCount": 123,
+  "voiceConsistencyScore": 85,
+  "suggestions": [
+    "Suggestion 1",
+    "Suggestion 2", 
+    "Suggestion 3"
+  ]
+}`;
+    } else if (request.mode === "horoscope" && request.channel === "horoscope") {
+      // Handle multiple zodiac signs
+      const zodiacSigns = request.zodiacSigns && request.zodiacSigns.length > 0 
+        ? request.zodiacSigns 
+        : request.zodiacSign 
+          ? [request.zodiacSign]
+          : ['aries'];
+
+      const zodiacSignNames = zodiacSigns.map(signId => {
+        const signMap: { [key: string]: string } = {
+          'aries': 'Aries', 'taurus': 'Taurus', 'gemini': 'Gemini', 'cancer': 'Cancer',
+          'leo': 'Leo', 'virgo': 'Virgo', 'libra': 'Libra', 'scorpio': 'Scorpio',
+          'sagittarius': 'Sagittarius', 'capricorn': 'Capricorn', 'aquarius': 'Aquarius', 'pisces': 'Pisces'
+        };
+        return signMap[signId] || signId;
+      });
+
+      fullPrompt = `You are an AI horoscope generator. Create 8 themed horoscope versions for ${zodiacSignNames.join(', ')} based on the provided themes and user prompt.
+
+${voicePrompt}
+
+USER PROMPT: "${request.prompt}"
+
+HOROSCOPE THEMES:
+Day 0: Beginnings, freedom, originality
+Day 1: Rules, origins, techniques  
+Day 2: Aesthetics, comforts, sumptuousness
+Day 3: Intuition, depth, feeling
+Day 4: Creativity, expression, doing
+Day 5: Experimentation, technology, creation
+Day 6: Newness, adventure
+Day 7: Athleticism, mastery, winning
+
+TASK: Generate 8 horoscope versions for ${zodiacSignNames.join(', ')} based on the themes above and following the user's prompt instructions.
+
+REQUIREMENTS:
+- Each horoscope should be 2-3 sentences
+- Follow the tone, voice, and style instructions from the user prompt
+- Apply the voice and tone characteristics specified above
+- Each should feel unique to its theme while staying true to the zodiac sign characteristics
+- Make each horoscope engaging and personalized
+- If multiple signs are selected, create horoscopes that work for all selected signs
+
+RESPONSE FORMAT (JSON):
+{
+  "content": {
+    "horoscopes": [
+      "Day 0 horoscope text here",
+      "Day 1 horoscope text here", 
+      "Day 2 horoscope text here",
+      "Day 3 horoscope text here",
+      "Day 4 horoscope text here",
+      "Day 5 horoscope text here",
+      "Day 6 horoscope text here",
+      "Day 7 horoscope text here"
+    ]
+  },
+  "characterCount": 123,
+  "voiceConsistencyScore": 85,
+  "suggestions": [
+    "Suggestion 1",
+    "Suggestion 2", 
+    "Suggestion 3"
+  ]
+}`;
+    } else {
+      fullPrompt += `
 
 RESPONSE FORMAT (JSON):
 {
@@ -91,7 +195,10 @@ RESPONSE FORMAT (JSON):
     "Suggestion 2", 
     "Suggestion 3"
   ]
-}
+}`;
+    }
+
+    fullPrompt += `
 
 Generate the copy now:`;
 
@@ -111,6 +218,13 @@ Generate the copy now:`;
       return parsedResponse;
     } catch (error) {
       console.error("❌ Error generating copy:", error);
+      
+      // Check if it's a quota error
+      if (error instanceof Error && error.message.includes("429")) {
+        console.log("⚠️ Quota exceeded - falling back to enhanced demo mode");
+        return this.generateEnhancedDemoCopy(request);
+      }
+      
       // Fallback to demo mode if API fails
       return this.generateDemoCopy(request);
     }
@@ -141,6 +255,35 @@ Generate the copy now:`;
         "Add a call-to-action to increase engagement",
         "Include relevant hashtags for better discoverability",
         "Consider adding emojis to make it more engaging"
+      ]
+    };
+  }
+
+  private generateEnhancedDemoCopy(request: CopyGenerationRequest): CopyGenerationResponse {
+    const voiceMatrix = request.voiceMatrix;
+    const channel = request.channel;
+    const prompt = request.prompt;
+    const characterLimit = request.characterLimit || 280;
+
+    // Generate more sophisticated demo content
+    let content = this.generateEnhancedDemoContent(prompt, voiceMatrix, channel, characterLimit);
+    
+    // Ensure content fits within character limit
+    if (content.length > characterLimit) {
+      content = content.substring(0, characterLimit - 3) + "...";
+    }
+
+    // Calculate voice consistency score based on voice matrix
+    const consistencyScore = this.calculateDemoConsistencyScore(voiceMatrix);
+
+    return {
+      content,
+      characterCount: content.length,
+      voiceConsistencyScore: consistencyScore,
+      suggestions: [
+        "💡 This is demo content - upgrade to real AI for personalized results",
+        "🎯 Add specific metrics or data points to increase credibility",
+        "📈 Include a clear call-to-action to drive engagement"
       ]
     };
   }
@@ -240,6 +383,92 @@ Generate the copy now:`;
     return "POV: You discover {prompt} and your mind is blown 🤯\n\nThis changes everything! \n\n#fyp #viral #mindblown #discovery";
   }
 
+  private generateEnhancedDemoContent(prompt: string, voiceMatrix: VoiceMatrix, channel: string, characterLimit: number): string {
+    const isFormal = voiceMatrix.formalCasual > 0;
+    const isAuthoritative = voiceMatrix.authoritativeApproachable > 0;
+    const isProfessional = voiceMatrix.professionalConversational > 0;
+    const isSerious = voiceMatrix.seriousPlayful > 0;
+    const isConfident = voiceMatrix.confidence > 0;
+    const isEnthusiastic = voiceMatrix.enthusiasm > 0;
+    const isEmpathetic = voiceMatrix.empathy > 0;
+
+    // Create more dynamic content based on the actual prompt
+    const promptWords = prompt.toLowerCase().split(' ');
+    const isProduct = promptWords.some(word => ['product', 'launch', 'new', 'feature'].includes(word));
+    const isService = promptWords.some(word => ['service', 'help', 'support', 'consulting'].includes(word));
+    const isEvent = promptWords.some(word => ['event', 'meeting', 'conference', 'webinar'].includes(word));
+    const isEducational = promptWords.some(word => ['learn', 'education', 'course', 'training'].includes(word));
+
+    // Channel-specific content generation
+    let content = "";
+    
+    if (channel === 'twitter') {
+      if (isProduct) {
+        content = isFormal 
+          ? `Introducing our latest innovation: ${prompt}. Experience the future of technology with cutting-edge features designed for modern professionals. #Innovation #Tech`
+          : `Check this out! 🚀 ${prompt} is here and it's absolutely amazing! Can't wait for you to try it. #NewProduct #Excited`;
+      } else if (isService) {
+        content = isFormal
+          ? `Professional ${prompt} services now available. Our expert team delivers exceptional results tailored to your specific needs. Contact us today. #ProfessionalServices`
+          : `Need help with ${prompt}? We've got you covered! Our team is here to make it easy and stress-free. DM us! 💪 #Help #Support`;
+      } else {
+        content = isFormal
+          ? `Exploring ${prompt}: A comprehensive analysis of current trends and future implications. Join the conversation. #Analysis #Insights`
+          : `So, about ${prompt}... 🤔 What do you think? Drop your thoughts below! #Discussion #Thoughts`;
+      }
+    } else if (channel === 'email') {
+      content = isFormal
+        ? `Subject: ${prompt} - Important Update\n\nDear Valued Client,\n\nWe are pleased to inform you about ${prompt}. This development represents a significant advancement in our commitment to excellence.\n\nOur team has carefully analyzed the implications and prepared comprehensive solutions tailored to your needs.\n\nBest regards,\nThe Team`
+        : `Hey there! 👋\n\nHope you're doing great! I wanted to reach out about ${prompt} - it's something I think you'll find really interesting.\n\nWe've been working on this for a while and I'm excited to share it with you. Let me know what you think!\n\nTalk soon,\nSam`;
+    } else if (channel === 'linkedin') {
+      content = isFormal
+        ? `Professional Insight: ${prompt}\n\nIn today's rapidly evolving business landscape, ${prompt} represents a critical opportunity for organizations seeking sustainable growth and competitive advantage.\n\nKey considerations:\n• Strategic implementation\n• Risk assessment\n• Performance metrics\n\nWhat are your thoughts on this trend? #ProfessionalInsights #BusinessStrategy`
+        : `Quick thought on ${prompt}...\n\nI've been thinking about this a lot lately, and honestly, it's pretty fascinating how it's changing the game.\n\nWhat's your take? Have you seen this in action? Would love to hear your experiences!\n\n#Discussion #Learning #Networking`;
+    } else if (channel === 'instagram') {
+      content = isFormal
+        ? `✨ Professional Spotlight: ${prompt}\n\nDiscover the latest insights and trends in our industry. Our expert analysis reveals key opportunities for growth and innovation.\n\n#Professional #IndustryInsights #Innovation #Growth`
+        : `OMG, you guys! 😍\n\n${prompt} is literally everything right now! I'm obsessed and you need to know about this ASAP!\n\nSwipe to see more 👉\n\n#Obsessed #Trending #MustKnow #Viral`;
+    } else if (channel === 'web') {
+      content = isFormal
+        ? `About ${prompt}\n\nOur comprehensive approach to ${prompt} combines industry expertise with innovative solutions. We deliver measurable results through proven methodologies and cutting-edge technology.\n\nKey Benefits:\n• Proven track record\n• Expert team\n• Custom solutions\n\nContact us today to learn more.`
+        : `Welcome to ${prompt}!\n\nWe're here to help you succeed with ${prompt}. Our friendly team makes everything simple and straightforward.\n\nWhat we offer:\n• Easy solutions\n• Great support\n• Real results\n\nReady to get started? Let's chat!`;
+    } else if (channel === 'facebook') {
+      content = isFormal
+        ? `Company Update: ${prompt}\n\nWe're excited to share important developments regarding ${prompt}. This initiative reflects our commitment to innovation and customer satisfaction.\n\nJoin the conversation and share your thoughts.`
+        : `Hey everyone! 👋\n\nBig news about ${prompt}! I'm so excited to share this with you all.\n\nWhat do you think? Drop a comment below! 👇\n\n#Excited #News #Community`;
+    } else if (channel === 'tiktok') {
+      content = isFormal
+        ? `Professional Insight: ${prompt}\n\nKey trends and opportunities in today's market. Strategic considerations for business growth.\n\n#Professional #Business #Insights`
+        : `POV: You discover ${prompt} and your mind is blown 🤯\n\nThis is actually insane! Wait until you see this...\n\n#MindBlown #Trending #Viral #MustSee`;
+    }
+
+    // Adjust tone based on voice matrix
+    if (isConfident) {
+      content = content.replace(/might/g, 'will').replace(/could/g, 'will').replace(/perhaps/g, 'definitely');
+    }
+    
+    if (isEmpathetic) {
+      content = content.replace(/you/g, 'you').replace(/your/g, 'your');
+      if (!content.includes('understand') && !content.includes('feel')) {
+        content = content.replace(/\./g, '. We understand your needs.');
+      }
+    }
+
+    if (isEnthusiastic) {
+      content = content.replace(/good/g, 'amazing').replace(/great/g, 'incredible');
+      if (!content.includes('!')) {
+        content = content + '!';
+      }
+    }
+
+    // Ensure content fits character limit
+    if (content.length > characterLimit) {
+      content = content.substring(0, characterLimit - 3) + '...';
+    }
+
+    return content;
+  }
+
   private calculateDemoConsistencyScore(voiceMatrix: VoiceMatrix): number {
     // Calculate a base score based on how well the voice matrix values align
     let score = 70; // Base score
@@ -297,17 +526,22 @@ Provide only the numerical score (0-100).
     }
   }
 
-  private buildVoicePrompt(voiceMatrix: VoiceMatrix, brandGuidelines?: string, voiceSamples?: string): string {
+  private buildVoicePrompt(voiceMatrix?: VoiceMatrix, voiceSettings?: Record<string, number>, brandGuidelines?: string, voiceSamples?: string): string {
     let prompt = "Voice and Tone Guidelines:\n";
     
-    // Voice characteristics
-    prompt += `- Formality Level: ${this.describeLevel(voiceMatrix.formalCasual, 'casual', 'formal')}\n`;
-    prompt += `- Authority Level: ${this.describeLevel(voiceMatrix.authoritativeApproachable, 'approachable', 'authoritative')}\n`;
-    prompt += `- Professionalism: ${this.describeLevel(voiceMatrix.professionalConversational, 'conversational', 'professional')}\n`;
-    prompt += `- Tone: ${this.describeLevel(voiceMatrix.seriousPlayful, 'playful', 'serious')}\n`;
-    prompt += `- Confidence: ${this.describeLevel(voiceMatrix.confidence, 'modest', 'confident')}\n`;
-    prompt += `- Enthusiasm: ${this.describeLevel(voiceMatrix.enthusiasm, 'reserved', 'enthusiastic')}\n`;
-    prompt += `- Empathy: ${this.describeLevel(voiceMatrix.empathy, 'direct', 'empathetic')}\n`;
+    if (voiceMatrix) {
+      // Voice characteristics from voice matrix
+      prompt += `- Directness: ${this.describeLevel(voiceMatrix.formalCasual, 'subtle', 'very direct')}\n`;
+      prompt += `- Universality: ${this.describeLevel(voiceMatrix.authoritativeApproachable, 'specific', 'universal')}\n`;
+      prompt += `- Authority: ${this.describeLevel(voiceMatrix.professionalConversational, 'approachable', 'authoritative')}\n`;
+      prompt += `- Tone: ${this.describeLevel(voiceMatrix.seriousPlayful, 'expressive', 'candid')}\n`;
+    } else if (voiceSettings) {
+      // Voice characteristics from voice settings
+      Object.entries(voiceSettings).forEach(([key, value]) => {
+        const displayName = key.charAt(0).toUpperCase() + key.slice(1);
+        prompt += `- ${displayName}: ${this.describeLevel(value, 'low', 'high')}\n`;
+      });
+    }
 
     if (brandGuidelines) {
       prompt += `\nBrand Guidelines:\n${brandGuidelines}\n`;
@@ -320,20 +554,70 @@ Provide only the numerical score (0-100).
     return prompt;
   }
 
-  private buildChannelPrompt(channel: string, characterLimit?: number): string {
-    const channelGuidelines: Record<string, string> = {
-      email: "Email copy should be clear, actionable, and maintain professional tone while being engaging.",
-      linkedin: "LinkedIn content should be professional, thought-provoking, and industry-relevant.",
-      instagram: "Instagram content should be visually appealing, engaging, and use appropriate hashtags.",
-      twitter: "Twitter content should be concise, engaging, and use relevant hashtags and mentions.",
-      web: "Web copy should be clear, SEO-friendly, and guide users toward desired actions.",
-      facebook: "Facebook content should be engaging, shareable, and community-focused.",
-      tiktok: "TikTok content should be trendy, entertaining, and use popular sounds/effects.",
-    };
-
-    const guidelines = channelGuidelines[channel.toLowerCase()] || "Content should be appropriate for the specified channel.";
+  private buildChannelPrompt(channel: string, characterLimit?: number, mode?: string, specifications?: any): string {
+    let prompt = `Channel: ${channel}\n`;
     
-    return `Channel: ${channel}\n${guidelines}${characterLimit ? `\nCharacter Limit: ${characterLimit}` : ''}`;
+    if (mode === "email-optimized" && specifications) {
+      // Special handling for email-optimized mode
+      if (channel === "email-pushes") {
+        prompt += `\nEMAIL & PUSH NOTIFICATION SPECIFICATIONS:\n`;
+        prompt += `\nEMAIL COMPONENTS:\n`;
+        prompt += `1. Subject Line: ${specifications.subjectLine?.recommended || '30-50 characters'} (max: ${specifications.subjectLine?.max || '78 characters'})\n`;
+        prompt += `   - Must be compelling and action-oriented\n`;
+        prompt += `   - Avoid spam trigger words\n`;
+        prompt += `   - Front-load important information\n`;
+        prompt += `\n2. Preheader Text: ${specifications.preheader?.recommended || '40-90 characters'} (max: ${specifications.preheader?.max || '140 characters'})\n`;
+        prompt += `   - Should complement, not repeat, the subject line\n`;
+        prompt += `   - Acts as secondary headline to increase open rates\n`;
+        prompt += `\n3. Body Content:\n`;
+        prompt += `   - Primary Headline: ${specifications.bodyContent?.headline || '30-65 characters'}\n`;
+        prompt += `   - Opening paragraph: ${specifications.bodyContent?.opening || '50-100 words'}\n`;
+        prompt += `   - Main content: ${specifications.bodyContent?.main || '150-300 words'}\n`;
+        prompt += `   - Closing: ${specifications.bodyContent?.closing || '25-50 words'}\n`;
+        prompt += `\n4. Call-to-Action:\n`;
+        prompt += `   - Button text: ${specifications.cta?.buttonText || '2-5 words (25 characters max)'}\n`;
+        prompt += `   - Must be action-oriented verbs\n`;
+        prompt += `\nPUSH NOTIFICATION COMPONENTS:\n`;
+        prompt += `1. Push Title: ${specifications.pushTitle?.recommended || '30-40 characters'} (iOS: ${specifications.pushTitle?.ios || '178 characters'}, Android: ${specifications.pushTitle?.android || '65 characters'})\n`;
+        prompt += `   - Must be attention-grabbing and relevant\n`;
+        prompt += `   - Personalization highly recommended\n`;
+        prompt += `\n2. Push Body: ${specifications.pushBody?.recommended || '40-125 characters'} (iOS: ${specifications.pushBody?.ios || '178 characters'}, Android: ${specifications.pushBody?.android || '240 characters'})\n`;
+        prompt += `   - Should expand on title with additional context\n`;
+        prompt += `   - Include clear call-to-action\n`;
+      } else if (channel === "tiktok") {
+        prompt += `\nTIKTOK SPECIFICATIONS:\n`;
+        prompt += `- Caption: ${specifications.caption?.recommended || '100-300 characters'} (max: ${specifications.caption?.max || '2200 characters'})\n`;
+        prompt += `- Hashtags: ${specifications.hashtags?.recommended || '3-5 hashtags'} (max: ${specifications.hashtags?.max || '100 characters'})\n`;
+        prompt += `- Hook: ${specifications.hook?.recommended || 'First 3 seconds'} (max: ${specifications.hook?.max || '15 words'})\n`;
+        prompt += `- Content should be trendy, entertaining, and use popular sounds/effects\n`;
+      } else if (channel === "instagram") {
+        prompt += `\nINSTAGRAM SPECIFICATIONS:\n`;
+        prompt += `- Caption: ${specifications.caption?.recommended || '125-150 characters'} (max: ${specifications.caption?.max || '2200 characters'})\n`;
+        prompt += `- Hashtags: ${specifications.hashtags?.recommended || '5-10 hashtags'} (max: ${specifications.hashtags?.max || '30 hashtags'})\n`;
+        prompt += `- Stories: ${specifications.stories?.text || 'Max 2 lines'} (${specifications.stories?.recommended || '1-2 words per line'})\n`;
+        prompt += `- Content should be visually appealing, engaging, and use appropriate hashtags\n`;
+      }
+    } else {
+      // Standard channel guidelines
+      const channelGuidelines: Record<string, string> = {
+        email: "Email copy should be clear, actionable, and maintain professional tone while being engaging.",
+        linkedin: "LinkedIn content should be professional, thought-provoking, and industry-relevant.",
+        instagram: "Instagram content should be visually appealing, engaging, and use appropriate hashtags.",
+        twitter: "Twitter content should be concise, engaging, and use relevant hashtags and mentions.",
+        web: "Web copy should be clear, SEO-friendly, and guide users toward desired actions.",
+        facebook: "Facebook content should be engaging, shareable, and community-focused.",
+        tiktok: "TikTok content should be trendy, entertaining, and use popular sounds/effects.",
+      };
+
+      const guidelines = channelGuidelines[channel.toLowerCase()] || "Content should be appropriate for the specified channel.";
+      prompt += guidelines;
+    }
+    
+    if (characterLimit) {
+      prompt += `\nCharacter Limit: ${characterLimit}`;
+    }
+    
+    return prompt;
   }
 
   private describeLevel(value: number, low: string, high: string): string {
@@ -355,6 +639,22 @@ Provide only the numerical score (0-100).
         const parsed = JSON.parse(jsonStr);
         console.log("✅ Successfully parsed JSON response:", parsed);
         
+        // Handle structured email-optimized response
+        if (parsed.content && typeof parsed.content === 'object') {
+          // Return the structured data directly instead of formatting as text
+          return {
+            content: parsed.content, // Keep as structured object
+            characterCount: parsed.characterCount || 0,
+            voiceConsistencyScore: Math.max(0, Math.min(100, parsed.voiceConsistencyScore || 85)),
+            suggestions: parsed.suggestions || [
+              "Consider adjusting the tone to better match your brand voice",
+              "Add more specific details to make the content more engaging",
+              "Review the call-to-action for clarity and effectiveness"
+            ]
+          };
+        }
+        
+        // Handle simple content response
         return {
           content: parsed.content?.substring(0, characterLimit) || text.substring(0, characterLimit),
           characterCount: Math.min(parsed.characterCount || parsed.content?.length || text.length, characterLimit),
@@ -401,4 +701,4 @@ Provide only the numerical score (0-100).
   }
 }
 
-export const geminiClient = new GeminiClient();
+// Removed global instance - now requires user API key

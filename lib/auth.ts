@@ -28,10 +28,6 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   },
-  pages: {
-    signIn: "/auth/signin",
-    error: "/auth/error",
-  },
   debug: true,
   secret: env.NEXTAUTH_SECRET,
 };

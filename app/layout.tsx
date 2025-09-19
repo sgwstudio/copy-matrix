@@ -9,7 +9,7 @@ import * as fonts from "~/lib/fonts";
 import { cn } from "~/lib/utils";
 
 export const metadata = {
-  title: "Copy Matrix - AI Copywriting Platform",
+  title: "GG Copy Matrix - AI Copywriting Platform",
   description: "Generate channel-optimized copy while maintaining consistent brand voice through intelligent matrix-based tone management",
 };
 

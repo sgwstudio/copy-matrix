@@ -36,6 +36,14 @@ export const VoiceMatrixSlider: React.FC<VoiceMatrixSliderProps> = ({
       </div>
       
       <div className="relative">
+        {/* Gradient Background */}
+        <div 
+          className="w-full h-2 rounded-lg absolute top-0"
+          style={{ 
+            background: 'linear-gradient(90deg, #cc95c0, #dbd4b4, #7aa1d2)'
+          }}
+        />
+        
         <input
           type="range"
           min="-1"
@@ -43,7 +51,10 @@ export const VoiceMatrixSlider: React.FC<VoiceMatrixSliderProps> = ({
           step="0.1"
           value={value}
           onChange={handleChange}
-          className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 slider"
+          className="w-full h-2 bg-transparent rounded-lg appearance-none cursor-pointer relative z-10 slider"
+          style={{
+            background: 'transparent'
+          }}
         />
         
         <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">

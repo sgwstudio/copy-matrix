@@ -1,22 +1,43 @@
 "use client";
 
 import Link from "next/link";
-import { Copy, Home, Settings, LogIn, User } from "lucide-react";
+import { Home, Settings, LogIn, User, ChevronDown, Copy, Layers, Globe, Mail, Star } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useState, useEffect, useRef } from "react";
+
+const modes = [
+  { id: "single", name: "Single Channel", icon: Copy, href: "/dashboard?mode=single" },
+  { id: "multi", name: "Multi Channel", icon: Layers, href: "/dashboard?mode=multi" },
+  { id: "channels", name: "All Channels", icon: Globe, href: "/dashboard?mode=channels" },
+  { id: "email", name: "Email-Optimized", icon: Mail, href: "/dashboard?mode=email" },
+  { id: "horoscope", name: "Horoscope", icon: Star, href: "/dashboard?mode=horoscope" },
+];
 
 export const Navigation: React.FC = () => {
   const { data: session, status } = useSession();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-4">
-            <Link href="/" className="flex items-center space-x-2">
-              <Copy className="h-8 w-8 text-blue-600" />
-              <span className="text-xl font-bold text-gray-900 dark:text-white">
-                Copy Matrix
-              </span>
+            <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white">
+              GG Copy Matrix
             </Link>
           </div>
           
@@ -31,13 +52,34 @@ export const Navigation: React.FC = () => {
             
             {session ? (
               <>
-                <Link
-                  href="/dashboard"
-                  className="flex items-center space-x-1 px-3 py-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700"
-                >
-                  <Copy className="h-4 w-4" />
-                  <span>Generator</span>
-                </Link>
+                {/* Generator Modes Dropdown */}
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="flex items-center space-x-1 px-3 py-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700"
+                  >
+                    <span>Generator</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                  
+                  {isDropdownOpen && (
+                    <div className="absolute top-full left-0 mt-1 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 z-50">
+                      <div className="py-1">
+                        {modes.map((mode) => (
+                          <Link
+                            key={mode.id}
+                            href={mode.href}
+                            className="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            onClick={() => setIsDropdownOpen(false)}
+                          >
+                            <mode.icon className="h-4 w-4" />
+                            <span>{mode.name}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
                 
                 <Link
                   href="/settings"
@@ -70,11 +112,14 @@ export const Navigation: React.FC = () => {
                   <div className="text-sm text-gray-500 dark:text-gray-400">
                     Demo Mode
                   </div>
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgb(25, 118, 210)' }}></div>
                 </div>
                 <button
                   onClick={() => signIn("google")}
-                  className="flex items-center space-x-1 px-3 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+                  className="flex items-center space-x-1 px-3 py-2 rounded-md text-white transition-colors"
+                  style={{ backgroundColor: 'rgb(25, 118, 210)' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(21, 101, 192)'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(25, 118, 210)'}
                 >
                   <LogIn className="h-4 w-4" />
                   <span>Sign In</span>

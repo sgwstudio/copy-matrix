@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { VoiceMatrix as VoiceMatrixType } from "~/lib/gemini-client";
 import { VoiceMatrix } from "../voice-matrix/VoiceMatrix";
+import { ToneMatrix } from "../voice-matrix/ToneMatrix";
 import { CopyOutput } from "./CopyOutput";
 import { ChannelSelector } from "./ChannelSelector";
 import { UserAPIKey } from "../UserAPIKey";
@@ -11,6 +12,7 @@ interface CopyGeneratorProps {
   brandGuidelines?: string;
   voiceSamples?: string;
   className?: string;
+  useToneMatrix?: boolean; // New prop to control which matrix to use
 }
 
 const CHANNELS = [
@@ -37,6 +39,7 @@ export const CopyGenerator: React.FC<CopyGeneratorProps> = ({
   brandGuidelines,
   voiceSamples,
   className,
+  useToneMatrix = false,
 }) => {
   const [prompt, setPrompt] = useState("");
   const [selectedChannel, setSelectedChannel] = useState(CHANNELS[0]);
@@ -121,10 +124,13 @@ export const CopyGenerator: React.FC<CopyGeneratorProps> = ({
         <p className="text-gray-600 dark:text-gray-400 mt-2">
           Generate channel-optimized copy while maintaining your brand voice
         </p>
-        <div className="mt-3 inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-          <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
-          {userApiKey ? "AI Mode - Using your Gemini API key" : "Demo Mode - Add your API key in Settings"}
-        </div>
+            <div className="mt-3 inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+              <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+              AI Mode - Powered by Google Gemini
+            </div>
+            <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 text-center">
+              ✨ Using your personal Gemini API key for unlimited AI generation
+            </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -152,10 +158,17 @@ export const CopyGenerator: React.FC<CopyGeneratorProps> = ({
           </div>
 
           {/* Voice Matrix */}
-          <VoiceMatrix
-            voiceMatrix={voiceMatrix}
-            onChange={setVoiceMatrix}
-          />
+          {useToneMatrix ? (
+            <ToneMatrix
+              voiceMatrix={voiceMatrix}
+              onChange={setVoiceMatrix}
+            />
+          ) : (
+            <VoiceMatrix
+              voiceMatrix={voiceMatrix}
+              onChange={setVoiceMatrix}
+            />
+          )}
 
           {/* Generate Button */}
           <div className="flex gap-3">
