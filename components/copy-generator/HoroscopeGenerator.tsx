@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { VoiceMatrix } from "~/components/voice-matrix/VoiceMatrix";
+import { FlowSelector } from "~/components/FlowSelector";
 import {
   Sparkles,
   Star,
@@ -119,6 +120,9 @@ export const HoroscopeGenerator: React.FC<HoroscopeGeneratorProps> = ({
 
   return (
     <div className="space-y-6">
+      {/* Flow Selector */}
+      <FlowSelector currentMode="horoscope" />
+      
       {/* Header */}
       <div className="text-center">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { VoiceMatrix as VoiceMatrixType } from "~/lib/gemini-client";
 import { VoiceMatrix } from "../voice-matrix/VoiceMatrix";
 import { CopyOutput } from "./CopyOutput";
+import { FlowSelector } from "~/components/FlowSelector";
 // Removed ChannelSelector import - using multi-channel selection instead
 import { Copy, Plus, Trash2, RotateCcw, BarChart3 } from "lucide-react";
 import { ComparisonView } from "./ComparisonView";
@@ -247,6 +248,9 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
 
   return (
     <div className={`space-y-6 ${className}`}>
+      {/* Flow Selector */}
+      <FlowSelector currentMode="multi" />
+      
       {/* Header */}
       <div className="text-center">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
