@@ -58,7 +58,7 @@ const EMAIL_CHANNELS = [
     name: "TikTok",
     icon: Video,
     description: "Short-form video content",
-    color: "bg-pink-500",
+    color: "rgb(0, 0, 255)",
     specifications: {
       caption: {
         max: "2200 characters",
@@ -79,7 +79,7 @@ const EMAIL_CHANNELS = [
     name: "Instagram",
     icon: Camera,
     description: "Visual content and stories",
-    color: "bg-gradient-to-r from-purple-500 to-pink-500",
+    color: "rgb(0, 0, 255)",
     specifications: {
       caption: {
         max: "2200 characters",
