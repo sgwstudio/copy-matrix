@@ -16,6 +16,7 @@ const modes = [
 export const Navigation: React.FC = () => {
   const { data: session, status } = useSession();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [hasValidApiKey, setHasValidApiKey] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,6 +32,26 @@ export const Navigation: React.FC = () => {
     };
   }, []);
 
+  // Check for valid API key when user is signed in
+  useEffect(() => {
+    const checkApiKey = async () => {
+      if (session?.user?.id) {
+        try {
+          const response = await fetch('/api/user/api-key');
+          const data = await response.json();
+          setHasValidApiKey(!!data.apiKey);
+        } catch (error) {
+          console.error('Error checking API key:', error);
+          setHasValidApiKey(false);
+        }
+      } else {
+        setHasValidApiKey(false);
+      }
+    };
+
+    checkApiKey();
+  }, [session]);
+
   return (
     <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
       <div className="container mx-auto px-4">
@@ -39,6 +60,17 @@ export const Navigation: React.FC = () => {
             <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white">
               GG Copy Matrix
             </Link>
+            <div className="flex items-center space-x-2">
+              <div className="text-sm text-gray-500 dark:text-gray-400">
+                {session && hasValidApiKey ? "Real AI Mode" : "Demo Mode"}
+              </div>
+              <div 
+                className="w-2 h-2 rounded-full" 
+                style={{ 
+                  backgroundColor: session && hasValidApiKey ? '#22c55e' : 'rgb(0, 0, 255)' 
+                }}
+              ></div>
+            </div>
           </div>
           
           <div className="flex items-center space-x-4">
@@ -99,23 +131,15 @@ export const Navigation: React.FC = () => {
                 </button>
               </div>
             ) : (
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <div className="text-sm text-gray-500 dark:text-gray-400">
-                    Demo Mode
-                  </div>
-                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgb(0, 0, 255)' }}></div>
-                </div>
-                <button
-                  onClick={() => signIn("google")}
-                  className="px-3 py-2 rounded-md text-white transition-colors"
-                  style={{ backgroundColor: 'rgb(0, 0, 255)' }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
-                >
-                  Sign In
-                </button>
-              </div>
+              <button
+                onClick={() => signIn("google")}
+                className="px-3 py-2 rounded-md text-white transition-colors"
+                style={{ backgroundColor: 'rgb(0, 0, 255)' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
+              >
+                Sign In
+              </button>
             )}
           </div>
         </div>
