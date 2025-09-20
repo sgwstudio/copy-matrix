@@ -67,14 +67,14 @@ const Home: React.FC = () => {
                            <Link
                              href="/dashboard?mode=horoscope"
                              className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
-                             style={{ backgroundColor: '#8000FF' }}
+                             style={{ backgroundColor: '#8800FF' }}
                            >
                              Horoscope
                            </Link>
                            <Link
                              href="/dashboard?mode=multi"
                              className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
-                             style={{ backgroundColor: '#006400' }}
+                             style={{ backgroundColor: '#008800' }}
                            >
                              Voice R&D
                            </Link>
