@@ -20,7 +20,7 @@ const EMAIL_CHANNELS = [
     name: "Email & Pushes",
     icon: Mail,
     description: "Email campaigns with push notifications",
-    color: "bg-blue-500",
+    color: "rgb(0, 0, 255)",
     specifications: {
       subjectLine: {
         recommended: "30-50 characters",
@@ -225,12 +225,16 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                       onClick={() => setSelectedChannel(channel.id)}
                       className={`w-full p-4 rounded-lg border-2 transition-all ${
                         selectedChannel === channel.id
-                          ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                          ? ""
                           : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
                       }`}
+                      style={selectedChannel === channel.id ? { 
+                        borderColor: 'rgb(0, 0, 255)', 
+                        backgroundColor: 'rgba(0, 0, 255, 0.05)' 
+                      } : {}}
                     >
                       <div className="flex items-center space-x-3">
-                        <div className={`p-2 rounded-lg ${channel.color} text-white`}>
+                        <div className="p-2 rounded-lg text-white" style={{ backgroundColor: channel.color }}>
                           <Icon className="h-5 w-5" />
                         </div>
                         <div className="text-left">
@@ -300,7 +304,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                 <div>
                 <div className="space-y-4">
                   {Object.entries(selectedChannelData.specifications).map(([key, spec]) => (
-                    <div key={key} className="border-l-4 border-blue-500 pl-4">
+                    <div key={key} className="border-l-4 pl-4" style={{ borderLeftColor: 'rgb(0, 0, 255)' }}>
                       <h4 className="font-semibold text-gray-900 dark:text-white capitalize">
                         {key.replace(/([A-Z])/g, ' $1').trim()}
                       </h4>
@@ -343,7 +347,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                       onClick={() => setActiveTab("copy")}
                       className={`py-2 px-1 border-b-2 font-medium text-sm ${
                         activeTab === "copy"
-                          ? "border-blue-500 text-blue-600 dark:text-blue-400"
+                          ? "border-2"
                           : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600"
                       }`}
                     >
@@ -353,7 +357,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                       onClick={() => setActiveTab("preview")}
                       className={`py-2 px-1 border-b-2 font-medium text-sm ${
                         activeTab === "preview"
-                          ? "border-blue-500 text-blue-600 dark:text-blue-400"
+                          ? "border-2"
                           : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600"
                       }`}
                     >
@@ -383,7 +387,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                               newCopy.content.email.subjectLine = e.target.value;
                               setGeneratedCopy(newCopy);
                             }}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-2 dark:bg-gray-700 dark:text-white"
                             placeholder="Enter subject line..."
                           />
                         </div>
@@ -401,7 +405,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                               newCopy.content.email.preheaderText = e.target.value;
                               setGeneratedCopy(newCopy);
                             }}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-2 dark:bg-gray-700 dark:text-white"
                             placeholder="Enter preheader text..."
                           />
                         </div>
@@ -420,7 +424,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                               newCopy.content.email.body.primaryHeadline = e.target.value;
                               setGeneratedCopy(newCopy);
                             }}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-2 dark:bg-gray-700 dark:text-white"
                             placeholder="Enter primary headline..."
                           />
                         </div>
@@ -439,7 +443,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                               setGeneratedCopy(newCopy);
                             }}
                             rows={3}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-2 dark:bg-gray-700 dark:text-white"
                             placeholder="Enter opening paragraph..."
                           />
                         </div>
@@ -458,7 +462,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                               setGeneratedCopy(newCopy);
                             }}
                             rows={4}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-2 dark:bg-gray-700 dark:text-white"
                             placeholder="Enter main content..."
                           />
                         </div>
@@ -477,7 +481,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                               setGeneratedCopy(newCopy);
                             }}
                             rows={2}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-2 dark:bg-gray-700 dark:text-white"
                             placeholder="Enter closing paragraph..."
                           />
                         </div>
@@ -496,7 +500,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                               newCopy.content.email.callToAction.buttonText = e.target.value;
                               setGeneratedCopy(newCopy);
                             }}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-2 dark:bg-gray-700 dark:text-white"
                             placeholder="Enter CTA button text..."
                           />
                         </div>
@@ -521,7 +525,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                               newCopy.content.pushNotification.pushTitle = e.target.value;
                               setGeneratedCopy(newCopy);
                             }}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-2 dark:bg-gray-700 dark:text-white"
                             placeholder="Enter push title..."
                           />
                         </div>
@@ -539,7 +543,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                               setGeneratedCopy(newCopy);
                             }}
                             rows={2}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-2 dark:bg-gray-700 dark:text-white"
                             placeholder="Enter push body text..."
                           />
                         </div>
@@ -565,7 +569,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                               setGeneratedCopy(newCopy);
                             }}
                             rows={6}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-2 dark:bg-gray-700 dark:text-white"
                             placeholder="Enter content..."
                           />
                         </div>
@@ -574,12 +578,12 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
 
                     {/* Voice Consistency Score */}
                     {generatedCopy.voiceConsistencyScore && (
-                      <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                      <div className="rounded-lg p-4" style={{ backgroundColor: 'rgba(0, 0, 255, 0.05)', borderColor: 'rgba(0, 0, 255, 0.2)' }}>
                         <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium text-blue-900 dark:text-blue-100">
+                          <span className="text-sm font-medium" style={{ color: 'rgb(0, 0, 200)' }}>
                             Voice Consistency Score
                           </span>
-                          <span className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                          <span className="text-lg font-bold" style={{ color: 'rgb(0, 0, 255)' }}>
                             {generatedCopy.voiceConsistencyScore}%
                           </span>
                         </div>
