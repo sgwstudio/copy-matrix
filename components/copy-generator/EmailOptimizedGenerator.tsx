@@ -106,13 +106,13 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
 }) => {
   const [selectedChannel, setSelectedChannel] = useState(EMAIL_CHANNELS[0].id);
   const [voiceMatrix, setVoiceMatrix] = useState({
-    formalCasual: 0,
-    authoritativeApproachable: 0,
-    professionalConversational: 0,
-    seriousPlayful: 0,
-    confidence: 0,
-    enthusiasm: 0,
-    empathy: 0,
+    directness: 0,
+    universality: 0,
+    authority: 0,
+    tension: 0,
+    education: 0,
+    rhythm: 0,
+    expressiveCandid: 0,
   });
   const [content, setContent] = useState("");
   const [generatedCopy, setGeneratedCopy] = useState<any>(null);

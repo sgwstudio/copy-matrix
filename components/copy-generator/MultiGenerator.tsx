@@ -25,13 +25,13 @@ const CHANNELS = [
 ];
 
 const defaultVoiceMatrix: VoiceMatrixType = {
-  formalCasual: 0,
-  authoritativeApproachable: 0,
-  professionalConversational: 0,
-  seriousPlayful: 0,
-  confidence: 0,
-  enthusiasm: 0,
-  empathy: 0,
+  directness: 0,
+  universality: 0,
+  authority: 0,
+  tension: 0,
+  education: 0,
+  rhythm: 0,
+  expressiveCandid: 0,
 };
 
 interface GenerationConfig {
@@ -56,7 +56,7 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
     {
       id: "1",
       name: "Professional",
-      voiceMatrix: { ...defaultVoiceMatrix, formalCasual: 0.8, professionalConversational: 0.7 },
+      voiceMatrix: { ...defaultVoiceMatrix, directness: 0.8, authority: 0.7, expressiveCandid: 0.3 },
       generatedContent: null,
       characterCount: 0,
       voiceConsistencyScore: 0,
@@ -66,7 +66,7 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
     {
       id: "2", 
       name: "Casual",
-      voiceMatrix: { ...defaultVoiceMatrix, formalCasual: -0.8, seriousPlayful: 0.6 },
+      voiceMatrix: { ...defaultVoiceMatrix, directness: -0.3, authority: -0.2, expressiveCandid: -0.4 },
       generatedContent: null,
       characterCount: 0,
       voiceConsistencyScore: 0,

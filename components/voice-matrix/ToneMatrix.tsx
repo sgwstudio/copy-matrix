@@ -20,19 +20,19 @@ export const ToneMatrix: React.FC<ToneMatrixProps> = ({
   // Convert 7-dimensional voice matrix to 2D tone matrix
   const convertToToneMatrix = (vm: VoiceMatrixType) => {
     // X-axis: Provocative (-1) to Educational (+1)
-    // Combine: seriousPlayful (serious = provocative), professionalConversational (conversational = provocative), confidence (high = provocative)
+    // Combine: directness (high = provocative), education (high = educational), tension (high = provocative)
     const provocativeScore = (
-      (vm.seriousPlayful * -0.4) + // Serious = more provocative
-      (vm.professionalConversational * -0.3) + // Conversational = more provocative  
-      (vm.confidence * 0.3) // High confidence = more provocative
+      (vm.directness * 0.4) + // Direct = more provocative
+      (vm.education * -0.3) + // Educational = less provocative
+      (vm.tension * 0.3) // High tension = more provocative
     );
     
     // Y-axis: Playful (-1) to Serious (+1)
-    // Combine: seriousPlayful, formalCasual, enthusiasm
+    // Combine: expressiveCandid (expressive = playful), authority (high = serious), rhythm (varied = playful)
     const seriousScore = (
-      (vm.seriousPlayful * 0.5) + // Serious = more serious
-      (vm.formalCasual * 0.3) + // Formal = more serious
-      (vm.enthusiasm * -0.2) // Enthusiastic = less serious (more playful)
+      (vm.expressiveCandid * -0.5) + // Expressive = more playful
+      (vm.authority * 0.4) + // Authority = more serious
+      (vm.rhythm * -0.1) // Varied rhythm = slightly playful
     );
 
     return {
@@ -46,23 +46,23 @@ export const ToneMatrix: React.FC<ToneMatrixProps> = ({
     // X-axis: Provocative to Educational
     // Y-axis: Playful to Serious
     
-    // Map back to original dimensions
-    const seriousPlayful = (y * 0.6) + (x * -0.4); // Y-axis primary, X-axis secondary
-    const professionalConversational = (x * -0.5) + (y * 0.3); // X-axis primary
-    const formalCasual = y * 0.4; // Y-axis primary
-    const confidence = (x * 0.3) + (y * 0.2); // Both axes contribute
-    const enthusiasm = (y * -0.4) + (x * 0.2); // Y-axis primary (playful = enthusiastic)
-    const authoritativeApproachable = (y * 0.3) + (x * 0.2); // Both axes contribute
-    const empathy = (x * 0.1) + (y * -0.1); // Minimal impact
+    // Map back to new dimensions
+    const directness = (x * 0.4) + (y * 0.1); // X-axis primary (provocative = direct)
+    const education = (x * -0.3) + (y * 0.2); // X-axis primary (educational = high education)
+    const tension = (x * 0.3) + (y * -0.1); // X-axis primary (provocative = high tension)
+    const expressiveCandid = (y * -0.5) + (x * 0.1); // Y-axis primary (playful = expressive)
+    const authority = (y * 0.4) + (x * 0.1); // Y-axis primary (serious = authoritative)
+    const rhythm = (y * -0.1) + (x * 0.1); // Minimal impact from both axes
+    const universality = (x * 0.1) + (y * 0.1); // Minimal impact from both axes
 
     return {
-      formalCasual: Math.max(-1, Math.min(1, formalCasual)),
-      authoritativeApproachable: Math.max(-1, Math.min(1, authoritativeApproachable)),
-      professionalConversational: Math.max(-1, Math.min(1, professionalConversational)),
-      seriousPlayful: Math.max(-1, Math.min(1, seriousPlayful)),
-      confidence: Math.max(-1, Math.min(1, confidence)),
-      enthusiasm: Math.max(-1, Math.min(1, enthusiasm)),
-      empathy: Math.max(-1, Math.min(1, empathy)),
+      directness: Math.max(-1, Math.min(1, directness)),
+      universality: Math.max(-1, Math.min(1, universality)),
+      authority: Math.max(-1, Math.min(1, authority)),
+      tension: Math.max(-1, Math.min(1, tension)),
+      education: Math.max(-1, Math.min(1, education)),
+      rhythm: Math.max(-1, Math.min(1, rhythm)),
+      expressiveCandid: Math.max(-1, Math.min(1, expressiveCandid)),
     };
   };
 

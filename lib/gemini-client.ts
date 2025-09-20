@@ -1,14 +1,62 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export interface VoiceMatrix {
-  formalCasual: number; // -1 to 1
-  authoritativeApproachable: number; // -1 to 1
-  professionalConversational: number; // -1 to 1
-  seriousPlayful: number; // -1 to 1
-  confidence: number; // -1 to 1
-  enthusiasm: number; // -1 to 1
-  empathy: number; // -1 to 1
+  // CORE VOICE (always present, intensity varies)
+  directness: number;        // -1 to 1: How straightforward vs nuanced
+  universality: number;      // -1 to 1: How niche vs globally accessible  
+  authority: number;         // -1 to 1: How confident vs humble
+  
+  // TONE CHARACTERISTICS (variable application)
+  tension: number;           // -1 to 1: Everyday language vs elevated/juxtaposed
+  education: number;         // -1 to 1: Minimal context vs deep insight
+  rhythm: number;           // -1 to 1: Standard flow vs staccato/varied cadence
+  
+  // SPECTRUM POSITION
+  expressiveCandid: number;  // -1 to 1: Expressive (editorial) vs Candid (technical)
 }
+
+// Preset Configurations for Different Content Types
+export const BRAND_VOICE_PRESETS: Record<string, VoiceMatrix> = {
+  editorial: {
+    directness: 0.7,
+    universality: 0.4,
+    authority: 0.8,
+    tension: 0.9,
+    education: 0.8,
+    rhythm: 0.9,
+    expressiveCandid: -0.8  // Very expressive
+  },
+  
+  social: {
+    directness: 0.6,
+    universality: 0.7,
+    authority: 0.6,
+    tension: 0.5,
+    education: 0.4,
+    rhythm: 0.6,
+    expressiveCandid: -0.3  // Somewhat expressive
+  },
+  
+  productDescription: {
+    directness: 0.8,
+    universality: 0.6,
+    authority: 0.7,
+    tension: 0.3,
+    education: 0.6,
+    rhythm: 0.4,
+    expressiveCandid: 0.2   // Slightly candid
+  },
+  
+  technical: {
+    directness: 0.9,
+    universality: 0.5,
+    authority: 0.8,
+    tension: 0.1,
+    education: 0.7,
+    rhythm: 0.2,
+    expressiveCandid: 0.8   // Very candid
+  }
+};
 
 export interface CopyGenerationRequest {
   prompt: string;
@@ -527,14 +575,23 @@ Provide only the numerical score (0-100).
   }
 
   private buildVoicePrompt(voiceMatrix?: VoiceMatrix, voiceSettings?: Record<string, number>, brandGuidelines?: string, voiceSamples?: string): string {
-    let prompt = "Voice and Tone Guidelines:\n";
+    let prompt = "VOICE AND TONE GUIDELINES:\n\n";
     
     if (voiceMatrix) {
-      // Voice characteristics from voice matrix
-      prompt += `- Directness: ${this.describeLevel(voiceMatrix.formalCasual, 'subtle', 'very direct')}\n`;
-      prompt += `- Universality: ${this.describeLevel(voiceMatrix.authoritativeApproachable, 'specific', 'universal')}\n`;
-      prompt += `- Authority: ${this.describeLevel(voiceMatrix.professionalConversational, 'approachable', 'authoritative')}\n`;
-      prompt += `- Tone: ${this.describeLevel(voiceMatrix.seriousPlayful, 'expressive', 'candid')}\n`;
+      // Core Voice (always applied)
+      prompt += "CORE VOICE:\n";
+      prompt += `- DIRECTNESS: ${this.describeDirectness(voiceMatrix.directness)}\n`;
+      prompt += `- UNIVERSALITY: ${this.describeUniversality(voiceMatrix.universality)}\n`;
+      prompt += `- AUTHORITY: ${this.describeAuthority(voiceMatrix.authority)}\n\n`;
+      
+      // Tone Characteristics (variable application)
+      prompt += "TONE APPLICATION:\n";
+      prompt += `- TENSION: ${this.describeTension(voiceMatrix.tension)}\n`;
+      prompt += `- EDUCATION: ${this.describeEducation(voiceMatrix.education)}\n`;
+      prompt += `- RHYTHM: ${this.describeRhythm(voiceMatrix.rhythm)}\n\n`;
+      
+      // Spectrum Position
+      prompt += `TONE SPECTRUM: ${this.describeSpectrum(voiceMatrix.expressiveCandid)}\n\n`;
     } else if (voiceSettings) {
       // Voice characteristics from voice settings
       Object.entries(voiceSettings).forEach(([key, value]) => {
@@ -544,11 +601,11 @@ Provide only the numerical score (0-100).
     }
 
     if (brandGuidelines) {
-      prompt += `\nBrand Guidelines:\n${brandGuidelines}\n`;
+      prompt += `Brand Guidelines:\n${brandGuidelines}\n\n`;
     }
 
     if (voiceSamples) {
-      prompt += `\nVoice Samples:\n${voiceSamples}\n`;
+      prompt += `Voice Samples:\n${voiceSamples}\n\n`;
     }
 
     return prompt;
@@ -626,6 +683,62 @@ Provide only the numerical score (0-100).
     if (value < -0.5) return `Very ${low}`;
     if (value < 0) return `Somewhat ${low}`;
     return 'Neutral';
+  }
+
+  private describeDirectness(value: number): string {
+    if (value > 0.5) return "Be extremely straightforward - no ambiguity, clear statements";
+    if (value > 0) return "Be direct but allow for some nuance";
+    if (value < -0.5) return "Use more nuanced, layered communication";
+    if (value < 0) return "Be somewhat indirect, let meaning emerge";
+    return "Balance directness with nuance appropriately";
+  }
+  
+  private describeUniversality(value: number): string {
+    if (value > 0.5) return "Use globally accessible language, avoid niche references";
+    if (value > 0) return "Lean toward universal language with minimal jargon";
+    if (value < -0.5) return "Use specialized language, insider knowledge expected";
+    if (value < 0) return "Some specialized terms acceptable";
+    return "Balance accessibility with expertise";
+  }
+  
+  private describeAuthority(value: number): string {
+    if (value > 0.5) return "Speak with complete confidence as the definitive expert";
+    if (value > 0) return "Show confidence while remaining respectful";
+    if (value < -0.5) return "Be humble, acknowledge uncertainty where appropriate";
+    if (value < 0) return "Show some humility alongside expertise";
+    return "Balance authority with approachability";
+  }
+  
+  private describeTension(value: number): string {
+    if (value > 0.5) return "Create strong tension: pair everyday words with elevated terms, use juxtaposition";
+    if (value > 0) return "Add some linguistic tension and unexpected word choices";
+    if (value < -0.5) return "Use straightforward language without creative tension";
+    if (value < 0) return "Minimize creative word play";
+    return "Moderate use of linguistic tension";
+  }
+  
+  private describeEducation(value: number): string {
+    if (value > 0.5) return "Provide deep insight about brands, products, and culture - be highly educational";
+    if (value > 0) return "Include educational elements and context";
+    if (value < -0.5) return "Minimal educational content - focus on essentials only";
+    if (value < 0) return "Light educational context";
+    return "Balanced educational approach";
+  }
+  
+  private describeRhythm(value: number): string {
+    if (value > 0.5) return "Strong rhythmic variation: mix long/short sentences, use incomplete sentences, apply staccato punctuation";
+    if (value > 0) return "Create some rhythmic variety in sentence structure";
+    if (value < -0.5) return "Use standard, consistent sentence structure";
+    if (value < 0) return "Minimal rhythmic variation";
+    return "Moderate rhythmic variation";
+  }
+  
+  private describeSpectrum(value: number): string {
+    if (value > 0.6) return "CANDID - Technical/Product tone: Factual, precise, minimal flourish";
+    if (value > 0.2) return "BALANCED-CANDID - Product descriptions with some personality";
+    if (value > -0.2) return "CENTERED - Pure voice expression";
+    if (value > -0.6) return "BALANCED-EXPRESSIVE - Social content with editorial elements";
+    return "EXPRESSIVE - Editorial tone: Creative, elevated, maximum personality";
   }
 
   private parseResponse(text: string, characterLimit: number): CopyGenerationResponse {

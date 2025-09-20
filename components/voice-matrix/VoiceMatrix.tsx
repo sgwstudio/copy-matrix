@@ -33,35 +33,78 @@ export const VoiceMatrix: React.FC<VoiceMatrixProps> = ({
         </p>
       </div>
 
-      {/* Voice Principles */}
+      {/* Core Voice */}
       <div className="space-y-4">
         <h4 className="text-md font-medium text-gray-800 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 pb-2">
-          Voice Principles
+          Core Voice
         </h4>
+        <div className="text-center mb-4">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Define your brand's fundamental voice characteristics
+          </p>
+        </div>
         
         <div className="space-y-4">
           <VoiceMatrixSlider
             label="Directness"
-            value={voiceMatrix.formalCasual}
-            onChange={(value) => updateValue("formalCasual", value)}
-            leftLabel="Subtle"
-            rightLabel="Very Direct"
+            value={voiceMatrix.directness}
+            onChange={(value) => updateValue("directness", value)}
+            leftLabel="Nuanced"
+            rightLabel="Straightforward"
           />
           
           <VoiceMatrixSlider
             label="Universality"
-            value={voiceMatrix.authoritativeApproachable}
-            onChange={(value) => updateValue("authoritativeApproachable", value)}
-            leftLabel="Specific"
-            rightLabel="Universal"
+            value={voiceMatrix.universality}
+            onChange={(value) => updateValue("universality", value)}
+            leftLabel="Niche"
+            rightLabel="Globally Accessible"
           />
           
           <VoiceMatrixSlider
             label="Authority"
-            value={voiceMatrix.professionalConversational}
-            onChange={(value) => updateValue("professionalConversational", value)}
-            leftLabel="Approachable"
-            rightLabel="Authoritative"
+            value={voiceMatrix.authority}
+            onChange={(value) => updateValue("authority", value)}
+            leftLabel="Humble"
+            rightLabel="Confident"
+          />
+        </div>
+      </div>
+
+      {/* Tone Characteristics */}
+      <div className="space-y-4">
+        <h4 className="text-md font-medium text-gray-800 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 pb-2">
+          Tone Characteristics
+        </h4>
+        <div className="text-center mb-4">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Fine-tune how your voice is expressed
+          </p>
+        </div>
+        
+        <div className="space-y-4">
+          <VoiceMatrixSlider
+            label="Tension"
+            value={voiceMatrix.tension}
+            onChange={(value) => updateValue("tension", value)}
+            leftLabel="Everyday Language"
+            rightLabel="Elevated/Juxtaposed"
+          />
+          
+          <VoiceMatrixSlider
+            label="Education"
+            value={voiceMatrix.education}
+            onChange={(value) => updateValue("education", value)}
+            leftLabel="Minimal Context"
+            rightLabel="Deep Insight"
+          />
+          
+          <VoiceMatrixSlider
+            label="Rhythm"
+            value={voiceMatrix.rhythm}
+            onChange={(value) => updateValue("rhythm", value)}
+            leftLabel="Standard Flow"
+            rightLabel="Staccato/Varied"
           />
         </div>
       </div>
@@ -73,16 +116,16 @@ export const VoiceMatrix: React.FC<VoiceMatrixProps> = ({
         </h4>
         <div className="text-center mb-4">
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Adjust the tone along the spectrum from expressive to candid
+            Position your tone along the expressive to candid spectrum
           </p>
         </div>
         
         <VoiceMatrixSlider
-          label="Tone Position"
-          value={voiceMatrix.seriousPlayful}
-          onChange={(value) => updateValue("seriousPlayful", value)}
-          leftLabel="Expressive"
-          rightLabel="Candid"
+          label="Expressive ↔ Candid"
+          value={voiceMatrix.expressiveCandid}
+          onChange={(value) => updateValue("expressiveCandid", value)}
+          leftLabel="Expressive (Editorial)"
+          rightLabel="Candid (Technical)"
         />
       </div>
 
@@ -103,42 +146,63 @@ export const VoiceMatrix: React.FC<VoiceMatrixProps> = ({
 function generateVoiceSummary(voiceMatrix: VoiceMatrixType): string {
   const characteristics = [];
   
-  // Directness
-  if (voiceMatrix.formalCasual > 0.5) {
+  // Core Voice
+  if (voiceMatrix.directness > 0.5) {
     characteristics.push("very direct");
-  } else if (voiceMatrix.formalCasual > 0) {
+  } else if (voiceMatrix.directness > 0) {
     characteristics.push("direct");
-  } else if (voiceMatrix.formalCasual < -0.5) {
-    characteristics.push("subtle");
+  } else if (voiceMatrix.directness < -0.5) {
+    characteristics.push("nuanced");
   } else {
     characteristics.push("balanced directness");
   }
   
-  // Universality
-  if (voiceMatrix.authoritativeApproachable > 0.5) {
-    characteristics.push("universal");
-  } else if (voiceMatrix.authoritativeApproachable < -0.5) {
-    characteristics.push("specific");
+  if (voiceMatrix.universality > 0.5) {
+    characteristics.push("globally accessible");
+  } else if (voiceMatrix.universality < -0.5) {
+    characteristics.push("niche-focused");
   } else {
     characteristics.push("balanced universality");
   }
   
-  // Authority
-  if (voiceMatrix.professionalConversational > 0.5) {
-    characteristics.push("authoritative");
-  } else if (voiceMatrix.professionalConversational < -0.5) {
-    characteristics.push("approachable");
+  if (voiceMatrix.authority > 0.5) {
+    characteristics.push("confident");
+  } else if (voiceMatrix.authority < -0.5) {
+    characteristics.push("humble");
   } else {
     characteristics.push("balanced authority");
   }
   
-  // Tone Position
-  if (voiceMatrix.seriousPlayful > 0.3) {
+  // Tone Characteristics
+  if (voiceMatrix.tension > 0.5) {
+    characteristics.push("elevated language");
+  } else if (voiceMatrix.tension < -0.5) {
+    characteristics.push("everyday language");
+  }
+  
+  if (voiceMatrix.education > 0.5) {
+    characteristics.push("highly educational");
+  } else if (voiceMatrix.education < -0.5) {
+    characteristics.push("minimal context");
+  }
+  
+  if (voiceMatrix.rhythm > 0.5) {
+    characteristics.push("varied rhythm");
+  } else if (voiceMatrix.rhythm < -0.5) {
+    characteristics.push("standard flow");
+  }
+  
+  // Tone Spectrum
+  if (voiceMatrix.expressiveCandid > 0.6) {
     characteristics.push("candid");
-  } else if (voiceMatrix.seriousPlayful < -0.3) {
+  } else if (voiceMatrix.expressiveCandid > 0.2) {
+    characteristics.push("balanced-candid");
+  } else if (voiceMatrix.expressiveCandid < -0.6) {
     characteristics.push("expressive");
+  } else if (voiceMatrix.expressiveCandid < -0.2) {
+    characteristics.push("balanced-expressive");
   } else {
-    characteristics.push("balanced tone");
+    characteristics.push("centered");
   }
   
   return `Your brand voice is ${characteristics.join(", ")}.`;
