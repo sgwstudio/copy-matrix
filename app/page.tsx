@@ -49,7 +49,7 @@ const Home: React.FC = () => {
                 <Link
                   href="/dashboard"
                   className="inline-flex items-center px-8 py-4 text-white font-semibold rounded-lg transition-colors"
-                  style={{ backgroundColor: 'rgb(0, 0, 255)', '&:hover': { backgroundColor: 'rgb(0, 0, 200)' } }}
+                  style={{ backgroundColor: 'rgb(0, 0, 255)' }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
                 >
