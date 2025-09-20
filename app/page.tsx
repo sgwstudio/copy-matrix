@@ -53,9 +53,9 @@ const Home: React.FC = () => {
                 <Link
                   href="/dashboard"
                   className="inline-flex items-center px-8 py-4 text-white font-semibold rounded-lg transition-colors"
-                  style={{ backgroundColor: 'rgb(25, 118, 210)', '&:hover': { backgroundColor: 'rgb(21, 101, 192)' } }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(21, 101, 192)'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(25, 118, 210)'}
+                  style={{ backgroundColor: 'rgb(0, 0, 255)', '&:hover': { backgroundColor: 'rgb(0, 0, 200)' } }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
                 >
                   Go to Generator
                 </Link>
@@ -64,9 +64,9 @@ const Home: React.FC = () => {
               <Link
                 href="/api/auth/signin"
                 className="inline-flex items-center px-8 py-4 text-white font-semibold rounded-lg transition-colors"
-                style={{ backgroundColor: 'rgb(25, 118, 210)' }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(21, 101, 192)'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(25, 118, 210)'}
+                style={{ backgroundColor: 'rgb(0, 0, 255)' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
               >
                 <LogIn className="mr-2 h-5 w-5" />
                 Sign In to Get Started

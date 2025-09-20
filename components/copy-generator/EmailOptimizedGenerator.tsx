@@ -193,9 +193,9 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
             onClick={handleGenerate}
             disabled={!content.trim() || isGenerating}
             className="w-full mt-4 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ backgroundColor: 'rgb(25, 118, 210)' }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(21, 101, 192)'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(25, 118, 210)'}
+            style={{ backgroundColor: 'rgb(0, 0, 255)' }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
           >
             {isGenerating ? "Generating..." : "Generate Copy"}
           </button>

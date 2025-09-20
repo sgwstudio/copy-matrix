@@ -34,7 +34,7 @@ const Dashboard: React.FC = () => {
                     ? "text-white"
                     : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                 }`}
-                style={mode === "single" ? { backgroundColor: 'rgb(25, 118, 210)' } : {}}
+                style={mode === "single" ? { backgroundColor: 'rgb(0, 0, 255)' } : {}}
               >
                 <Copy className="h-4 w-4 mr-2" />
                 Single Generation
@@ -46,7 +46,7 @@ const Dashboard: React.FC = () => {
                     ? "text-white"
                     : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                 }`}
-                style={mode === "multi" ? { backgroundColor: 'rgb(25, 118, 210)' } : {}}
+                style={mode === "multi" ? { backgroundColor: 'rgb(0, 0, 255)' } : {}}
               >
                 <Layers className="h-4 w-4 mr-2" />
                 Multi-Voice Generation
@@ -58,7 +58,7 @@ const Dashboard: React.FC = () => {
                     ? "text-white"
                     : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                 }`}
-                style={mode === "channels" ? { backgroundColor: 'rgb(25, 118, 210)' } : {}}
+                style={mode === "channels" ? { backgroundColor: 'rgb(0, 0, 255)' } : {}}
               >
                 <Globe className="h-4 w-4 mr-2" />
                 Multi-Channel Generation
@@ -70,7 +70,7 @@ const Dashboard: React.FC = () => {
                           ? "text-white"
                           : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                       }`}
-                      style={mode === "email" ? { backgroundColor: 'rgb(25, 118, 210)' } : {}}
+                      style={mode === "email" ? { backgroundColor: 'rgb(0, 0, 255)' } : {}}
                     >
                       <Mail className="h-4 w-4 mr-2" />
                       Email-Optimized
@@ -82,7 +82,7 @@ const Dashboard: React.FC = () => {
                           ? "text-white"
                           : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
                       }`}
-                      style={mode === "horoscope" ? { backgroundColor: 'rgb(25, 118, 210)' } : {}}
+                      style={mode === "horoscope" ? { backgroundColor: 'rgb(0, 0, 255)' } : {}}
                     >
                       <Star className="h-4 w-4 mr-2" />
                       Horoscope

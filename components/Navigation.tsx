@@ -112,14 +112,14 @@ export const Navigation: React.FC = () => {
                   <div className="text-sm text-gray-500 dark:text-gray-400">
                     Demo Mode
                   </div>
-                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgb(25, 118, 210)' }}></div>
+                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgb(0, 0, 255)' }}></div>
                 </div>
                 <button
                   onClick={() => signIn("google")}
                   className="flex items-center space-x-1 px-3 py-2 rounded-md text-white transition-colors"
-                  style={{ backgroundColor: 'rgb(25, 118, 210)' }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(21, 101, 192)'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(25, 118, 210)'}
+                  style={{ backgroundColor: 'rgb(0, 0, 255)' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
                 >
                   <LogIn className="h-4 w-4" />
                   <span>Sign In</span>
