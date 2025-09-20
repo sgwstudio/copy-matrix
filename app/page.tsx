@@ -68,7 +68,6 @@ const Home: React.FC = () => {
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
                 >
-                  <LogIn className="mr-2 h-5 w-5" />
                   → Sign In to Get Started
                 </Link>
               )}
