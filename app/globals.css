@@ -70,27 +70,6 @@
   box-shadow: none;
 }
 
-/* Marquee Animation Styles */
-@keyframes marquee {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
-}
-
-.marquee-container {
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.marquee-text {
-  display: inline-block;
-  animation: marquee 3s linear infinite;
-  padding-left: 100%;
-}
 
 /* Dark mode slider styles */
 .dark .slider::-webkit-slider-track {
