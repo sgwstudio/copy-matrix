@@ -60,16 +60,16 @@ export const Navigation: React.FC = () => {
             <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white">
               GG Copy Matrix
             </Link>
-            <div className="flex items-baseline space-x-2">
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
+              <div className="text-sm text-gray-600 dark:text-gray-300 font-medium">
                 {session && hasValidApiKey ? "Real AI Mode" : "Demo Mode"}
               </div>
-                     <div 
-                       className="w-2 h-2 rounded-full" 
-                       style={{ 
-                         backgroundColor: session && hasValidApiKey ? '#22c55e' : '#FF00FF' 
-                       }}
-                     ></div>
+              <div 
+                className="w-2 h-2 rounded-full ml-2" 
+                style={{ 
+                  backgroundColor: session && hasValidApiKey ? '#22c55e' : '#FF00FF' 
+                }}
+              ></div>
             </div>
           </div>
           
