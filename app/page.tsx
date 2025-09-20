@@ -50,18 +50,49 @@ const Home: React.FC = () => {
             <div className="flex justify-center">
               {session ? (
                 <div className="text-center">
-                  <div className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+                  <div className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
                     Welcome back, {session.user?.name || session.user?.email}!
                   </div>
-                  <Link
-                    href="/dashboard"
-                    className="inline-flex items-center px-8 py-4 text-white font-semibold rounded-lg transition-colors"
-                    style={{ backgroundColor: 'rgb(0, 0, 255)' }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
-                  >
-                    Go to Generator
-                  </Link>
+                  <div className="text-lg text-gray-600 dark:text-gray-400 mb-8">
+                    What do you want to work on today?
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                    <Link
+                      href="/dashboard?mode=single"
+                      className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
+                      style={{ backgroundColor: '#3B82F6' }}
+                    >
+                      Single Channel
+                    </Link>
+                    <Link
+                      href="/dashboard?mode=multi"
+                      className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
+                      style={{ backgroundColor: '#10B981' }}
+                    >
+                      Multi Channel
+                    </Link>
+                    <Link
+                      href="/dashboard?mode=channels"
+                      className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
+                      style={{ backgroundColor: '#F59E0B' }}
+                    >
+                      All Channels
+                    </Link>
+                    <Link
+                      href="/dashboard?mode=email"
+                      className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
+                      style={{ backgroundColor: '#EF4444' }}
+                    >
+                      Sneaker Release
+                    </Link>
+                    <Link
+                      href="/dashboard?mode=horoscope"
+                      className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
+                      style={{ backgroundColor: '#8B5CF6' }}
+                    >
+                      Horoscope
+                    </Link>
+                  </div>
                 </div>
               ) : (
                 <Link
