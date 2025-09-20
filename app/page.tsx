@@ -60,35 +60,35 @@ const Home: React.FC = () => {
                     <Link
                       href="/dashboard?mode=single"
                       className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
-                      style={{ backgroundColor: '#3B82F6' }}
+                      style={{ backgroundColor: 'rgb(0, 255, 255)' }}
                     >
                       Single Channel
                     </Link>
                     <Link
                       href="/dashboard?mode=multi"
                       className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
-                      style={{ backgroundColor: '#10B981' }}
+                      style={{ backgroundColor: 'rgb(0, 255, 0)' }}
                     >
                       Multi Channel
                     </Link>
                     <Link
                       href="/dashboard?mode=channels"
                       className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
-                      style={{ backgroundColor: '#F59E0B' }}
+                      style={{ backgroundColor: 'rgb(255, 255, 0)' }}
                     >
                       All Channels
                     </Link>
                     <Link
                       href="/dashboard?mode=email"
                       className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
-                      style={{ backgroundColor: '#EF4444' }}
+                      style={{ backgroundColor: 'rgb(255, 0, 0)' }}
                     >
                       Sneaker Release
                     </Link>
                     <Link
                       href="/dashboard?mode=horoscope"
                       className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
-                      style={{ backgroundColor: '#8B5CF6' }}
+                      style={{ backgroundColor: 'rgb(255, 0, 255)' }}
                     >
                       Horoscope
                     </Link>
