@@ -26,11 +26,10 @@ const Home: React.FC = () => {
   }
 
   return (
-    <main className="min-h-screen flex flex-col dark:from-gray-900 dark:to-gray-800" style={{ background: 'linear-gradient(135deg, rgb(227, 242, 253) 0%, rgb(235, 235, 235) 100%)' }}>
+    <main className="h-screen flex flex-col dark:from-gray-900 dark:to-gray-800 overflow-hidden" style={{ background: 'linear-gradient(135deg, rgb(227, 242, 253) 0%, rgb(235, 235, 235) 100%)' }}>
       {/* Hero Section */}
-      <section className="flex-1 flex items-center">
-        <div className="container mx-auto px-4 py-16 md:py-24">
-          <div className="text-center max-w-4xl mx-auto">
+      <section className="flex-1 flex items-center justify-center">
+        <div className="text-center max-w-4xl mx-auto px-4">
                   <div className="mb-8">
                     <div className="inline-flex items-center px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold text-lg rounded-xl bg-gray-50 dark:bg-gray-800 mb-6">
                       Access-Only Platform
@@ -66,12 +65,11 @@ const Home: React.FC = () => {
                 </Link>
               )}
             </div>
-          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-8 text-center text-gray-500 dark:text-gray-400">
+      <footer className="py-6 text-center text-gray-500 dark:text-gray-400">
         <div>© 2025 GG Copy Matrix. All rights reserved.</div>
         <div className="mt-2 text-sm">Built with Next.js, TypeScript, and Tailwind CSS.</div>
         <div className="mt-1 text-sm">Vibe Coded by SGW</div>
