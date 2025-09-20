@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Home, Settings, LogIn, User, ChevronDown, Copy, Layers, Globe, Mail, Star } from "lucide-react";
+import { Settings, LogIn, User, ChevronDown, Copy, Layers, Globe, Mail, Star } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState, useEffect, useRef } from "react";
 
@@ -42,14 +42,6 @@ export const Navigation: React.FC = () => {
           </div>
           
           <div className="flex items-center space-x-4">
-            <Link
-              href="/"
-              className="flex items-center space-x-1 px-3 py-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700"
-            >
-              <Home className="h-4 w-4" />
-              <span>Home</span>
-            </Link>
-            
             {session ? (
               <>
                 {/* Generator Modes Dropdown */}
