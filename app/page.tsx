@@ -26,54 +26,54 @@ const Home: React.FC = () => {
   }
 
   return (
-    <main className="min-h-screen dark:from-gray-900 dark:to-gray-800" style={{ background: 'linear-gradient(135deg, rgb(227, 242, 253) 0%, rgb(235, 235, 235) 100%)' }}>
+    <main className="min-h-screen flex flex-col dark:from-gray-900 dark:to-gray-800" style={{ background: 'linear-gradient(135deg, rgb(227, 242, 253) 0%, rgb(235, 235, 235) 100%)' }}>
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-16 md:py-24">
-        <div className="text-center max-w-4xl mx-auto">
-                <div className="mb-8">
-                  <div className="inline-flex items-center px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold text-lg rounded-xl bg-gray-50 dark:bg-gray-800 mb-6">
-                    Access-Only Platform
+      <section className="flex-1 flex items-center">
+        <div className="container mx-auto px-4 py-16 md:py-24">
+          <div className="text-center max-w-4xl mx-auto">
+                  <div className="mb-8">
+                    <div className="inline-flex items-center px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold text-lg rounded-xl bg-gray-50 dark:bg-gray-800 mb-6">
+                      Access-Only Platform
+                    </div>
                   </div>
+            
+            <div className="flex justify-center">
+              {session ? (
+                <div className="text-center">
+                  <div className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+                    Welcome back, {session.user?.name || session.user?.email}!
+                  </div>
+                  <Link
+                    href="/dashboard"
+                    className="inline-flex items-center px-8 py-4 text-white font-semibold rounded-lg transition-colors"
+                    style={{ backgroundColor: 'rgb(0, 0, 255)' }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
+                  >
+                    Go to Generator
+                  </Link>
                 </div>
-          
-          <div className="flex justify-center">
-            {session ? (
-              <div className="text-center">
-                <div className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
-                  Welcome back, {session.user?.name || session.user?.email}!
-                </div>
+              ) : (
                 <Link
-                  href="/dashboard"
+                  href="/api/auth/signin"
                   className="inline-flex items-center px-8 py-4 text-white font-semibold rounded-lg transition-colors"
                   style={{ backgroundColor: 'rgb(0, 0, 255)' }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
                 >
-                  Go to Generator
+                  <LogIn className="mr-2 h-5 w-5" />
+                  Sign In to Get Started
                 </Link>
-              </div>
-            ) : (
-              <Link
-                href="/api/auth/signin"
-                className="inline-flex items-center px-8 py-4 text-white font-semibold rounded-lg transition-colors"
-                style={{ backgroundColor: 'rgb(0, 0, 255)' }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
-              >
-                <LogIn className="mr-2 h-5 w-5" />
-                Sign In to Get Started
-              </Link>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </section>
 
-
       {/* Footer */}
-      <footer className="container mx-auto px-4 py-8 border-t border-gray-200 dark:border-gray-700">
-        <div className="text-center text-gray-600 dark:text-gray-400">
-          <p>&copy; 2025 GG Copy Matrix. Built with Next.js, TypeScript, and Tailwind CSS.</p>
-        </div>
+      <footer className="py-8 text-center text-gray-500 dark:text-gray-400">
+        <div>© 2025 GG Copy Matrix. All rights reserved.</div>
+        <div className="mt-2 text-sm">Vibe Coded by SGW</div>
       </footer>
     </main>
   );
