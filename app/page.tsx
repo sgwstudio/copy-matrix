@@ -26,7 +26,7 @@ const Home: React.FC = () => {
   }
 
   return (
-    <main className="h-screen flex flex-col dark:from-gray-900 dark:to-gray-800 overflow-hidden" style={{ background: 'linear-gradient(135deg, rgb(227, 242, 253) 0%, rgb(235, 235, 235) 100%)' }}>
+    <main className="h-screen flex flex-col bg-gray-100 dark:bg-gray-900 overflow-hidden">
       {/* Hero Section */}
       <section className="flex-1 flex items-center justify-center">
         <div className="text-center max-w-4xl mx-auto px-4">
@@ -63,13 +63,9 @@ const Home: React.FC = () => {
               ) : (
                 <Link
                   href="/api/auth/signin"
-                  className="inline-flex items-center px-8 py-4 text-white font-semibold rounded-lg transition-colors"
-                  style={{ backgroundColor: 'rgb(0, 0, 255)' }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
+                  className="inline-flex items-center justify-center w-12 h-12 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors"
                 >
-                  <LogIn className="mr-2 h-5 w-5" />
-                  Sign In to Get Started
+                  <LogIn className="h-5 w-5" />
                 </Link>
               )}
             </div>
