@@ -104,7 +104,7 @@ export default function SettingsPage() {
   if (status === "loading") {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2" style={{ borderBottomColor: 'rgb(0, 0, 255)' }}></div>
       </div>
     );
   }
@@ -120,7 +120,7 @@ export default function SettingsPage() {
         <div className="max-w-2xl mx-auto">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div className="flex items-center space-x-2 mb-6">
-              <Key className="h-6 w-6 text-blue-600" />
+              <Key className="h-6 w-6" style={{ color: 'rgb(0, 0, 255)' }} />
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                 API Settings
               </h1>
@@ -155,7 +155,8 @@ export default function SettingsPage() {
                       value={apiKey}
                       onChange={(e) => setApiKey(e.target.value)}
                       placeholder="Enter your Gemini API key..."
-                      className="w-full px-3 py-2 pr-20 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      className="w-full px-3 py-2 pr-20 border border-gray-300 rounded-md shadow-sm focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      style={{ '--tw-ring-color': 'rgb(0, 0, 255)', '--tw-border-color': 'rgb(0, 0, 255)' } as React.CSSProperties}
                     />
                     <button
                       type="button"
@@ -218,11 +219,11 @@ export default function SettingsPage() {
                     </div>
                   )}
 
-                  <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-md">
-                    <h3 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                  <div className="p-4 rounded-md" style={{ backgroundColor: 'rgba(0, 0, 255, 0.05)' }}>
+                    <h3 className="font-semibold mb-2" style={{ color: 'rgb(0, 0, 255)' }}>
                       How to get your API key:
                     </h3>
-                    <ol className="text-sm text-blue-800 dark:text-blue-200 space-y-1 list-decimal list-inside">
+                    <ol className="text-sm space-y-1 list-decimal list-inside" style={{ color: 'rgb(0, 0, 200)' }}>
                       <li>Go to <a href="https://aistudio.google.com" target="_blank" rel="noopener noreferrer" className="underline">Google AI Studio</a></li>
                       <li>Sign in with your Google account</li>
                       <li>Click "Get API key" in the left sidebar</li>

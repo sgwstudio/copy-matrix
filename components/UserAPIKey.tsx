@@ -53,7 +53,7 @@ export const UserAPIKey: React.FC<UserAPIKeyProps> = ({
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
       <div className="flex items-center space-x-2 mb-4">
-        <Key className="h-5 w-5 text-blue-600" />
+        <Key className="h-5 w-5" style={{ color: 'rgb(0, 0, 255)' }} />
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
           Your Gemini API Key
         </h3>
@@ -66,7 +66,10 @@ export const UserAPIKey: React.FC<UserAPIKeyProps> = ({
           href="https://aistudio.google.com" 
           target="_blank" 
           rel="noopener noreferrer"
-          className="text-blue-600 hover:text-blue-700 underline"
+          className="underline"
+          style={{ color: 'rgb(0, 0, 255)' }}
+          onMouseEnter={(e) => e.currentTarget.style.color = 'rgb(0, 0, 200)'}
+          onMouseLeave={(e) => e.currentTarget.style.color = 'rgb(0, 0, 255)'}
         >
           Google AI Studio
         </a>
@@ -79,7 +82,8 @@ export const UserAPIKey: React.FC<UserAPIKeyProps> = ({
             value={apiKey}
             onChange={(e) => handleKeyChange(e.target.value)}
             placeholder="Enter your Gemini API key..."
-            className="w-full px-3 py-2 pr-20 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="w-full px-3 py-2 pr-20 border border-gray-300 rounded-md shadow-sm focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            style={{ '--tw-ring-color': 'rgb(0, 0, 255)', '--tw-border-color': 'rgb(0, 0, 255)' } as React.CSSProperties}
           />
           <button
             type="button"

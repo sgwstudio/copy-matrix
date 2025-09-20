@@ -173,8 +173,8 @@ export const MultiChannelGenerator: React.FC<MultiChannelGeneratorProps> = ({
         <p className="text-gray-600 dark:text-gray-400 mt-2">
           Generate copy for multiple channels with the same voice characteristics
         </p>
-        <div className="mt-3 inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-          <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+        <div className="mt-3 inline-flex items-center px-3 py-1 rounded-full text-sm" style={{ backgroundColor: 'rgba(0, 0, 255, 0.1)', color: 'rgb(0, 0, 200)' }}>
+          <span className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: 'rgb(0, 0, 255)' }}></span>
           {userApiKey ? "AI Mode - Using your Gemini API key" : "Demo Mode - Add your API key in Settings"}
         </div>
       </div>
@@ -223,7 +223,8 @@ export const MultiChannelGenerator: React.FC<MultiChannelGeneratorProps> = ({
           </label>
           <textarea
             id="prompt"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+            style={{ '--tw-ring-color': 'rgb(0, 0, 255)', '--tw-border-color': 'rgb(0, 0, 255)' } as React.CSSProperties}
             rows={4}
             placeholder="Describe your content idea, target audience, key message, or any specific requirements..."
             value={prompt}
