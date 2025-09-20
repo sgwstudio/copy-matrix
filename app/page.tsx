@@ -73,7 +73,8 @@ const Home: React.FC = () => {
       {/* Footer */}
       <footer className="py-8 text-center text-gray-500 dark:text-gray-400">
         <div>© 2025 GG Copy Matrix. All rights reserved.</div>
-        <div className="mt-2 text-sm">Vibe Coded by SGW</div>
+        <div className="mt-2 text-sm">Built with Next.js, TypeScript, and Tailwind CSS.</div>
+        <div className="mt-1 text-sm">Vibe Coded by SGW</div>
       </footer>
     </main>
   );
