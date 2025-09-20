@@ -10,7 +10,6 @@ import {
   CheckCircle,
   LogIn,
 } from "lucide-react";
-import { AnimatedText } from "~/components/AnimatedText";
 
 const Home: React.FC = () => {
   const { data: session, status } = useSession();
@@ -33,16 +32,13 @@ const Home: React.FC = () => {
       <section className="container mx-auto px-4 py-16 md:py-24">
         <div className="text-center max-w-4xl mx-auto">
           <div className="mb-8">
-            <AnimatedText 
-              text="WIP Demo for the 2025 Marcom Annual Summit"
-              className="text-5xl md:text-7xl font-bold text-purple-600 dark:text-purple-400 mb-4"
-            />
-          </div>
-
-          <div className="mb-8">
-            <div className="inline-flex items-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg bg-gray-50 dark:bg-gray-800 mb-6">
-              <CheckCircle className="mr-2 h-5 w-5 text-green-500" />
-              Access-Only Platform
+            <div className="inline-flex items-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg bg-gray-50 dark:bg-gray-800 mb-6 overflow-hidden">
+              <CheckCircle className="mr-2 h-5 w-5 text-green-500 flex-shrink-0" />
+              <div className="marquee-container">
+                <div className="marquee-text">
+                  WIP Demo for the 2025 Marcom Annual Summit
+                </div>
+              </div>
             </div>
           </div>
           
