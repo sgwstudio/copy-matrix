@@ -32,9 +32,9 @@ const Home: React.FC = () => {
       <section className="container mx-auto px-4 py-16 md:py-24">
         <div className="text-center max-w-4xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-5xl md:text-7xl font-bold text-purple-600 dark:text-purple-400 mb-4">
-              Demo for 2025 Marcom Annual Summit
-            </h1>
+                  <h1 className="text-5xl md:text-7xl font-bold text-purple-600 dark:text-purple-400 mb-4">
+                    WIP Demo for the 2025 Marcom Annual Summit
+                  </h1>
           </div>
 
           <div className="mb-8">

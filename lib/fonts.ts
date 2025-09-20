@@ -1,13 +1,20 @@
-import { GeistMono } from "geist/font/mono";
-import { GeistSans } from "geist/font/sans";
+import { Roboto } from "next/font/google";
 
 /* -----------------------------------------------------------------------------------------------
- * Geist Fonts (https://vercel.com/font / https://www.npmjs.com/package/geist)
+ * Google Fonts - Roboto
  * -----------------------------------------------------------------------------------------------*/
 
-export const fontSans = GeistSans;
+export const fontSans = Roboto({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700", "900"],
+  variable: "--font-roboto",
+});
 
-export const fontMono = GeistMono;
+export const fontMono = Roboto({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700", "900"],
+  variable: "--font-roboto-mono",
+});
 
 /* -----------------------------------------------------------------------------------------------
  * Google Fonts
