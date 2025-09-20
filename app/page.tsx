@@ -8,6 +8,9 @@ import { useSession } from "next-auth/react";
 
 import {
   LogIn,
+  Sparkles,
+  Lock,
+  Mountain,
 } from "lucide-react";
 
 const Home: React.FC = () => {
@@ -33,13 +36,13 @@ const Home: React.FC = () => {
                   <div className="mb-8">
                     <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
                       <div className="inline-flex items-center px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold text-lg rounded-xl bg-gray-50 dark:bg-gray-800">
-                        GG
+                        GG <Sparkles className="ml-2 h-4 w-4" />
                       </div>
                       <div className="inline-flex items-center px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold text-lg rounded-xl bg-gray-50 dark:bg-gray-800">
-                        Access-Only Platform
+                        Access-Only Platform <Lock className="ml-2 h-4 w-4" />
                       </div>
                       <button className="inline-flex items-center px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold text-lg rounded-xl bg-gray-50 dark:bg-gray-800 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700">
-                        Marcom Annual Summit 2025
+                        Marcom Annual Summit 2025 <Mountain className="ml-2 h-4 w-4" />
                       </button>
                     </div>
                   </div>
