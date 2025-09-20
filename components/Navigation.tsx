@@ -60,7 +60,7 @@ export const Navigation: React.FC = () => {
             <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white">
               GG Copy Matrix
             </Link>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-baseline space-x-2">
               <div className="text-sm text-gray-500 dark:text-gray-400">
                 {session && hasValidApiKey ? "Real AI Mode" : "Demo Mode"}
               </div>
