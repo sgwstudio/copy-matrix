@@ -69,7 +69,7 @@ const Home: React.FC = () => {
                       className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
                       style={{ backgroundColor: 'rgb(0, 255, 0)' }}
                     >
-                      Multi Channel
+                      Voice Generator
                     </Link>
                     <Link
                       href="/dashboard?mode=channels"
