@@ -56,43 +56,29 @@ const Home: React.FC = () => {
                   <div className="text-lg text-gray-600 dark:text-gray-400 mb-8">
                     What do you want to work on today?
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
-                    <Link
-                      href="/dashboard?mode=single"
-                      className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
-                      style={{ backgroundColor: 'rgb(0, 255, 255)' }}
-                    >
-                      Single Channel
-                    </Link>
-                    <Link
-                      href="/dashboard?mode=multi"
-                      className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
-                      style={{ backgroundColor: 'rgb(0, 255, 0)' }}
-                    >
-                      Voice Generator
-                    </Link>
-                    <Link
-                      href="/dashboard?mode=channels"
-                      className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
-                      style={{ backgroundColor: 'rgb(255, 255, 0)' }}
-                    >
-                      All Channels
-                    </Link>
-                    <Link
-                      href="/dashboard?mode=email"
-                      className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
-                      style={{ backgroundColor: 'rgb(255, 0, 0)' }}
-                    >
-                      Sneaker Release
-                    </Link>
-                    <Link
-                      href="/dashboard?mode=horoscope"
-                      className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
-                      style={{ backgroundColor: 'rgb(255, 0, 255)' }}
-                    >
-                      Horoscope
-                    </Link>
-                  </div>
+                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                           <Link
+                             href="/dashboard?mode=email"
+                             className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
+                             style={{ backgroundColor: '#0000FF' }}
+                           >
+                             Sneaker Release
+                           </Link>
+                           <Link
+                             href="/dashboard?mode=horoscope"
+                             className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
+                             style={{ backgroundColor: '#8000FF' }}
+                           >
+                             Horoscope
+                           </Link>
+                           <Link
+                             href="/dashboard?mode=multi"
+                             className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
+                             style={{ backgroundColor: '#006400' }}
+                           >
+                             Voice R&D
+                           </Link>
+                         </div>
                 </div>
               ) : (
                 <Link
