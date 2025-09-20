@@ -24,6 +24,19 @@ export const VoiceMatrixSlider: React.FC<VoiceMatrixSliderProps> = ({
     onChange(parseFloat(e.target.value));
   };
 
+  // Calculate color based on slider position along magenta to blue gradient
+  const getSliderColor = (sliderValue: number) => {
+    // Normalize value from -1 to 1 to 0 to 1
+    const normalizedValue = (sliderValue + 1) / 2;
+    
+    // Interpolate between magenta (#FF00FF) and blue (#0000FF)
+    const r = Math.round(255 * (1 - normalizedValue)); // 255 at left (magenta), 0 at right (blue)
+    const g = 0; // Always 0 for both magenta and blue
+    const b = 255; // Always 255 for both magenta and blue
+    
+    return `rgb(${r}, ${g}, ${b})`;
+  };
+
   return (
     <div className={cn("space-y-3", className)}>
       <div className="flex items-center justify-between">
@@ -40,7 +53,7 @@ export const VoiceMatrixSlider: React.FC<VoiceMatrixSliderProps> = ({
         <div 
           className="w-full h-2 rounded-lg absolute top-0"
           style={{ 
-            background: 'linear-gradient(90deg, #cc95c0, #dbd4b4, #7aa1d2)'
+            background: 'linear-gradient(90deg, #FF00FF, #0000FF)'
           }}
         />
         
@@ -53,7 +66,18 @@ export const VoiceMatrixSlider: React.FC<VoiceMatrixSliderProps> = ({
           onChange={handleChange}
           className="w-full h-2 bg-transparent rounded-lg appearance-none cursor-pointer relative z-10 slider"
           style={{
-            background: 'transparent'
+            background: 'transparent',
+            WebkitAppearance: 'none',
+            appearance: 'none'
+          }}
+        />
+        
+        {/* Dynamic colored dot */}
+        <div
+          className="absolute top-0 w-4 h-4 rounded-full border-2 border-white dark:border-gray-800 shadow-lg transform -translate-y-1 transition-all duration-75"
+          style={{
+            left: `calc(${((value + 1) / 2) * 100}% - 8px)`,
+            backgroundColor: getSliderColor(value)
           }}
         />
         
