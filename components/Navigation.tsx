@@ -1,14 +1,34 @@
 "use client";
 
 import Link from "next/link";
-import { Settings, User } from "lucide-react";
+import { Settings, User, ChevronDown, Mail, Star, Layers } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
+const modes = [
+  { id: "email", name: "Sneaker Release", icon: Mail, href: "/dashboard?mode=email" },
+  { id: "horoscope", name: "Horoscope", icon: Star, href: "/dashboard?mode=horoscope" },
+  { id: "multi", name: "Voice R&D", icon: Layers, href: "/dashboard?mode=multi" },
+];
 
 export const Navigation: React.FC = () => {
   const { data: session, status } = useSession();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [hasValidApiKey, setHasValidApiKey] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   // Check for valid API key when user is signed in
   useEffect(() => {
@@ -54,6 +74,34 @@ export const Navigation: React.FC = () => {
           <div className="flex items-center space-x-4">
             {session ? (
               <>
+                {/* Generator Modes Dropdown */}
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                    className="flex items-center space-x-1 px-3 py-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700"
+                  >
+                    <span>Generator</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                  
+                  {isDropdownOpen && (
+                    <div className="absolute top-full left-0 mt-1 w-56 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 z-50">
+                      <div className="py-1">
+                        {modes.map((mode) => (
+                          <Link
+                            key={mode.id}
+                            href={mode.href}
+                            className="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            onClick={() => setIsDropdownOpen(false)}
+                          >
+                            <mode.icon className="h-4 w-4" />
+                            <span>{mode.name}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
                 
                 <Link
                   href="/settings"
