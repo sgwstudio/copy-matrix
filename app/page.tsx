@@ -36,33 +36,57 @@ const Home: React.FC = () => {
                     </div>
                   </div>
             
-            <div className="flex justify-center">
+            <div className="flex flex-col items-center space-y-4">
               {session ? (
                 <div className="text-center">
-                  <div className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+                  <div className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
                     Welcome back, {session.user?.name || session.user?.email}!
                   </div>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link
+                      href="/dashboard"
+                      className="inline-flex items-center justify-center px-8 py-4 text-white font-semibold rounded-lg transition-colors"
+                      style={{ backgroundColor: 'rgb(0, 0, 255)' }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
+                    >
+                      Go to Generator
+                    </Link>
+                    <button
+                      className="inline-flex items-center justify-center px-8 py-4 text-gray-700 dark:text-gray-300 font-semibold rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      Marcom Annual Summit 2025
+                    </button>
+                    <button
+                      className="inline-flex items-center justify-center px-8 py-4 text-gray-700 dark:text-gray-300 font-semibold rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      WIP Copy Tool
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-col sm:flex-row gap-3">
                   <Link
-                    href="/dashboard"
-                    className="inline-flex items-center px-8 py-4 text-white font-semibold rounded-lg transition-colors"
+                    href="/api/auth/signin"
+                    className="inline-flex items-center justify-center px-8 py-4 text-white font-semibold rounded-lg transition-colors"
                     style={{ backgroundColor: 'rgb(0, 0, 255)' }}
                     onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
                     onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
                   >
-                    Go to Generator
+                    <LogIn className="mr-2 h-5 w-5" />
+                    Sign In to Get Started
                   </Link>
+                  <button
+                    className="inline-flex items-center justify-center px-8 py-4 text-gray-700 dark:text-gray-300 font-semibold rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
+                    Marcom Annual Summit 2025
+                  </button>
+                  <button
+                    className="inline-flex items-center justify-center px-8 py-4 text-gray-700 dark:text-gray-300 font-semibold rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
+                    WIP Copy Tool
+                  </button>
                 </div>
-              ) : (
-                <Link
-                  href="/api/auth/signin"
-                  className="inline-flex items-center px-8 py-4 text-white font-semibold rounded-lg transition-colors"
-                  style={{ backgroundColor: 'rgb(0, 0, 255)' }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
-                >
-                  <LogIn className="mr-2 h-5 w-5" />
-                  Sign In to Get Started
-                </Link>
               )}
             </div>
         </div>
