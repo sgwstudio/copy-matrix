@@ -34,7 +34,7 @@ const Home: React.FC = () => {
             <div className="inline-flex items-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg bg-gray-50 dark:bg-gray-800 mb-6 overflow-hidden">
               <div className="marquee-container">
                 <div className="marquee-text">
-                  🚧 WIP GG Copy Matrix Demo for the 2025 Marcom Annual Summit 👥 GG Team Access Only 🔒
+                  ✨ Copy Matrix Demo 👥 2025 Marcom Annual Summit 🔒 GG Team Access Only
                 </div>
               </div>
             </div>
