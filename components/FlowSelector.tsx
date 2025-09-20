@@ -36,7 +36,7 @@ export const FlowSelector: React.FC<FlowSelectorProps> = ({ currentMode, classNa
   return (
     <div className={`mb-8 ${className}`}>
       <div className="flex justify-center">
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-1 shadow-sm border border-gray-200 dark:border-gray-700">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
           {flows.map((flow) => {
             const Icon = flow.icon;
             const isActive = currentMode === flow.id;
@@ -45,12 +45,8 @@ export const FlowSelector: React.FC<FlowSelectorProps> = ({ currentMode, classNa
               <Link
                 key={flow.id}
                 href={flow.href}
-                className={`flex items-center px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isActive
-                    ? "text-white"
-                    : "text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-                }`}
-                style={isActive ? { backgroundColor: flow.color } : {}}
+                className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
+                style={{ backgroundColor: flow.color }}
               >
                 <Icon className="h-4 w-4 mr-2" />
                 {flow.name}
