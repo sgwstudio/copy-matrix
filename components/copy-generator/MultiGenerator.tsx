@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { VoiceMatrix as VoiceMatrixType } from "~/lib/gemini-client";
 import { VoiceMatrix } from "../voice-matrix/VoiceMatrix";
 import { CopyOutput } from "./CopyOutput";
-import { ChannelSelector } from "./ChannelSelector";
+// Removed ChannelSelector import - using multi-channel selection instead
 import { Copy, Plus, Trash2, RotateCcw, BarChart3 } from "lucide-react";
 import { ComparisonView } from "./ComparisonView";
 
@@ -51,7 +51,9 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
   className,
 }) => {
   const [prompt, setPrompt] = useState("");
-  const [selectedChannel, setSelectedChannel] = useState(CHANNELS[0]);
+  const [selectedChannels, setSelectedChannels] = useState<typeof CHANNELS[0][]>([
+    CHANNELS[0], // Start with Email selected
+  ]);
   const [configs, setConfigs] = useState<GenerationConfig[]>([
     {
       id: "1",
@@ -76,6 +78,17 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
   ]);
   const [userApiKey, setUserApiKey] = useState<string>("");
   const [showComparison, setShowComparison] = useState(false);
+
+  const toggleChannel = (channel: typeof CHANNELS[0]) => {
+    setSelectedChannels(prev => {
+      const isSelected = prev.some(c => c.id === channel.id);
+      if (isSelected) {
+        return prev.filter(c => c.id !== channel.id);
+      } else {
+        return [...prev, channel];
+      }
+    });
+  };
 
   useEffect(() => {
     // Check if user has an API key stored in database
@@ -128,63 +141,90 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
   };
 
   const generateAll = async () => {
-    if (!prompt.trim()) return;
+    if (!prompt.trim() || selectedChannels.length === 0) return;
 
     // Set all configs to generating state
     setConfigs(prevConfigs => prevConfigs.map(config => ({ ...config, isGenerating: true })));
 
-    // Generate for each config
-    const promises = configs.map(async (config) => {
-      try {
-        const response = await fetch("/api/generate-copy", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            prompt,
-            channel: selectedChannel.name.toLowerCase(),
-            voiceMatrix: config.voiceMatrix,
-            brandGuidelines,
-            voiceSamples,
-            characterLimit: selectedChannel.characterLimit,
-          }),
-        });
+    // Generate for each config and each selected channel
+    const promises = configs.flatMap(config => 
+      selectedChannels.map(async (channel) => {
+        try {
+          const response = await fetch("/api/generate-copy", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              prompt,
+              channel: channel.name.toLowerCase(),
+              voiceMatrix: config.voiceMatrix,
+              brandGuidelines,
+              voiceSamples,
+              characterLimit: channel.characterLimit,
+            }),
+          });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || "Failed to generate copy");
-        }
-
-        const data = await response.json();
-        return { id: config.id, data };
-      } catch (error) {
-        console.error(`Failed to generate copy for ${config.name}:`, error);
-        return { 
-          id: config.id, 
-          data: { 
-            content: `Error: ${error instanceof Error ? error.message : String(error)}`,
-            characterCount: 0,
-            voiceConsistencyScore: 0,
-            suggestions: []
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || "Failed to generate copy");
           }
-        };
-      }
-    });
+
+          const data = await response.json();
+          return { 
+            configId: config.id, 
+            channelId: channel.id,
+            channelName: channel.name,
+            data 
+          };
+        } catch (error) {
+          console.error(`Failed to generate copy for ${config.name} on ${channel.name}:`, error);
+          return { 
+            configId: config.id,
+            channelId: channel.id,
+            channelName: channel.name,
+            data: { 
+              content: `Error: ${error instanceof Error ? error.message : String(error)}`,
+              characterCount: 0,
+              voiceConsistencyScore: 0,
+              suggestions: []
+            }
+          };
+        }
+      })
+    );
 
     const results = await Promise.all(promises);
 
-    // Update configs with results using functional update
+    // Group results by config and create combined content
+    const resultsByConfig = results.reduce((acc, result) => {
+      if (!acc[result.configId]) {
+        acc[result.configId] = [];
+      }
+      acc[result.configId].push(result);
+      return acc;
+    }, {} as Record<string, typeof results>);
+
+    // Update configs with combined results
     setConfigs(prevConfigs => prevConfigs.map(config => {
-      const result = results.find(r => r.id === config.id);
-      if (result) {
-        console.log(`🎯 Updating config ${config.id} with result:`, result.data);
+      const configResults = resultsByConfig[config.id] || [];
+      if (configResults.length > 0) {
+        // Combine all channel results for this config
+        const combinedContent = configResults.map(r => 
+          `## ${r.channelName}\n${r.data.content}`
+        ).join('\n\n');
+        
+        const totalCharacterCount = configResults.reduce((sum, r) => sum + r.data.characterCount, 0);
+        const avgVoiceScore = configResults.reduce((sum, r) => sum + r.data.voiceConsistencyScore, 0) / configResults.length;
+        const allSuggestions = configResults.flatMap(r => r.data.suggestions);
+
+        console.log(`🎯 Updating config ${config.id} with combined results:`, configResults);
         return {
           ...config,
-          generatedContent: result.data.content,
-          characterCount: result.data.characterCount,
-          voiceConsistencyScore: result.data.voiceConsistencyScore,
-          suggestions: result.data.suggestions,
+          generatedContent: combinedContent,
+          characterCount: totalCharacterCount,
+          voiceConsistencyScore: avgVoiceScore,
+          suggestions: allSuggestions,
           isGenerating: false,
         };
       }
@@ -224,11 +264,39 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
       {/* Input Section */}
       <div className="space-y-6">
         {/* Channel Selection */}
-        <ChannelSelector
-          channels={CHANNELS}
-          selectedChannel={selectedChannel}
-          onChannelChange={setSelectedChannel}
-        />
+        <div className="space-y-3">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Select Channels
+          </label>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+            {CHANNELS.map((channel) => {
+              const isSelected = selectedChannels.some(c => c.id === channel.id);
+              return (
+                <button
+                  key={channel.id}
+                  onClick={() => toggleChannel(channel)}
+                  className={`flex flex-col items-center p-3 rounded-lg border-2 transition-all duration-200 ${
+                    isSelected
+                      ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+                      : "border-gray-200 hover:border-gray-300 dark:border-gray-600 dark:hover:border-gray-500"
+                  }`}
+                  disabled={isGenerating}
+                >
+                  <span className="text-2xl mb-1">{channel.icon}</span>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    {channel.name}
+                  </span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {channel.characterLimit} chars
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {selectedChannels.length} channel{selectedChannels.length !== 1 ? 's' : ''} selected
+          </p>
+        </div>
 
         {/* Prompt Input */}
         <div className="space-y-2">
@@ -251,14 +319,14 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
         <div className="flex gap-3">
           <button
             onClick={generateAll}
-            disabled={isGenerating || !prompt.trim()}
+            disabled={isGenerating || !prompt.trim() || selectedChannels.length === 0}
             className="flex-1 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             style={{ backgroundColor: 'rgb(0, 0, 255)' }}
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
           >
             <Copy className="h-4 w-4 mr-2" />
-            {isGenerating ? "Generating All..." : "Generate All Versions"}
+            {isGenerating ? "Generating..." : `Generate for ${selectedChannels.length} Channel${selectedChannels.length !== 1 ? 's' : ''}`}
           </button>
           <button
             onClick={addNewConfig}
