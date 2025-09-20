@@ -63,9 +63,13 @@ const Home: React.FC = () => {
               ) : (
                 <Link
                   href="/api/auth/signin"
-                  className="inline-flex items-center justify-center w-12 h-12 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors"
+                  className="inline-flex items-center px-8 py-4 text-white font-semibold rounded-lg transition-colors"
+                  style={{ backgroundColor: 'rgb(0, 0, 255)' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
                 >
-                  <LogIn className="h-5 w-5" />
+                  <LogIn className="mr-2 h-5 w-5" />
+                  → Sign In to Get Started
                 </Link>
               )}
             </div>
