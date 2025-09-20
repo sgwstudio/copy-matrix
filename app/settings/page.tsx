@@ -170,7 +170,10 @@ export default function SettingsPage() {
                     <button
                       onClick={handleSave}
                       disabled={!apiKey || isTesting || isSaving}
-                      className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex items-center space-x-2 px-4 py-2 text-white rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                      style={{ backgroundColor: 'rgb(25, 118, 210)' }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(21, 101, 192)'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(25, 118, 210)'}
                     >
                       {isSaving ? (
                         <>

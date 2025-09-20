@@ -175,7 +175,10 @@ export const CopyGenerator: React.FC<CopyGeneratorProps> = ({
             <button
               onClick={handleGenerate}
               disabled={!prompt.trim() || isGenerating}
-              className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{ backgroundColor: 'rgb(25, 118, 210)' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(21, 101, 192)'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(25, 118, 210)'}
             >
               {isGenerating ? "Generating..." : "Generate Copy"}
             </button>
