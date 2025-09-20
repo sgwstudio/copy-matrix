@@ -139,21 +139,25 @@ export const ToneMatrix: React.FC<ToneMatrixProps> = ({
     };
   }, [isDragging, onChange]);
 
-  // Get dynamic cursor color based on position
+  // Get dynamic cursor color based on position - gradient from magenta to RGB blue
   const getCursorColor = (x: number, y: number) => {
-    // X-axis: Provocative (left, -1) to Educational (right, 1) - Cool spectrum (Red to Blue)
-    // Y-axis: Playful (top, -1) to Serious (bottom, 1) - Warm spectrum (Yellow to Green)
+    // X-axis: Provocative (left, -1) to Educational (right, 1) - Magenta to Blue spectrum
+    // Y-axis: Playful (top, -1) to Serious (bottom, 1) - Affects intensity
     
     // Normalize to 0-1 range
     const normalizedX = (x + 1) / 2; // 0 to 1
     const normalizedY = (y + 1) / 2; // 0 to 1
     
-    // Calculate RGB values
-    const r = Math.round(255 * (1 - normalizedY) * (1 - normalizedX * 0.5)); // More playful (low y) -> more red
-    const g = Math.round(255 * normalizedX * (0.5 + normalizedY * 0.5)); // More educational (high x) -> more green
-    const b = Math.round(255 * normalizedY * (0.5 + normalizedX * 0.5)); // More serious (high y) -> more blue
+    // Calculate RGB values for magenta to blue gradient
+    // Magenta: rgb(255, 0, 255) at x=0, Blue: rgb(0, 0, 255) at x=1
+    const r = Math.round(255 * (1 - normalizedX)); // 255 at left (magenta), 0 at right (blue)
+    const g = 0; // Always 0 for pure magenta to blue
+    const b = 255; // Always 255 for both magenta and blue
     
-    return `rgb(${Math.max(0, Math.min(255, r))}, ${Math.max(0, Math.min(255, g))}, ${Math.max(0, Math.min(255, b))})`;
+    // Adjust intensity based on Y position (playful to serious)
+    const intensity = 0.7 + (normalizedY * 0.3); // 0.7 to 1.0
+    
+    return `rgb(${Math.round(r * intensity)}, ${Math.round(g * intensity)}, ${Math.round(b * intensity)})`;
   };
 
   // Get the quadrant and description
@@ -224,11 +228,15 @@ export const ToneMatrix: React.FC<ToneMatrixProps> = ({
 
         <div
           ref={matrixRef}
-          className={`relative w-[500px] h-[500px] mx-auto border-4 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 cursor-crosshair focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-offset-4 shadow-2xl transition-all duration-200 ${
+          className={`relative w-[500px] h-[500px] mx-auto border-4 rounded-2xl cursor-crosshair focus:outline-none focus:ring-4 focus:ring-offset-4 shadow-2xl transition-all duration-200 ${
             isDragging 
-              ? 'border-blue-400 dark:border-blue-500 shadow-blue-200 dark:shadow-blue-900/50' 
+              ? 'border-gray-400 dark:border-gray-500 shadow-gray-200 dark:shadow-gray-900/50' 
               : 'border-gray-300 dark:border-gray-600'
           }`}
+          style={{
+            background: 'linear-gradient(to right, rgb(255, 0, 255) 0%, rgb(0, 0, 255) 100%)',
+            opacity: 0.1
+          }}
           tabIndex={0}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
@@ -251,12 +259,12 @@ export const ToneMatrix: React.FC<ToneMatrixProps> = ({
           {/* Center point indicator */}
           <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-gray-400 dark:bg-gray-500 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
 
-          {/* Quadrant background hints */}
+          {/* Quadrant background hints - magenta to blue gradient */}
           <div className="absolute inset-0 rounded-2xl overflow-hidden">
-            <div className="absolute top-0 left-0 w-1/2 h-1/2 bg-red-50 dark:bg-red-900/20 opacity-30"></div>
-            <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-yellow-50 dark:bg-yellow-900/20 opacity-30"></div>
-            <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-blue-50 dark:bg-blue-900/20 opacity-30"></div>
-            <div className="absolute bottom-0 right-0 w-1/2 h-1/2 bg-green-50 dark:bg-green-900/20 opacity-30"></div>
+            <div className="absolute top-0 left-0 w-1/2 h-1/2 opacity-20" style={{ backgroundColor: 'rgb(255, 0, 255)' }}></div>
+            <div className="absolute top-0 right-0 w-1/2 h-1/2 opacity-20" style={{ backgroundColor: 'rgb(128, 0, 255)' }}></div>
+            <div className="absolute bottom-0 left-0 w-1/2 h-1/2 opacity-20" style={{ backgroundColor: 'rgb(255, 0, 128)' }}></div>
+            <div className="absolute bottom-0 right-0 w-1/2 h-1/2 opacity-20" style={{ backgroundColor: 'rgb(0, 0, 255)' }}></div>
           </div>
 
           {/* Quadrant labels */}
@@ -273,19 +281,28 @@ export const ToneMatrix: React.FC<ToneMatrixProps> = ({
             Educational + Serious
           </div>
 
-          {/* Position indicator with dynamic color and better visibility */}
+          {/* Position indicator - gray arrow */}
           <div
-            className="absolute w-10 h-10 border-4 border-white dark:border-gray-800 rounded-full shadow-2xl transform -translate-x-1/2 -translate-y-1/2 transition-all duration-75 cursor-grab active:cursor-grabbing hover:scale-110"
+            className="absolute w-8 h-8 transform -translate-x-1/2 -translate-y-1/2 transition-all duration-75 cursor-grab active:cursor-grabbing hover:scale-110"
             style={{
               left: `${((tonePosition.x + 1) / 2) * 100}%`,
               top: `${((tonePosition.y + 1) / 2) * 100}%`,
-              backgroundColor: getCursorColor(tonePosition.x, tonePosition.y),
             }}
           >
-            <div className="w-full h-full rounded-full bg-white dark:bg-gray-800 opacity-30"></div>
-            <div className="absolute inset-2 rounded-full bg-white dark:bg-gray-800 opacity-50"></div>
-            {/* Inner dot for better visibility */}
-            <div className="absolute inset-3 rounded-full bg-white dark:bg-gray-800 opacity-80"></div>
+            {/* Gray arrow pointing down */}
+            <div 
+              className="w-0 h-0 border-l-4 border-r-4 border-t-6 border-transparent border-t-gray-600 dark:border-t-gray-400 mx-auto"
+              style={{
+                filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))'
+              }}
+            ></div>
+            {/* Small circle at the arrow base */}
+            <div 
+              className="w-3 h-3 bg-gray-600 dark:bg-gray-400 rounded-full mx-auto -mt-1"
+              style={{
+                filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3))'
+              }}
+            ></div>
           </div>
 
           {/* Click anywhere indicator */}
