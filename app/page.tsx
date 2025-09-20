@@ -31,7 +31,7 @@ const Home: React.FC = () => {
       <section className="container mx-auto px-4 py-16 md:py-24">
         <div className="text-center max-w-4xl mx-auto">
           <div className="mb-8">
-            <div className="inline-flex items-center px-6 py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-lg bg-gray-50 dark:bg-gray-800 mb-6 overflow-hidden">
+            <div className="inline-flex items-center px-12 py-6 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold text-xl rounded-xl bg-gray-50 dark:bg-gray-800 mb-6 overflow-hidden">
               <div className="marquee-container">
                 <div className="marquee-text">
                   ✨ Copy Matrix Demo 👥 2025 Marcom Annual Summit 🔒 GG Team Access Only
