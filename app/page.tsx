@@ -52,7 +52,7 @@ const Home: React.FC = () => {
                 <div className="text-center">
                   <div className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
                     Welcome back,<br />
-                    {session.user?.name || session.user?.email}.
+                    {(session.user?.name || session.user?.email || '').split(' ')[0]}.
                   </div>
                   <div className="text-2xl font-semibold text-gray-900 dark:text-white mb-8">
                     What do you want to work on today?
