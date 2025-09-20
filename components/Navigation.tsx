@@ -64,12 +64,12 @@ export const Navigation: React.FC = () => {
               <div className="text-sm text-gray-500 dark:text-gray-400">
                 {session && hasValidApiKey ? "Real AI Mode" : "Demo Mode"}
               </div>
-              <div 
-                className="w-2 h-2 rounded-full" 
-                style={{ 
-                  backgroundColor: session && hasValidApiKey ? '#22c55e' : 'rgb(0, 0, 255)' 
-                }}
-              ></div>
+                     <div 
+                       className="w-2 h-2 rounded-full" 
+                       style={{ 
+                         backgroundColor: session && hasValidApiKey ? '#22c55e' : '#FF00FF' 
+                       }}
+                     ></div>
             </div>
           </div>
           
