@@ -9,7 +9,7 @@ const modes = [
   { id: "single", name: "Single Channel", icon: Copy, href: "/dashboard?mode=single" },
   { id: "multi", name: "Multi Channel", icon: Layers, href: "/dashboard?mode=multi" },
   { id: "channels", name: "All Channels", icon: Globe, href: "/dashboard?mode=channels" },
-  { id: "email", name: "Email-Optimized", icon: Mail, href: "/dashboard?mode=email" },
+    { id: "email", name: "Sneaker Release", icon: Mail, href: "/dashboard?mode=email" },
   { id: "horoscope", name: "Horoscope", icon: Star, href: "/dashboard?mode=horoscope" },
 ];
 

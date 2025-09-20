@@ -169,7 +169,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
       {/* Header */}
       <div className="text-center">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Email-Optimized Copy Generator
+          Sneaker Release Copy Generator
         </h1>
         <p className="text-gray-600 dark:text-gray-400">
           Generate copy optimized for Email & Pushes, TikTok, and Instagram with detailed specifications
