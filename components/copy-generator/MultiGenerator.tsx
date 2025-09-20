@@ -359,7 +359,7 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
       {showComparison && (
         <ComparisonView 
           configs={configs} 
-          channel={selectedChannel} 
+          channels={selectedChannels} 
         />
       )}
 
@@ -397,10 +397,10 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
             <CopyOutput
               content={config.generatedContent}
               characterCount={config.characterCount}
-              characterLimit={selectedChannel.characterLimit}
+              characterLimit={selectedChannels.reduce((sum, ch) => sum + ch.characterLimit, 0)}
               voiceConsistencyScore={config.voiceConsistencyScore}
               suggestions={config.suggestions}
-              channel={selectedChannel}
+              channel={selectedChannels[0] || CHANNELS[0]}
               isLoading={config.isGenerating}
             />
           </div>

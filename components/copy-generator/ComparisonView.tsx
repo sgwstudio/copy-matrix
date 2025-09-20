@@ -21,10 +21,10 @@ interface ComparisonViewProps {
       empathy: number;
     };
   }>;
-  channel: { name: string; icon: string; characterLimit: number };
+  channels: Array<{ name: string; icon: string; characterLimit: number }>;
 }
 
-export const ComparisonView: React.FC<ComparisonViewProps> = ({ configs, channel }) => {
+export const ComparisonView: React.FC<ComparisonViewProps> = ({ configs, channels }) => {
   const validConfigs = configs.filter(config => config.generatedContent);
 
   if (validConfigs.length === 0) {
@@ -78,7 +78,7 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({ configs, channel
           Voice Comparison Analysis
         </h3>
         <p className="text-gray-600 dark:text-gray-400">
-          Compare different voice approaches for {channel.name} content
+          Compare different voice approaches for {channels.length > 1 ? `${channels.length} channels` : channels[0]?.name} content
         </p>
       </div>
 
@@ -107,7 +107,7 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({ configs, channel
               <div className="flex items-center justify-between">
                 <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Generated Copy:</p>
                 <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {config.characterCount}/{channel.characterLimit} chars
+                  {config.characterCount}/{channels.reduce((sum, ch) => sum + ch.characterLimit, 0)} chars
                 </span>
               </div>
               <div className="bg-gray-50 dark:bg-gray-700 rounded-md p-3 text-sm">
