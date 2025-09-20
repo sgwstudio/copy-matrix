@@ -51,9 +51,10 @@ const Home: React.FC = () => {
               {session ? (
                 <div className="text-center">
                   <div className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
-                    Welcome back, {session.user?.name || session.user?.email}!
+                    Welcome back,<br />
+                    {session.user?.name || session.user?.email}.
                   </div>
-                  <div className="text-lg text-gray-600 dark:text-gray-400 mb-8">
+                  <div className="text-2xl font-semibold text-gray-900 dark:text-white mb-8">
                     What do you want to work on today?
                   </div>
                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl mx-auto">
