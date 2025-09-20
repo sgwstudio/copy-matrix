@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Settings, LogIn, User, ChevronDown, Copy, Layers, Globe, Mail, Star } from "lucide-react";
+import { Settings, User, ChevronDown, Copy, Layers, Globe, Mail, Star } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState, useEffect, useRef } from "react";
 
@@ -108,13 +108,12 @@ export const Navigation: React.FC = () => {
                 </div>
                 <button
                   onClick={() => signIn("google")}
-                  className="flex items-center space-x-1 px-3 py-2 rounded-md text-white transition-colors"
+                  className="px-3 py-2 rounded-md text-white transition-colors"
                   style={{ backgroundColor: 'rgb(0, 0, 255)' }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
                 >
-                  <LogIn className="h-4 w-4" />
-                  <span>Sign In</span>
+                  Sign In
                 </button>
               </div>
             )}
