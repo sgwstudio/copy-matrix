@@ -44,7 +44,9 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
+    console.log("API Request body:", body);
     const validatedData = GenerateCopySchema.parse(body);
+    console.log("Validated data:", validatedData);
 
     // Get user's API key
     const user = await db.user.findUnique({

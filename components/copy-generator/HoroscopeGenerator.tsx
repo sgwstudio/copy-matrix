@@ -72,6 +72,15 @@ export const HoroscopeGenerator: React.FC = () => {
       });
 
       const result = await response.json();
+      console.log("API Response:", result);
+      console.log("Response status:", response.status);
+      
+      if (!response.ok) {
+        console.error("API Error:", result);
+        alert(`Failed to generate horoscopes: ${result.error || 'Unknown error'}`);
+        return;
+      }
+      
       setGeneratedHoroscopes(result);
     } catch (error) {
       console.error("Error generating horoscopes:", error);
@@ -250,6 +259,7 @@ export const HoroscopeGenerator: React.FC = () => {
 
         {/* Right Column - Generated Horoscopes */}
         <div className="lg:col-span-2">
+          {console.log("Generated horoscopes state:", generatedHoroscopes)}
           {generatedHoroscopes && (
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
               <div className="p-6">

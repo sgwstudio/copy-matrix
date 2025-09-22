@@ -401,9 +401,11 @@ Generate the copy now:`;
 
     try {
       console.log("🔄 Sending request to Gemini API...");
-      const result = await this.model.generateContent(fullPrompt);
-      const response = await result.response;
-      const text = response.text();
+    console.log("Full prompt for horoscope:", fullPrompt);
+    const result = await this.model.generateContent(fullPrompt);
+    const response = await result.response;
+    const text = response.text();
+    console.log("Raw AI response:", text);
       
       console.log("📥 Raw response from Gemini:", text);
       
