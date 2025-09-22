@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { VoiceMatrix } from "~/components/voice-matrix/VoiceMatrix";
 import { FlowSelector } from "~/components/FlowSelector";
 import {
   Sparkles,
@@ -39,24 +38,9 @@ const HOROSCOPE_THEMES = [
   { id: 7, name: "Athleticism", description: "mastery, winning", icon: "🏆" },
 ];
 
-interface HoroscopeGeneratorProps {
-  useToneMatrix?: boolean;
-}
-
-export const HoroscopeGenerator: React.FC<HoroscopeGeneratorProps> = ({
-  useToneMatrix = true
-}) => {
+export const HoroscopeGenerator: React.FC = () => {
   const [selectedSigns, setSelectedSigns] = useState<string[]>([ZODIAC_SIGNS[0].id]);
   const [content, setContent] = useState("");
-  const [voiceMatrix, setVoiceMatrix] = useState({
-    directness: 0,
-    universality: 0,
-    authority: 0,
-    tension: 0,
-    education: 0,
-    rhythm: 0,
-    expressiveCandid: 0,
-  });
   const [generatedHoroscopes, setGeneratedHoroscopes] = useState<any>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSpecs, setShowSpecs] = useState(false);
@@ -82,7 +66,6 @@ export const HoroscopeGenerator: React.FC<HoroscopeGeneratorProps> = ({
         body: JSON.stringify({
           content: content,
           channel: "horoscope",
-          voiceMatrix,
           mode: "horoscope",
           zodiacSigns: selectedSigns,
         }),
@@ -240,15 +223,6 @@ export const HoroscopeGenerator: React.FC<HoroscopeGeneratorProps> = ({
             </div>
           </div>
 
-          {/* Voice Matrix */}
-          {useToneMatrix && (
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-              <VoiceMatrix
-                voiceMatrix={voiceMatrix}
-                onChange={setVoiceMatrix}
-              />
-            </div>
-          )}
 
           {/* Theme Information */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">

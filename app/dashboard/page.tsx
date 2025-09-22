@@ -26,7 +26,7 @@ const Dashboard: React.FC = () => {
 
         {/* Generator Component */}
         {mode === "email" && <EmailOptimizedGenerator useToneMatrix={true} />}
-        {mode === "horoscope" && <HoroscopeGenerator useToneMatrix={true} />}
+        {mode === "horoscope" && <HoroscopeGenerator />}
         {mode === "multi" && <MultiGenerator />}
       </div>
     </main>
