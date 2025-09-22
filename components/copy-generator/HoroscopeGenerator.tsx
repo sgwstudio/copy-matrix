@@ -81,6 +81,20 @@ export const HoroscopeGenerator: React.FC = () => {
         return;
       }
       
+      // Check if the response has content
+      if (!result || (!result.content && !result.error)) {
+        console.error("Empty or invalid response:", result);
+        alert("Failed to generate horoscopes: Empty response from server");
+        return;
+      }
+      
+      // Check if there's an error in the response
+      if (result.error) {
+        console.error("Response contains error:", result.error);
+        alert(`Failed to generate horoscopes: ${result.error}`);
+        return;
+      }
+      
       setGeneratedHoroscopes(result);
     } catch (error) {
       console.error("Error generating horoscopes:", error);

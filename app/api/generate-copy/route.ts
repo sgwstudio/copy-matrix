@@ -75,6 +75,13 @@ export async function POST(request: NextRequest) {
       throw error;
     }
 
+    console.log("Calling geminiClient.generateCopy with:", {
+      prompt: validatedData.prompt || validatedData.content,
+      channel: validatedData.channel,
+      mode: validatedData.mode,
+      zodiacSigns: validatedData.zodiacSigns,
+    });
+
     const result = await geminiClient.generateCopy({
       prompt: validatedData.prompt || validatedData.content,
       channel: validatedData.channel,
@@ -90,6 +97,7 @@ export async function POST(request: NextRequest) {
       zodiacSigns: validatedData.zodiacSigns,
     });
 
+    console.log("GeminiClient result:", result);
     return NextResponse.json(result);
   } catch (error) {
     console.error("Error generating copy:", error);
