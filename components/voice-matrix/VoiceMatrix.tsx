@@ -106,6 +106,14 @@ export const VoiceMatrix: React.FC<VoiceMatrixProps> = ({
             leftLabel="Standard Flow"
             rightLabel="Staccato/Varied"
           />
+          
+          <VoiceMatrixSlider
+            label="Sneaker Culture"
+            value={voiceMatrix.sneakerCulture}
+            onChange={(value) => updateValue("sneakerCulture", value)}
+            leftLabel="Premium"
+            rightLabel="Insider"
+          />
         </div>
       </div>
 
@@ -190,6 +198,14 @@ function generateVoiceSummary(voiceMatrix: VoiceMatrixType): string {
     characteristics.push("varied rhythm");
   } else if (voiceMatrix.rhythm < -0.5) {
     characteristics.push("standard flow");
+  }
+  
+  if (voiceMatrix.sneakerCulture > 0.5) {
+    characteristics.push("insider sneaker culture");
+  } else if (voiceMatrix.sneakerCulture < -0.5) {
+    characteristics.push("premium fashion language");
+  } else {
+    characteristics.push("balanced sneaker terminology");
   }
   
   // Tone Spectrum

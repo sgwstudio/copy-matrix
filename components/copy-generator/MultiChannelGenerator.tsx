@@ -29,6 +29,7 @@ const defaultVoiceMatrix: VoiceMatrixType = {
   tension: 0,
   education: 0,
   rhythm: 0,
+  sneakerCulture: 0,
   expressiveCandid: 0,
 };
 

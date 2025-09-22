@@ -11,6 +11,9 @@ export interface VoiceMatrix {
   education: number;         // -1 to 1: Minimal context vs deep insight
   rhythm: number;           // -1 to 1: Standard flow vs staccato/varied cadence
   
+  // CULTURAL LANGUAGE
+  sneakerCulture: number;    // -1 to 1: Premium language vs insider/community language
+  
   // SPECTRUM POSITION
   expressiveCandid: number;  // -1 to 1: Expressive (editorial) vs Candid (technical)
 }
@@ -24,6 +27,7 @@ export const BRAND_VOICE_PRESETS: Record<string, VoiceMatrix> = {
     tension: 0.9,
     education: 0.8,
     rhythm: 0.9,
+    sneakerCulture: 0.3,      // Moderate culture language for editorial
     expressiveCandid: -0.8  // Very expressive
   },
   
@@ -34,6 +38,7 @@ export const BRAND_VOICE_PRESETS: Record<string, VoiceMatrix> = {
     tension: 0.5,
     education: 0.4,
     rhythm: 0.6,
+    sneakerCulture: 0.6,      // Higher culture language for social
     expressiveCandid: -0.3  // Somewhat expressive
   },
   
@@ -44,6 +49,7 @@ export const BRAND_VOICE_PRESETS: Record<string, VoiceMatrix> = {
     tension: 0.3,
     education: 0.6,
     rhythm: 0.4,
+    sneakerCulture: 0.1,      // Minimal culture language for product pages
     expressiveCandid: 0.2   // Slightly candid
   },
   
@@ -54,6 +60,7 @@ export const BRAND_VOICE_PRESETS: Record<string, VoiceMatrix> = {
     tension: 0.1,
     education: 0.7,
     rhythm: 0.2,
+    sneakerCulture: -0.3,     // Avoid culture language in technical content
     expressiveCandid: 0.8   // Very candid
   }
 };
