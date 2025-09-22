@@ -92,10 +92,26 @@ export const CopyGenerator: React.FC<CopyGeneratorProps> = ({
       });
 
       if (!response.ok) {
-        throw new Error("Failed to generate copy");
+        let errorMessage = "Failed to generate copy";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch (parseError) {
+          const errorText = await response.text();
+          errorMessage = errorText || errorMessage;
+        }
+        throw new Error(errorMessage);
       }
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        console.error("Failed to parse JSON response:", parseError);
+        const responseText = await response.text();
+        console.error("Response text:", responseText);
+        throw new Error("Invalid response format from server");
+      }
       setGeneratedContent(data.content);
       setCharacterCount(data.characterCount);
       setVoiceConsistencyScore(data.voiceConsistencyScore);

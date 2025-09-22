@@ -11,15 +11,15 @@ const GenerateCopySchema = z.object({
   channel: z.string().min(1, "Channel is required"),
   voiceSettings: z.record(z.number()).optional(),
   voiceMatrix: z.object({
-    directness: z.number().min(-1).max(1),
-    universality: z.number().min(-1).max(1),
-    authority: z.number().min(-1).max(1),
-    tension: z.number().min(-1).max(1),
-    education: z.number().min(-1).max(1),
-    rhythm: z.number().min(-1).max(1),
-    sneakerCulture: z.number().min(-1).max(1),
-    marketplaceAccuracy: z.number().min(-1).max(1),
-    expressiveCandid: z.number().min(-1).max(1),
+    directness: z.number().min(-1).max(1).optional(),
+    universality: z.number().min(-1).max(1).optional(),
+    authority: z.number().min(-1).max(1).optional(),
+    tension: z.number().min(-1).max(1).optional(),
+    education: z.number().min(-1).max(1).optional(),
+    rhythm: z.number().min(-1).max(1).optional(),
+    sneakerCulture: z.number().min(-1).max(1).optional(),
+    marketplaceAccuracy: z.number().min(-1).max(1).optional(),
+    expressiveCandid: z.number().min(-1).max(1).optional(),
   }).optional(),
   brandGuidelines: z.string().optional(),
   voiceSamples: z.string().optional(),
@@ -29,11 +29,26 @@ const GenerateCopySchema = z.object({
   exampleText: z.string().optional(), // Added for horoscope mode
   zodiacSign: z.string().optional(), // Added for horoscope mode
   zodiacSigns: z.array(z.string()).optional(), // Added for multiple horoscope signs
-});
+}).refine(
+  (data) => data.content || data.prompt,
+  {
+    message: "Either 'content' or 'prompt' is required",
+    path: ["content", "prompt"],
+  }
+);
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    let session;
+    try {
+      session = await getServerSession(authOptions);
+    } catch (authError) {
+      console.error("Auth error:", authError);
+      return NextResponse.json(
+        { error: "Authentication service unavailable. Please try again later." },
+        { status: 500 }
+      );
+    }
     
     // Require authentication
     if (!session?.user?.id) {
@@ -49,10 +64,19 @@ export async function POST(request: NextRequest) {
     console.log("Validated data:", validatedData);
 
     // Get user's API key
-    const user = await db.user.findUnique({
-      where: { id: session.user.id },
-      select: { geminiApiKey: true },
-    });
+    let user;
+    try {
+      user = await db.user.findUnique({
+        where: { id: session.user.id },
+        select: { geminiApiKey: true },
+      });
+    } catch (dbError) {
+      console.error("Database error:", dbError);
+      return NextResponse.json(
+        { error: "Database error. Please try again later." },
+        { status: 500 }
+      );
+    }
 
     if (!user?.geminiApiKey) {
       return NextResponse.json(
@@ -103,8 +127,13 @@ export async function POST(request: NextRequest) {
     console.error("Error generating copy:", error);
     
     if (error instanceof z.ZodError) {
+      console.error("Validation errors:", error.errors);
       return NextResponse.json(
-        { error: "Invalid request data", details: error.errors },
+        { 
+          error: "Invalid request data", 
+          details: error.errors,
+          message: error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ')
+        },
         { status: 400 }
       );
     }

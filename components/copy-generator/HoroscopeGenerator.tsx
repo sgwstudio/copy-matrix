@@ -71,13 +71,22 @@ export const HoroscopeGenerator: React.FC = () => {
         }),
       });
 
-      const result = await response.json();
-      console.log("API Response:", result);
-      console.log("Response status:", response.status);
+      let result;
+      try {
+        result = await response.json();
+        console.log("API Response:", result);
+        console.log("Response status:", response.status);
+      } catch (parseError) {
+        console.error("Failed to parse JSON response:", parseError);
+        const responseText = await response.text();
+        console.error("Response text:", responseText);
+        alert("Invalid response format from server");
+        return;
+      }
       
       if (!response.ok) {
         console.error("API Error:", result);
-        alert(`Failed to generate horoscopes: ${result.error || 'Unknown error'}`);
+        alert(`Failed to generate horoscopes: ${result?.error || 'Unknown error'}`);
         return;
       }
       

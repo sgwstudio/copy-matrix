@@ -65,7 +65,7 @@ export const Navigation: React.FC = () => {
               <div 
                 className="w-2 h-2 rounded-full ml-2" 
                 style={{ 
-                  backgroundColor: session && hasValidApiKey ? '#22c55e' : '#FF00FF' 
+                  backgroundColor: session && hasValidApiKey ? '#347834' : '#FF00FF' 
                 }}
               ></div>
             </div>

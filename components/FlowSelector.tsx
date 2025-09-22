@@ -28,7 +28,7 @@ const flows = [
     name: "Voice R&D", 
     icon: Layers, 
     href: "/dashboard?mode=multi",
-    color: "#008800"
+    color: "#347834"
   },
 ];
 

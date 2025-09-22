@@ -74,7 +74,7 @@ const Home: React.FC = () => {
                            <Link
                              href="/dashboard?mode=multi"
                              className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
-                             style={{ backgroundColor: '#008800' }}
+                             style={{ backgroundColor: '#347834' }}
                            >
                              Voice R&D
                            </Link>

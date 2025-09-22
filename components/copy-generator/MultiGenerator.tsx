@@ -16,13 +16,36 @@ interface MultiGeneratorProps {
 }
 
 const CHANNELS = [
-  { id: "email", name: "Email", icon: "📧", characterLimit: 500 },
-  { id: "linkedin", name: "LinkedIn", icon: "💼", characterLimit: 3000 },
-  { id: "instagram", name: "Instagram", icon: "📸", characterLimit: 2200 },
-  { id: "twitter", name: "Twitter", icon: "🐦", characterLimit: 280 },
-  { id: "web", name: "Web", icon: "🌐", characterLimit: 1000 },
-  { id: "facebook", name: "Facebook", icon: "👥", characterLimit: 2000 },
-  { id: "tiktok", name: "TikTok", icon: "🎵", characterLimit: 300 },
+  { 
+    id: "tiktok", 
+    name: "TikTok Caption", 
+    icon: "🎵", 
+    characterLimit: 300,
+    description: "Short, punchy social media caption",
+    wordCount: "15-30 words",
+    structure: "2-3 short sentences",
+    testFocus: "How voice handles viral/casual energy and brevity"
+  },
+  { 
+    id: "instagram", 
+    name: "Instagram Caption", 
+    icon: "📸", 
+    characterLimit: 2200,
+    description: "Medium-length storytelling social post",
+    wordCount: "80-150 words",
+    structure: "1-2 paragraphs",
+    testFocus: "How voice balances personal connection with brand authority"
+  },
+  { 
+    id: "twitter", 
+    name: "X/Twitter Post", 
+    icon: "🐦", 
+    characterLimit: 280,
+    description: "Concise social media post with conversation potential",
+    wordCount: "20-50 words",
+    structure: "Single tweet format",
+    testFocus: "How voice creates intrigue and drives conversation"
+  },
 ];
 
 const defaultVoiceMatrix: VoiceMatrixType = {
@@ -46,6 +69,12 @@ interface GenerationConfig {
   voiceConsistencyScore: number;
   suggestions: string[];
   isGenerating: boolean;
+  channelContent: Record<string, {
+    content: string;
+    characterCount: number;
+    voiceConsistencyScore: number;
+    suggestions: string[];
+  }>;
 }
 
 export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
@@ -67,6 +96,7 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
       voiceConsistencyScore: 0,
       suggestions: [],
       isGenerating: false,
+      channelContent: {},
     },
     {
       id: "2", 
@@ -77,6 +107,7 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
       voiceConsistencyScore: 0,
       suggestions: [],
       isGenerating: false,
+      channelContent: {},
     },
   ]);
   const [userApiKey, setUserApiKey] = useState<string>("");
@@ -129,6 +160,7 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
       voiceConsistencyScore: 0,
       suggestions: [],
       isGenerating: false,
+      channelContent: {},
     };
     setConfigs([...configs, newConfig]);
   };
@@ -154,6 +186,20 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
   const generateAll = async () => {
     if (!prompt.trim() || selectedChannels.length === 0) return;
 
+    // Check if server is running by making a simple health check
+    try {
+      const healthCheck = await fetch("/api/generate-copy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: "test", channel: "email" })
+      });
+    } catch (error) {
+      if (error instanceof TypeError && error.message === "Failed to fetch") {
+        alert("Development server is not running. Please start the server with 'npm run dev' and try again.");
+        return;
+      }
+    }
+
     // Set all configs to generating state
     setConfigs(prevConfigs => prevConfigs.map(config => ({ ...config, isGenerating: true })));
 
@@ -177,11 +223,27 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
           });
 
           if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || "Failed to generate copy");
+            let errorMessage = "Failed to generate copy";
+            try {
+              const errorData = await response.json();
+              errorMessage = errorData.error || errorMessage;
+            } catch (parseError) {
+              // If response is not JSON, get text content
+              const errorText = await response.text();
+              errorMessage = errorText || errorMessage;
+            }
+            throw new Error(errorMessage);
           }
 
-          const data = await response.json();
+          let data;
+          try {
+            data = await response.json();
+          } catch (parseError) {
+            console.error("Failed to parse JSON response:", parseError);
+            const responseText = await response.text();
+            console.error("Response text:", responseText);
+            throw new Error("Invalid response format from server");
+          }
           return { 
             configId: config.id, 
             channelId: channel.id,
@@ -190,12 +252,20 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
           };
         } catch (error) {
           console.error(`Failed to generate copy for ${config.name} on ${channel.name}:`, error);
+          
+          let errorMessage = "Unknown error occurred";
+          if (error instanceof TypeError && error.message === "Failed to fetch") {
+            errorMessage = "Server is not running. Please start the development server.";
+          } else if (error instanceof Error) {
+            errorMessage = error.message;
+          }
+          
           return { 
             configId: config.id,
             channelId: channel.id,
             channelName: channel.name,
             data: { 
-              content: `Error: ${error instanceof Error ? error.message : String(error)}`,
+              content: `Error: ${errorMessage}`,
               characterCount: 0,
               voiceConsistencyScore: 0,
               suggestions: []
@@ -216,26 +286,40 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
       return acc;
     }, {} as Record<string, typeof results>);
 
-    // Update configs with combined results
+    // Update configs with separate channel content
     setConfigs(prevConfigs => prevConfigs.map(config => {
       const configResults = resultsByConfig[config.id] || [];
       if (configResults.length > 0) {
-        // Combine all channel results for this config
-        const combinedContent = configResults.map(r => 
-          `## ${r.channelName}\n${r.data.content}`
-        ).join('\n\n');
+        // Store separate content for each channel
+        const channelContent: Record<string, {
+          content: string;
+          characterCount: number;
+          voiceConsistencyScore: number;
+          suggestions: string[];
+        }> = {};
         
+        configResults.forEach(result => {
+          channelContent[result.channelId] = {
+            content: result.data.content,
+            characterCount: result.data.characterCount,
+            voiceConsistencyScore: result.data.voiceConsistencyScore,
+            suggestions: result.data.suggestions,
+          };
+        });
+        
+        // Calculate overall stats for the config
         const totalCharacterCount = configResults.reduce((sum, r) => sum + r.data.characterCount, 0);
         const avgVoiceScore = configResults.reduce((sum, r) => sum + r.data.voiceConsistencyScore, 0) / configResults.length;
         const allSuggestions = configResults.flatMap(r => r.data.suggestions);
 
-        console.log(`🎯 Updating config ${config.id} with combined results:`, configResults);
+        console.log(`🎯 Updating config ${config.id} with separate channel results:`, channelContent);
         return {
           ...config,
-          generatedContent: combinedContent,
+          generatedContent: configResults.map(r => `${r.channelName}: ${r.data.content}`).join('\n\n'), // Keep combined for backward compatibility
           characterCount: totalCharacterCount,
           voiceConsistencyScore: avgVoiceScore,
           suggestions: allSuggestions,
+          channelContent,
           isGenerating: false,
         };
       }
@@ -251,6 +335,7 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
       characterCount: 0,
       voiceConsistencyScore: 0,
       suggestions: [],
+      channelContent: {},
     })));
   };
 
@@ -317,137 +402,137 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column - Controls */}
-        <div className="space-y-6">
-          {/* Channel Selection */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                <Layers className="h-5 w-5" />
-                Channels ({selectedChannels.length} selected)
-              </h3>
-              <div className="flex gap-2">
-                <button
-                  onClick={selectAllChannels}
-                  className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded hover:bg-green-200 dark:hover:bg-green-800 transition-colors"
-                >
-                  Select All
-                </button>
-                <button
-                  onClick={clearAllChannels}
-                  className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                >
-                  Clear All
-                </button>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-2">
-              {CHANNELS.map((channel) => {
-                const isSelected = selectedChannels.some(c => c.id === channel.id);
-                return (
-                  <button
-                    key={channel.id}
-                    onClick={() => toggleChannel(channel)}
-                    className={`p-3 rounded-lg border text-left transition-colors ${
-                      isSelected
-                        ? "bg-green-100 dark:bg-green-900 border-green-300 dark:border-green-700"
-                        : "bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                        isSelected
-                          ? "bg-green-600 border-green-600"
-                          : "border-gray-300 dark:border-gray-600"
-                      }`}>
-                        {isSelected && (
-                          <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                        )}
-                      </div>
-                      <span className="text-lg">{channel.icon}</span>
-                      <div>
-                        <div className="font-medium text-sm text-gray-900 dark:text-white">
-                          {channel.name}
-                        </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">
-                          {channel.characterLimit} chars
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+      {/* Channel Selection - Full Width */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+              <Layers className="h-5 w-5" />
+              Social Media Channels ({selectedChannels.length} selected)
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              Select channels to test your voice across different social media formats
+            </p>
           </div>
-
-          {/* Voice Matrix */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <VoiceMatrix
-              voiceMatrix={configs[0]?.voiceMatrix || defaultVoiceMatrix}
-              onChange={(newMatrix) => {
-                setConfigs(prevConfigs => 
-                  prevConfigs.map((config, index) => 
-                    index === 0 ? { ...config, voiceMatrix: newMatrix } : config
-                  )
-                );
-              }}
-            />
-          </div>
-
-          {/* Voice Configurations */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                <BarChart3 className="h-5 w-5" />
-                Voice Configurations
-              </h3>
-              <div className="flex gap-2">
-                <button
-                  onClick={addNewConfig}
-                  disabled={isGenerating}
-                  className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded hover:bg-green-200 dark:hover:bg-green-800 transition-colors flex items-center gap-1"
-                >
-                  <Plus className="h-3 w-3" />
-                  Add Voice
-                </button>
-                <button
-                  onClick={resetAll}
-                  disabled={isGenerating}
-                  className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center gap-1"
-                >
-                  <RotateCcw className="h-3 w-3" />
-                  Reset
-                </button>
-              </div>
-            </div>
-            <div className="space-y-3">
-              {configs.map((config, index) => (
-                <div key={config.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">
-                      {config.name}
-                    </span>
-                    {configs.length > 1 && (
-                      <button
-                        onClick={() => removeConfig(config.id)}
-                        disabled={isGenerating}
-                        className="text-red-500 hover:text-red-700 transition-colors"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="flex gap-2">
+            <button
+              onClick={selectAllChannels}
+              className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded hover:bg-green-200 dark:hover:bg-green-800 transition-colors"
+            >
+              Select All
+            </button>
+            <button
+              onClick={clearAllChannels}
+              className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            >
+              Clear All
+            </button>
           </div>
         </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {CHANNELS.map((channel) => {
+            const isSelected = selectedChannels.some(c => c.id === channel.id);
+            return (
+              <button
+                key={channel.id}
+                onClick={() => toggleChannel(channel)}
+                className={`p-4 rounded-lg border text-left transition-colors ${
+                  isSelected
+                    ? "bg-green-100 dark:bg-green-900 border-green-300 dark:border-green-700"
+                    : "bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600"
+                }`}
+              >
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                      isSelected
+                        ? "bg-green-600 border-green-600"
+                        : "border-gray-300 dark:border-gray-600"
+                    }`}>
+                      {isSelected && (
+                        <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </div>
+                    <span className="text-lg">{channel.icon}</span>
+                    <div className="font-medium text-sm text-gray-900 dark:text-white">
+                      {channel.name}
+                    </div>
+                  </div>
+                  
+                  <div className="text-xs text-gray-600 dark:text-gray-400">
+                    {channel.description}
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                      <span className="font-medium">Words:</span> {channel.wordCount}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                      <span className="font-medium">Structure:</span> {channel.structure}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                      <span className="font-medium">Focus:</span> {channel.testFocus}
+                    </div>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
 
-        {/* Right Column - Generated Results */}
-        <div className="lg:col-span-2">
+      {/* Voice Configurations - Full Width */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+            <BarChart3 className="h-5 w-5" />
+            Voice Configurations
+          </h3>
+          <div className="flex gap-2">
+            <button
+              onClick={addNewConfig}
+              disabled={isGenerating}
+              className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded hover:bg-green-200 dark:hover:bg-green-800 transition-colors flex items-center gap-1"
+            >
+              <Plus className="h-3 w-3" />
+              Add Voice
+            </button>
+            <button
+              onClick={resetAll}
+              disabled={isGenerating}
+              className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center gap-1"
+            >
+              <RotateCcw className="h-3 w-3" />
+              Reset
+            </button>
+          </div>
+        </div>
+        <div className="space-y-3">
+          {configs.map((config, index) => (
+            <div key={config.id} className="p-3 border border-gray-200 dark:border-gray-600 rounded-lg">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  {config.name}
+                </span>
+                {configs.length > 1 && (
+                  <button
+                    onClick={() => removeConfig(config.id)}
+                    disabled={isGenerating}
+                    className="text-red-500 hover:text-red-700 transition-colors"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Generated Results - Full Width */}
+      <div>
           {/* Comparison View Toggle */}
           <div className="mb-6">
             <button
@@ -471,7 +556,7 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
           )}
 
           {/* Voice Configurations Grid */}
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {configs.map((config) => (
               <div key={config.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 space-y-4">
                 {/* Config Header */}
@@ -500,20 +585,43 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
                   onChange={(voiceMatrix) => updateConfigVoiceMatrix(config.id, voiceMatrix)}
                 />
 
-                {/* Output */}
-                <CopyOutput
-                  content={config.generatedContent}
-                  characterCount={config.characterCount}
-                  characterLimit={selectedChannels.reduce((sum, ch) => sum + ch.characterLimit, 0)}
-                  voiceConsistencyScore={config.voiceConsistencyScore}
-                  suggestions={config.suggestions}
-                  channel={selectedChannels[0] || CHANNELS[0]}
-                  isLoading={config.isGenerating}
-                />
+                {/* Channel Outputs */}
+                <div className="space-y-4">
+                  <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Generated Content by Channel:
+                  </h4>
+                  {selectedChannels.map((channel) => {
+                    const channelData = config.channelContent[channel.id];
+                    return (
+                      <div key={channel.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="text-lg">{channel.icon}</span>
+                          <div>
+                            <h5 className="font-medium text-sm text-gray-900 dark:text-white">
+                              {channel.name}
+                            </h5>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                              {channel.wordCount} • {channel.structure}
+                            </p>
+                          </div>
+                        </div>
+                        
+                        <CopyOutput
+                          content={channelData?.content || null}
+                          characterCount={channelData?.characterCount || 0}
+                          characterLimit={channel.characterLimit}
+                          voiceConsistencyScore={channelData?.voiceConsistencyScore || 0}
+                          suggestions={channelData?.suggestions || []}
+                          channel={channel}
+                          isLoading={config.isGenerating}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             ))}
           </div>
-        </div>
       </div>
     </div>
   );

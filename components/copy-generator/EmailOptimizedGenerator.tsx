@@ -126,6 +126,20 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
   const handleGenerate = async () => {
     if (!content.trim()) return;
 
+    // Check if server is running
+    try {
+      const healthCheck = await fetch("/api/generate-copy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: "test", channel: "email" })
+      });
+    } catch (error) {
+      if (error instanceof TypeError && error.message === "Failed to fetch") {
+        alert("Development server is not running. Please start the server with 'npm run dev' and try again.");
+        return;
+      }
+    }
+
     setIsGenerating(true);
     try {
       const response = await fetch("/api/generate-copy", {
@@ -143,10 +157,26 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
       });
 
       if (!response.ok) {
-        throw new Error("Failed to generate copy");
+        let errorMessage = "Failed to generate copy";
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.error || errorMessage;
+        } catch (parseError) {
+          const errorText = await response.text();
+          errorMessage = errorText || errorMessage;
+        }
+        throw new Error(errorMessage);
       }
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        console.error("Failed to parse JSON response:", parseError);
+        const responseText = await response.text();
+        console.error("Response text:", responseText);
+        throw new Error("Invalid response format from server");
+      }
       setGeneratedCopy(data);
     } catch (error) {
       console.error("Error generating copy:", error);

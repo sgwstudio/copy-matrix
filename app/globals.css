@@ -16,6 +16,30 @@
   --font-family-mono: var(--font-roboto-mono), ui-sans-serif, system-ui,
     sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
     "Noto Color Emoji";
+  
+  /* Custom green color palette using #347834 */
+  --color-green-50: #f0f9f0;
+  --color-green-100: #dcf2dc;
+  --color-green-200: #b9e5b9;
+  --color-green-300: #8dd18d;
+  --color-green-400: #5bb85b;
+  --color-green-500: #347834;
+  --color-green-600: #2d652d;
+  --color-green-700: #265226;
+  --color-green-800: #1f3f1f;
+  --color-green-900: #182c18;
+  
+  /* Custom emerald color palette using #347834 */
+  --color-emerald-50: #f0f9f0;
+  --color-emerald-100: #dcf2dc;
+  --color-emerald-200: #b9e5b9;
+  --color-emerald-300: #8dd18d;
+  --color-emerald-400: #5bb85b;
+  --color-emerald-500: #347834;
+  --color-emerald-600: #2d652d;
+  --color-emerald-700: #265226;
+  --color-emerald-800: #1f3f1f;
+  --color-emerald-900: #182c18;
 }
 
 /* Custom slider styles */
