@@ -344,20 +344,21 @@ Day 5: Experimentation, technology, creation
 Day 6: Newness, adventure
 Day 7: Athleticism, mastery, winning
 
-TASK: Generate 8 horoscope versions for ${zodiacSignNames.join(', ')} based on the themes above and following the user's prompt instructions.
+TASK: Generate 8 horoscope versions for each selected zodiac sign (${zodiacSignNames.join(', ')}) based on the themes above and following the user's prompt instructions.
 
 REQUIREMENTS:
+- Generate horoscopes for EACH selected zodiac sign separately
 - Each horoscope should be 2-3 sentences
 - Follow the tone, voice, and style instructions from the user prompt
 - Apply the voice and tone characteristics specified above
 - Each should feel unique to its theme while staying true to the zodiac sign characteristics
 - Make each horoscope engaging and personalized
-- If multiple signs are selected, create horoscopes that work for all selected signs
+- Create separate horoscope arrays for each zodiac sign
 
 RESPONSE FORMAT (JSON):
 {
   "content": {
-    "horoscopes": [
+${zodiacSignNames.map(signName => `    "${signName}": [
       "Day 0 horoscope text here",
       "Day 1 horoscope text here", 
       "Day 2 horoscope text here",
@@ -366,7 +367,7 @@ RESPONSE FORMAT (JSON):
       "Day 5 horoscope text here",
       "Day 6 horoscope text here",
       "Day 7 horoscope text here"
-    ]
+    ]`).join(',\n')}
   },
   "characterCount": 123,
   "voiceConsistencyScore": 85,
