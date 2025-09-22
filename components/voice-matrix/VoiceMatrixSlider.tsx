@@ -27,7 +27,7 @@ export const VoiceMatrixSlider: React.FC<VoiceMatrixSliderProps> = ({
   // Calculate color based on slider position along magenta to blue gradient
   const getSliderColor = (sliderValue: number) => {
     // Normalize value from -1 to 1 to 0 to 1
-    const normalizedValue = (sliderValue + 1) / 2;
+    const normalizedValue = ((sliderValue ?? 0) + 1) / 2;
     
     // Interpolate between magenta (#FF00FF) and blue (#0000FF)
     const r = Math.round(255 * (1 - normalizedValue)); // 255 at left (magenta), 0 at right (blue)
@@ -44,7 +44,7 @@ export const VoiceMatrixSlider: React.FC<VoiceMatrixSliderProps> = ({
           {label}
         </label>
         <span className="text-xs text-gray-500 dark:text-gray-400">
-          {value.toFixed(1)}
+          {(value ?? 0).toFixed(1)}
         </span>
       </div>
       
@@ -62,7 +62,7 @@ export const VoiceMatrixSlider: React.FC<VoiceMatrixSliderProps> = ({
           min="-1"
           max="1"
           step="0.1"
-          value={value}
+          value={value ?? 0}
           onChange={handleChange}
           className="w-full h-2 bg-transparent rounded-lg appearance-none cursor-pointer relative z-10 slider"
           style={{
@@ -76,8 +76,8 @@ export const VoiceMatrixSlider: React.FC<VoiceMatrixSliderProps> = ({
         <div
           className="absolute top-0 w-4 h-4 rounded-full border-2 border-white dark:border-gray-800 shadow-lg transform -translate-y-1 transition-all duration-75"
           style={{
-            left: `calc(${((value + 1) / 2) * 100}% - 8px)`,
-            backgroundColor: getSliderColor(value)
+            left: `calc(${(((value ?? 0) + 1) / 2) * 100}% - 8px)`,
+            backgroundColor: getSliderColor(value ?? 0)
           }}
         />
         
