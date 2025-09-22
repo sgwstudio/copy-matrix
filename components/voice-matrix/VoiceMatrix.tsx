@@ -2,7 +2,7 @@
 
 import React from "react";
 import { VoiceMatrixSlider } from "./VoiceMatrixSlider";
-import { VoiceMatrix as VoiceMatrixType } from "~/lib/gemini-client";
+import { BrandVoiceMatrix as VoiceMatrixType } from "~/lib/gemini-client";
 
 interface VoiceMatrixProps {
   voiceMatrix: VoiceMatrixType;
@@ -114,6 +114,14 @@ export const VoiceMatrix: React.FC<VoiceMatrixProps> = ({
             leftLabel="Premium"
             rightLabel="Insider"
           />
+          
+          <VoiceMatrixSlider
+            label="Marketplace Accuracy"
+            value={voiceMatrix.marketplaceAccuracy ?? 0}
+            onChange={(value) => updateValue("marketplaceAccuracy", value)}
+            leftLabel="Factual"
+            rightLabel="Retail"
+          />
         </div>
       </div>
 
@@ -207,6 +215,15 @@ function generateVoiceSummary(voiceMatrix: VoiceMatrixType): string {
     characteristics.push("premium fashion language");
   } else {
     characteristics.push("balanced sneaker terminology");
+  }
+  
+  const marketplaceAccuracy = voiceMatrix.marketplaceAccuracy ?? 0;
+  if (marketplaceAccuracy > 0.5) {
+    characteristics.push("traditional retail language");
+  } else if (marketplaceAccuracy < -0.5) {
+    characteristics.push("strict factual accuracy");
+  } else {
+    characteristics.push("balanced marketplace language");
   }
   
   // Tone Spectrum

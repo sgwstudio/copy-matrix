@@ -17,6 +17,8 @@ const GenerateCopySchema = z.object({
     tension: z.number().min(-1).max(1),
     education: z.number().min(-1).max(1),
     rhythm: z.number().min(-1).max(1),
+    sneakerCulture: z.number().min(-1).max(1),
+    marketplaceAccuracy: z.number().min(-1).max(1),
     expressiveCandid: z.number().min(-1).max(1),
   }).optional(),
   brandGuidelines: z.string().optional(),
