@@ -262,10 +262,13 @@ export class GeminiClient {
 
     console.log("✅ Using real Gemini API for generation");
 
-    const voicePrompt = this.promptBuilder.buildVoicePrompt(request.voiceMatrix!, 'general');
+    const voicePrompt = request.voiceMatrix ? this.promptBuilder.buildVoicePrompt(request.voiceMatrix, 'general') : '';
     const channelPrompt = this.buildChannelPrompt(request.channel, request.characterLimit, request.mode, request.specifications);
     
-    let fullPrompt = `You are an AI copywriting assistant. Generate marketing copy that matches the specified voice and tone characteristics.
+    let fullPrompt = '';
+
+    if (request.mode === "email-optimized" && request.channel === "email-pushes") {
+      fullPrompt = `You are an AI copywriting assistant. Generate marketing copy that matches the specified voice and tone characteristics.
 
 ${voicePrompt}
 
@@ -278,8 +281,6 @@ REQUIREMENTS:
 - Optimize for the ${request.channel} channel
 - Keep within ${request.characterLimit || 280} characters
 - Ensure brand voice consistency`;
-
-    if (request.mode === "email-optimized" && request.channel === "email-pushes") {
       fullPrompt += `
 
 RESPONSE FORMAT (JSON):
@@ -377,8 +378,22 @@ ${zodiacSignNames.map(signName => `    "${signName}": [
     "Suggestion 3"
   ]
 }`;
+    } else if (request.mode === "horoscope" && request.channel === "horoscope") {
+      // Horoscope mode gets its own complete prompt (already handled above)
     } else {
-      fullPrompt += `
+      fullPrompt = `You are an AI copywriting assistant. Generate marketing copy that matches the specified voice and tone characteristics.
+
+${voicePrompt}
+
+${channelPrompt}
+
+TASK: Generate copy for: "${request.prompt}"
+
+REQUIREMENTS:
+- Maintain the specified voice and tone characteristics
+- Optimize for the ${request.channel} channel
+- Keep within ${request.characterLimit || 280} characters
+- Ensure brand voice consistency
 
 RESPONSE FORMAT (JSON):
 {
