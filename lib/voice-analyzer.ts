@@ -1,4 +1,4 @@
-import { VoiceMatrix } from "./gemini-client";
+import { BrandVoiceMatrix as VoiceMatrix } from "./gemini-client";
 
 export interface VoiceAnalysisResult {
   consistencyScore: number;

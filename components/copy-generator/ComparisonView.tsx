@@ -12,13 +12,15 @@ interface ComparisonViewProps {
     voiceConsistencyScore: number;
     suggestions: string[];
     voiceMatrix: {
-      formalCasual: number;
-      authoritativeApproachable: number;
-      professionalConversational: number;
-      seriousPlayful: number;
-      confidence: number;
-      enthusiasm: number;
-      empathy: number;
+      directness: number;
+      universality: number;
+      authority: number;
+      tension: number;
+      education: number;
+      rhythm: number;
+      sneakerCulture: number;
+      marketplaceAccuracy: number;
+      expressiveCandid: number;
     };
   }>;
   channels: Array<{ name: string; icon: string; characterLimit: number }>;
@@ -41,17 +43,17 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({ configs, channel
   const getVoiceCharacteristics = (voiceMatrix: any) => {
     const characteristics = [];
     
-    if (voiceMatrix.formalCasual > 0.5) characteristics.push("Very Formal");
-    else if (voiceMatrix.formalCasual < -0.5) characteristics.push("Very Casual");
-    else characteristics.push("Neutral Formality");
+    if (voiceMatrix.directness > 0.5) characteristics.push("Very Direct");
+    else if (voiceMatrix.directness < -0.5) characteristics.push("Very Nuanced");
+    else characteristics.push("Balanced Directness");
 
-    if (voiceMatrix.authoritativeApproachable > 0.5) characteristics.push("Authoritative");
-    else if (voiceMatrix.authoritativeApproachable < -0.5) characteristics.push("Approachable");
+    if (voiceMatrix.authority > 0.5) characteristics.push("Confident");
+    else if (voiceMatrix.authority < -0.5) characteristics.push("Humble");
     else characteristics.push("Balanced Authority");
 
-    if (voiceMatrix.seriousPlayful > 0.5) characteristics.push("Serious");
-    else if (voiceMatrix.seriousPlayful < -0.5) characteristics.push("Playful");
-    else characteristics.push("Balanced Tone");
+    if (voiceMatrix.expressiveCandid > 0.5) characteristics.push("Expressive");
+    else if (voiceMatrix.expressiveCandid < -0.5) characteristics.push("Candid");
+    else characteristics.push("Balanced Expression");
 
     return characteristics.join(" • ");
   };

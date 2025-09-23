@@ -115,6 +115,8 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
     tension: 0,
     education: 0,
     rhythm: 0,
+    sneakerCulture: 0,
+    marketplaceAccuracy: 0,
     expressiveCandid: 0,
   });
   const [content, setContent] = useState("");

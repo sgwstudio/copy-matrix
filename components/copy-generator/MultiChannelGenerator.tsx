@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { VoiceMatrix as VoiceMatrixType } from "~/lib/gemini-client";
+import { BrandVoiceMatrix as VoiceMatrixType } from "~/lib/gemini-client";
 import { VoiceMatrix } from "../voice-matrix/VoiceMatrix";
 import { CopyOutput } from "./CopyOutput";
 import { Copy, Plus, Trash2, RotateCcw, Globe } from "lucide-react";

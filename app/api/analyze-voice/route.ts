@@ -5,13 +5,15 @@ import { z } from "zod";
 const AnalyzeVoiceSchema = z.object({
   content: z.string().min(1, "Content is required"),
   voiceMatrix: z.object({
-    formalCasual: z.number().min(-1).max(1),
-    authoritativeApproachable: z.number().min(-1).max(1),
-    professionalConversational: z.number().min(-1).max(1),
-    seriousPlayful: z.number().min(-1).max(1),
-    confidence: z.number().min(-1).max(1),
-    enthusiasm: z.number().min(-1).max(1),
-    empathy: z.number().min(-1).max(1),
+    directness: z.number().min(-1).max(1),
+    universality: z.number().min(-1).max(1),
+    authority: z.number().min(-1).max(1),
+    tension: z.number().min(-1).max(1),
+    education: z.number().min(-1).max(1),
+    rhythm: z.number().min(-1).max(1),
+    sneakerCulture: z.number().min(-1).max(1),
+    marketplaceAccuracy: z.number().min(-1).max(1),
+    expressiveCandid: z.number().min(-1).max(1),
   }),
 });
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { VoiceMatrix as VoiceMatrixType } from "~/lib/gemini-client";
+import { BrandVoiceMatrix as VoiceMatrixType } from "~/lib/gemini-client";
 
 interface ToneMatrixProps {
   voiceMatrix: VoiceMatrixType;
@@ -339,13 +339,13 @@ export const ToneMatrix: React.FC<ToneMatrixProps> = ({
           Voice Characteristics
         </h4>
         <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
-          <div>Formality: {voiceMatrix.formalCasual > 0 ? 'Formal' : 'Casual'}</div>
-          <div>Authority: {voiceMatrix.authoritativeApproachable > 0 ? 'Authoritative' : 'Approachable'}</div>
-          <div>Style: {voiceMatrix.professionalConversational > 0 ? 'Professional' : 'Conversational'}</div>
-          <div>Tone: {voiceMatrix.seriousPlayful > 0 ? 'Serious' : 'Playful'}</div>
-          <div>Confidence: {voiceMatrix.confidence > 0 ? 'High' : 'Modest'}</div>
-          <div>Energy: {voiceMatrix.enthusiasm > 0 ? 'Enthusiastic' : 'Reserved'}</div>
-          <div>Empathy: {voiceMatrix.empathy > 0 ? 'High' : 'Direct'}</div>
+          <div>Directness: {voiceMatrix.directness > 0 ? 'Straightforward' : 'Nuanced'}</div>
+          <div>Universality: {voiceMatrix.universality > 0 ? 'Global' : 'Niche'}</div>
+          <div>Authority: {voiceMatrix.authority > 0 ? 'Confident' : 'Humble'}</div>
+          <div>Tension: {voiceMatrix.tension > 0 ? 'High' : 'Low'}</div>
+          <div>Education: {voiceMatrix.education > 0 ? 'Deep' : 'Minimal'}</div>
+          <div>Rhythm: {voiceMatrix.rhythm > 0 ? 'Varied' : 'Standard'}</div>
+          <div>Culture: {voiceMatrix.sneakerCulture > 0 ? 'Insider' : 'Premium'}</div>
         </div>
       </div>
     </div>

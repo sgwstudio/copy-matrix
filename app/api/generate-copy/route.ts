@@ -11,15 +11,15 @@ const GenerateCopySchema = z.object({
   channel: z.string().min(1, "Channel is required"),
   voiceSettings: z.record(z.number()).optional(),
   voiceMatrix: z.object({
-    directness: z.number().min(-1).max(1).optional(),
-    universality: z.number().min(-1).max(1).optional(),
-    authority: z.number().min(-1).max(1).optional(),
-    tension: z.number().min(-1).max(1).optional(),
-    education: z.number().min(-1).max(1).optional(),
-    rhythm: z.number().min(-1).max(1).optional(),
-    sneakerCulture: z.number().min(-1).max(1).optional(),
-    marketplaceAccuracy: z.number().min(-1).max(1).optional(),
-    expressiveCandid: z.number().min(-1).max(1).optional(),
+    directness: z.number().min(-1).max(1),
+    universality: z.number().min(-1).max(1),
+    authority: z.number().min(-1).max(1),
+    tension: z.number().min(-1).max(1),
+    education: z.number().min(-1).max(1),
+    rhythm: z.number().min(-1).max(1),
+    sneakerCulture: z.number().min(-1).max(1),
+    marketplaceAccuracy: z.number().min(-1).max(1),
+    expressiveCandid: z.number().min(-1).max(1),
   }).optional(),
   brandGuidelines: z.string().optional(),
   voiceSamples: z.string().optional(),
@@ -88,10 +88,23 @@ export async function POST(request: NextRequest) {
       zodiacSigns: validatedData.zodiacSigns,
     });
 
+    // Provide default voice matrix if none provided
+    const defaultVoiceMatrix = {
+      directness: 0,
+      universality: 0,
+      authority: 0,
+      tension: 0,
+      education: 0,
+      rhythm: 0,
+      sneakerCulture: 0,
+      marketplaceAccuracy: 0,
+      expressiveCandid: 0,
+    };
+
     const result = await geminiClient.generateCopy({
       prompt: validatedData.prompt || validatedData.content || "",
       channel: validatedData.channel,
-      voiceMatrix: validatedData.voiceMatrix,
+      voiceMatrix: validatedData.voiceMatrix || defaultVoiceMatrix,
       voiceSettings: validatedData.voiceSettings,
       brandGuidelines: validatedData.brandGuidelines,
       voiceSamples: validatedData.voiceSamples,
