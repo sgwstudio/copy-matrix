@@ -7,6 +7,37 @@ export interface VoiceAnalysisResult {
   weaknesses: string[];
 }
 
+export interface TextAnalysis {
+  // Formality indicators
+  formalWords: number;
+  casualWords: number;
+  contractions: number;
+  
+  // Authority indicators
+  imperativeSentences: number;
+  questionSentences: number;
+  
+  // Professional indicators
+  technicalTerms: number;
+  buzzwords: number;
+  
+  // Tone indicators
+  exclamationMarks: number;
+  questionMarks: number;
+  
+  // Confidence indicators
+  certaintyWords: number;
+  hedgeWords: number;
+  
+  // Enthusiasm indicators
+  positiveWords: number;
+  negativeWords: number;
+  
+  // Empathy indicators
+  personalPronouns: number;
+  emotionalWords: number;
+}
+
 export class VoiceAnalyzer {
   static analyzeConsistency(content: string, targetVoice: VoiceMatrix): VoiceAnalysisResult {
     const analysis = this.analyzeTextCharacteristics(content);
@@ -59,7 +90,7 @@ export class VoiceAnalyzer {
     };
   }
 
-  private static calculateConsistencyScore(analysis: any, targetVoice: VoiceMatrix): number {
+  private static calculateConsistencyScore(analysis: TextAnalysis, targetVoice: VoiceMatrix): number {
     let score = 100;
     
     // Directness consistency (mapped from formality)
@@ -93,7 +124,7 @@ export class VoiceAnalyzer {
     return Math.max(0, Math.min(100, Math.round(score)));
   }
 
-  private static generateRecommendations(analysis: any, targetVoice: VoiceMatrix): string[] {
+  private static generateRecommendations(analysis: TextAnalysis, targetVoice: VoiceMatrix): string[] {
     const recommendations: string[] = [];
     
     if (targetVoice.directness > 0 && analysis.casualWords > analysis.formalWords) {
@@ -117,7 +148,7 @@ export class VoiceAnalyzer {
     return recommendations;
   }
 
-  private static identifyStrengths(analysis: any, targetVoice: VoiceMatrix): string[] {
+  private static identifyStrengths(analysis: TextAnalysis, targetVoice: VoiceMatrix): string[] {
     const strengths: string[] = [];
     
     if (Math.abs(this.calculateFormalityScore(analysis) - targetVoice.directness) < 0.2) {
@@ -131,7 +162,7 @@ export class VoiceAnalyzer {
     return strengths;
   }
 
-  private static identifyWeaknesses(analysis: any, targetVoice: VoiceMatrix): string[] {
+  private static identifyWeaknesses(analysis: TextAnalysis, targetVoice: VoiceMatrix): string[] {
     const weaknesses: string[] = [];
     
     if (Math.abs(this.calculateFormalityScore(analysis) - targetVoice.directness) > 0.5) {
@@ -209,38 +240,38 @@ export class VoiceAnalyzer {
   }
 
   // Scoring methods
-  private static calculateFormalityScore(analysis: any): number {
+  private static calculateFormalityScore(analysis: TextAnalysis): number {
     const formalRatio = analysis.formalWords / (analysis.formalWords + analysis.casualWords + 1);
     const contractionRatio = analysis.contractions / (analysis.contractions + 10);
     return (formalRatio - contractionRatio) * 2 - 1;
   }
 
-  private static calculateAuthorityScore(analysis: any): number {
+  private static calculateAuthorityScore(analysis: TextAnalysis): number {
     const imperativeRatio = analysis.imperativeSentences / (analysis.imperativeSentences + analysis.questionSentences + 1);
     return (imperativeRatio - 0.5) * 2;
   }
 
-  private static calculateProfessionalScore(analysis: any): number {
+  private static calculateProfessionalScore(analysis: TextAnalysis): number {
     const techRatio = analysis.technicalTerms / (analysis.technicalTerms + analysis.buzzwords + 1);
     return (techRatio - 0.5) * 2;
   }
 
-  private static calculateToneScore(analysis: any): number {
+  private static calculateToneScore(analysis: TextAnalysis): number {
     const exclamationRatio = analysis.exclamationMarks / (analysis.exclamationMarks + 5);
     return (exclamationRatio - 0.5) * 2;
   }
 
-  private static calculateConfidenceScore(analysis: any): number {
+  private static calculateConfidenceScore(analysis: TextAnalysis): number {
     const certaintyRatio = analysis.certaintyWords / (analysis.certaintyWords + analysis.hedgeWords + 1);
     return (certaintyRatio - 0.5) * 2;
   }
 
-  private static calculateEnthusiasmScore(analysis: any): number {
+  private static calculateEnthusiasmScore(analysis: TextAnalysis): number {
     const positiveRatio = analysis.positiveWords / (analysis.positiveWords + analysis.negativeWords + 1);
     return (positiveRatio - 0.5) * 2;
   }
 
-  private static calculateEmpathyScore(analysis: any): number {
+  private static calculateEmpathyScore(analysis: TextAnalysis): number {
     const pronounRatio = analysis.personalPronouns / (analysis.personalPronouns + 10);
     const emotionalRatio = analysis.emotionalWords / (analysis.emotionalWords + 10);
     return ((pronounRatio + emotionalRatio) / 2 - 0.5) * 2;

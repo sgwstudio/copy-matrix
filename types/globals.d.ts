@@ -30,7 +30,7 @@ declare global {
 
   type UnionToTuple<T> =
     UnionToIntersection<T extends any ? (t: T) => T : never> extends (
-      (_: any) => infer W
+      (_: unknown) => infer W
     ) ?
       [...UnionToTuple<Exclude<T, W>>, W]
     : [];

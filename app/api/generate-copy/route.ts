@@ -25,7 +25,7 @@ const GenerateCopySchema = z.object({
   voiceSamples: z.string().optional(),
   characterLimit: z.number().optional(),
   mode: z.string().optional(),
-  specifications: z.any().optional(),
+  specifications: z.record(z.unknown()).optional(),
   exampleText: z.string().optional(), // Added for horoscope mode
   zodiacSign: z.string().optional(), // Added for horoscope mode
   zodiacSigns: z.array(z.string()).optional(), // Added for multiple horoscope signs

@@ -2,6 +2,24 @@
 
 import { useState } from "react";
 import { FlowSelector } from "~/components/FlowSelector";
+
+// Horoscope data interfaces
+interface HoroscopeEntry {
+  icon: string;
+  name: string;
+  description: string;
+}
+
+interface HoroscopeData {
+  [signName: string]: HoroscopeEntry[];
+}
+
+interface GeneratedHoroscopeData {
+  content: HoroscopeData;
+  characterCount: number;
+  voiceConsistencyScore: number;
+  suggestions: string[];
+}
 import {
   Sparkles,
   Star,
@@ -41,7 +59,7 @@ const HOROSCOPE_THEMES = [
 export const HoroscopeGenerator: React.FC = () => {
   const [selectedSigns, setSelectedSigns] = useState<string[]>([ZODIAC_SIGNS[0]!.id]);
   const [content, setContent] = useState("");
-  const [generatedHoroscopes, setGeneratedHoroscopes] = useState<{ content: Record<string, unknown[]> | unknown[] } | null>(null);
+  const [generatedHoroscopes, setGeneratedHoroscopes] = useState<GeneratedHoroscopeData | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSpecs, setShowSpecs] = useState(false);
 
@@ -287,14 +305,14 @@ export const HoroscopeGenerator: React.FC = () => {
                   {generatedHoroscopes.content ? (
                     // Handle object with zodiac sign keys (current format)
                     typeof generatedHoroscopes.content === 'object' && !Array.isArray(generatedHoroscopes.content) ? (
-                      Object.entries(generatedHoroscopes.content).map(([signName, horoscopes]: [string, unknown]) => (
+                      Object.entries(generatedHoroscopes.content).map(([signName, horoscopes]: [string, HoroscopeEntry[]]) => (
                         <div key={signName} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
                           <h4 className="font-semibold text-gray-900 dark:text-white mb-4 text-lg flex items-center gap-2">
                             <span className="text-2xl">{ZODIAC_SIGNS.find(s => s.name === signName)?.symbol}</span>
                             {signName}
                           </h4>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {Array.isArray(horoscopes) && horoscopes.map((horoscope: unknown, index: number) => (
+                            {Array.isArray(horoscopes) && horoscopes.map((horoscope: HoroscopeEntry, index: number) => (
                               <div key={index} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
                                 <div className="flex items-center gap-2 mb-2">
                                   <span className="text-lg">{HOROSCOPE_THEMES[index]?.icon}</span>
@@ -313,7 +331,7 @@ export const HoroscopeGenerator: React.FC = () => {
                     ) : (
                       // Handle array format (fallback)
                       Array.isArray(generatedHoroscopes.content) ? (
-                        generatedHoroscopes.content.map((horoscope: unknown, index: number) => (
+                        generatedHoroscopes.content.map((horoscope: HoroscopeEntry, index: number) => (
                           <div key={index} className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
                             <div className="flex items-center gap-3 mb-3">
                               <span className="text-2xl">{HOROSCOPE_THEMES[index]?.icon}</span>

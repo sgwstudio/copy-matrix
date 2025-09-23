@@ -12,17 +12,7 @@ interface ComparisonViewProps {
     characterCount: number;
     voiceConsistencyScore: number;
     suggestions: string[];
-    voiceMatrix: {
-      directness: number;
-      universality: number;
-      authority: number;
-      tension: number;
-      education: number;
-      rhythm: number;
-      sneakerCulture: number;
-      marketplaceAccuracy: number;
-      expressiveCandid: number;
-    };
+    voiceMatrix: BrandVoiceMatrix;
   }>;
   channels: Array<{ name: string; icon: string; characterLimit: number }>;
 }

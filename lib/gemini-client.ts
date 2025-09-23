@@ -81,7 +81,7 @@ export interface CopyGenerationRequest {
   voiceSamples?: string;
   characterLimit?: number;
   mode?: string;
-  specifications?: any;
+  specifications?: Record<string, unknown>;
   exampleText?: string; // Added for horoscope mode
   zodiacSign?: string; // Added for horoscope mode
   zodiacSigns?: string[]; // Added for multiple horoscope signs
@@ -225,7 +225,7 @@ class BrandVoicePromptBuilder {
 }
 
 export class GeminiClient {
-  private model: any;
+  private model: GoogleGenerativeAI | null;
   private promptBuilder: BrandVoicePromptBuilder;
 
   constructor(userApiKey: string) {
@@ -743,7 +743,7 @@ Provide only the numerical score (0-100).
   }
 
 
-  private buildChannelPrompt(channel: string, characterLimit?: number, mode?: string, specifications?: any): string {
+  private buildChannelPrompt(channel: string, characterLimit?: number, mode?: string, specifications?: Record<string, unknown>): string {
     let prompt = `Channel: ${channel}\n`;
     
     if (mode === "email-optimized" && specifications) {
