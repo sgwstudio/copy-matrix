@@ -163,7 +163,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
       if (!response.ok) {
         let errorMessage = "Failed to generate copy";
         try {
-          const errorData = await response.json();
+          const errorData = await response.json() as { error?: string };
           errorMessage = errorData.error || errorMessage;
         } catch (parseError) {
           const errorText = await response.text();
@@ -174,7 +174,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
 
       let data;
       try {
-        data = await response.json();
+        data = await response.json() as { content: string; characterCount: number; voiceConsistencyScore: number; suggestions: string[] };
       } catch (parseError) {
         console.error("Failed to parse JSON response:", parseError);
         const responseText = await response.text();

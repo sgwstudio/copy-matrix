@@ -73,7 +73,7 @@ export const HoroscopeGenerator: React.FC = () => {
 
       let result;
       try {
-        result = await response.json();
+        result = await response.json() as { content: string; characterCount: number; voiceConsistencyScore: number; suggestions: string[] };
         console.log("API Response:", result);
         console.log("Response status:", response.status);
       } catch (parseError) {

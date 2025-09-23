@@ -28,7 +28,7 @@ export const UserAPIKey: React.FC<UserAPIKeyProps> = ({
         body: JSON.stringify({ apiKey: key }),
       });
       
-      const result = await response.json();
+      const result = await response.json() as { valid: boolean };
       setIsValid(result.valid);
       
       if (result.valid) {

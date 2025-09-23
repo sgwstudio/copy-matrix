@@ -138,7 +138,7 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
       try {
         const response = await fetch("/api/user/api-key");
         if (response.ok) {
-          const data = await response.json();
+          const data = await response.json() as { apiKey: string | null };
           setUserApiKey(data.apiKey || "");
         }
       } catch (error) {
@@ -225,7 +225,7 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
           if (!response.ok) {
             let errorMessage = "Failed to generate copy";
             try {
-              const errorData = await response.json();
+              const errorData = await response.json() as { error?: string };
               errorMessage = errorData.error || errorMessage;
             } catch (parseError) {
               // If response is not JSON, get text content
@@ -237,7 +237,7 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
 
           let data;
           try {
-            data = await response.json();
+            data = await response.json() as { content: string; characterCount: number; voiceConsistencyScore: number; suggestions: string[] };
           } catch (parseError) {
             console.error("Failed to parse JSON response:", parseError);
             const responseText = await response.text();

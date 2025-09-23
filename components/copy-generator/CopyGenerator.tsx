@@ -60,7 +60,7 @@ export const CopyGenerator: React.FC<CopyGeneratorProps> = ({
       try {
         const response = await fetch("/api/user/api-key");
         if (response.ok) {
-          const data = await response.json();
+          const data = await response.json() as { apiKey: string | null };
           setUserApiKey(data.apiKey || "");
         }
       } catch (error) {
@@ -94,7 +94,7 @@ export const CopyGenerator: React.FC<CopyGeneratorProps> = ({
       if (!response.ok) {
         let errorMessage = "Failed to generate copy";
         try {
-          const errorData = await response.json();
+          const errorData = await response.json() as { error?: string };
           errorMessage = errorData.error || errorMessage;
         } catch (parseError) {
           const errorText = await response.text();
@@ -105,7 +105,7 @@ export const CopyGenerator: React.FC<CopyGeneratorProps> = ({
 
       let data;
       try {
-        data = await response.json();
+        data = await response.json() as { content: string; characterCount: number; voiceConsistencyScore: number; suggestions: string[] };
       } catch (parseError) {
         console.error("Failed to parse JSON response:", parseError);
         const responseText = await response.text();

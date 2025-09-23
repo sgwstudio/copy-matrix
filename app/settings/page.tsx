@@ -32,7 +32,7 @@ export default function SettingsPage() {
     try {
       const response = await fetch("/api/user/api-key");
       if (response.ok) {
-        const data = await response.json();
+        const data = await response.json() as { apiKey: string | null };
         setApiKey(data.apiKey || "");
       }
     } catch (error) {
@@ -51,7 +51,7 @@ export default function SettingsPage() {
         body: JSON.stringify({ apiKey: key }),
       });
       
-      const result = await response.json();
+      const result = await response.json() as { valid: boolean };
       setIsValid(result.valid);
       return result.valid;
     } catch (error) {

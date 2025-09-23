@@ -62,7 +62,7 @@ export const MultiChannelGenerator: React.FC<MultiChannelGeneratorProps> = ({
       try {
         const response = await fetch("/api/user/api-key");
         if (response.ok) {
-          const data = await response.json();
+          const data = await response.json() as { apiKey: string | null };
           setUserApiKey(data.apiKey || "");
         }
       } catch (error) {
@@ -117,11 +117,11 @@ export const MultiChannelGenerator: React.FC<MultiChannelGeneratorProps> = ({
         });
 
         if (!response.ok) {
-          const errorData = await response.json();
+          const errorData = await response.json() as { error?: string };
           throw new Error(errorData.error || "Failed to generate copy");
         }
 
-        const data = await response.json();
+        const data = await response.json() as { content: string; characterCount: number; voiceConsistencyScore: number; suggestions: string[] };
         return { channelId: channel.id, data };
       } catch (error) {
         console.error(`Failed to generate copy for ${channel.name}:`, error);

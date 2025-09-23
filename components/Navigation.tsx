@@ -38,10 +38,10 @@ export const Navigation: React.FC = () => {
   // Check for valid API key when user is signed in
   useEffect(() => {
     const checkApiKey = async () => {
-      if (session?.user?.id) {
+      if (session?.user) {
         try {
           const response = await fetch('/api/user/api-key');
-          const data = await response.json();
+          const data = await response.json() as { apiKey: string | null };
           setHasValidApiKey(!!data.apiKey);
         } catch (error) {
           console.error('Error checking API key:', error);
