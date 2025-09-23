@@ -500,14 +500,15 @@ Generate the copy now:`;
     };
   }
 
-  private generateDemoContent(prompt: string, voiceMatrix: VoiceMatrix, channel: string, characterLimit: number): string {
-    const isFormal = voiceMatrix.formalCasual > 0;
-    const isAuthoritative = voiceMatrix.authoritativeApproachable > 0;
-    const isProfessional = voiceMatrix.professionalConversational > 0;
-    const isSerious = voiceMatrix.seriousPlayful > 0;
-    const isConfident = voiceMatrix.confidence > 0;
-    const isEnthusiastic = voiceMatrix.enthusiasm > 0;
-    const isEmpathetic = voiceMatrix.empathy > 0;
+  private generateDemoContent(prompt: string, voiceMatrix: BrandVoiceMatrix, channel: string, characterLimit: number): string {
+    // Map new BrandVoiceMatrix properties to legacy concepts for demo content generation
+    const isFormal = voiceMatrix.directness > 0.5; // Direct = more formal
+    const isAuthoritative = voiceMatrix.authority > 0.5; // Authority = authoritative
+    const isProfessional = voiceMatrix.authority > 0; // Authority = professional
+    const isSerious = voiceMatrix.expressiveCandid < 0; // Candid = more serious
+    const isConfident = voiceMatrix.authority > 0.3; // Authority = confidence
+    const isEnthusiastic = voiceMatrix.tension > 0.3; // Tension = enthusiasm
+    const isEmpathetic = voiceMatrix.universality > 0.3; // Universality = empathy
 
     // Channel-specific templates
     const channelTemplates = {
@@ -595,14 +596,15 @@ Generate the copy now:`;
     return "POV: You discover {prompt} and your mind is blown 🤯\n\nThis changes everything! \n\n#fyp #viral #mindblown #discovery";
   }
 
-  private generateEnhancedDemoContent(prompt: string, voiceMatrix: VoiceMatrix, channel: string, characterLimit: number): string {
-    const isFormal = voiceMatrix.formalCasual > 0;
-    const isAuthoritative = voiceMatrix.authoritativeApproachable > 0;
-    const isProfessional = voiceMatrix.professionalConversational > 0;
-    const isSerious = voiceMatrix.seriousPlayful > 0;
-    const isConfident = voiceMatrix.confidence > 0;
-    const isEnthusiastic = voiceMatrix.enthusiasm > 0;
-    const isEmpathetic = voiceMatrix.empathy > 0;
+  private generateEnhancedDemoContent(prompt: string, voiceMatrix: BrandVoiceMatrix, channel: string, characterLimit: number): string {
+    // Map new BrandVoiceMatrix properties to legacy concepts for demo content generation
+    const isFormal = voiceMatrix.directness > 0.5; // Direct = more formal
+    const isAuthoritative = voiceMatrix.authority > 0.5; // Authority = authoritative
+    const isProfessional = voiceMatrix.authority > 0; // Authority = professional
+    const isSerious = voiceMatrix.expressiveCandid < 0; // Candid = more serious
+    const isConfident = voiceMatrix.authority > 0.3; // Authority = confidence
+    const isEnthusiastic = voiceMatrix.tension > 0.3; // Tension = enthusiasm
+    const isEmpathetic = voiceMatrix.universality > 0.3; // Universality = empathy
 
     // Create more dynamic content based on the actual prompt
     const promptWords = prompt.toLowerCase().split(' ');
@@ -681,36 +683,38 @@ Generate the copy now:`;
     return content;
   }
 
-  private calculateDemoConsistencyScore(voiceMatrix: VoiceMatrix): number {
+  private calculateDemoConsistencyScore(voiceMatrix: BrandVoiceMatrix): number {
     // Calculate a base score based on how well the voice matrix values align
     let score = 70; // Base score
     
-    // Add points for balanced voice characteristics
-    const balance = Math.abs(voiceMatrix.formalCasual) + Math.abs(voiceMatrix.authoritativeApproachable) + 
-                   Math.abs(voiceMatrix.professionalConversational) + Math.abs(voiceMatrix.seriousPlayful);
+    // Add points for balanced voice characteristics using new properties
+    const balance = Math.abs(voiceMatrix.directness) + Math.abs(voiceMatrix.universality) + 
+                   Math.abs(voiceMatrix.authority) + Math.abs(voiceMatrix.expressiveCandid);
     
     if (balance < 2) score += 15; // Well-balanced voice
     if (balance < 1) score += 10; // Very well-balanced
     
-    // Add points for confidence and enthusiasm
-    if (voiceMatrix.confidence > 0.3) score += 5;
-    if (voiceMatrix.enthusiasm > 0.3) score += 5;
+    // Add points for authority and tension (mapped from old confidence/enthusiasm)
+    if (voiceMatrix.authority > 0.3) score += 5;
+    if (voiceMatrix.tension > 0.3) score += 5;
     
     return Math.min(95, Math.max(60, score));
   }
 
-  async analyzeVoiceConsistency(content: string, voiceMatrix: VoiceMatrix): Promise<number> {
+  async analyzeVoiceConsistency(content: string, voiceMatrix: BrandVoiceMatrix): Promise<number> {
     const prompt = `
 Analyze the following content for voice consistency against these characteristics:
 
 Voice Matrix:
-- Formal vs Casual: ${voiceMatrix.formalCasual} (${voiceMatrix.formalCasual > 0 ? 'More Formal' : 'More Casual'})
-- Authoritative vs Approachable: ${voiceMatrix.authoritativeApproachable} (${voiceMatrix.authoritativeApproachable > 0 ? 'More Authoritative' : 'More Approachable'})
-- Professional vs Conversational: ${voiceMatrix.professionalConversational} (${voiceMatrix.professionalConversational > 0 ? 'More Professional' : 'More Conversational'})
-- Serious vs Playful: ${voiceMatrix.seriousPlayful} (${voiceMatrix.seriousPlayful > 0 ? 'More Serious' : 'More Playful'})
-- Confidence Level: ${voiceMatrix.confidence} (${voiceMatrix.confidence > 0 ? 'More Confident' : 'Less Confident'})
-- Enthusiasm Level: ${voiceMatrix.enthusiasm} (${voiceMatrix.enthusiasm > 0 ? 'More Enthusiastic' : 'Less Enthusiastic'})
-- Empathy Level: ${voiceMatrix.empathy} (${voiceMatrix.empathy > 0 ? 'More Empathetic' : 'Less Empathetic'})
+- Directness: ${voiceMatrix.directness} (${voiceMatrix.directness > 0 ? 'More Direct' : 'More Nuanced'})
+- Universality: ${voiceMatrix.universality} (${voiceMatrix.universality > 0 ? 'More Global' : 'More Niche'})
+- Authority: ${voiceMatrix.authority} (${voiceMatrix.authority > 0 ? 'More Confident' : 'More Humble'})
+- Tension: ${voiceMatrix.tension} (${voiceMatrix.tension > 0 ? 'Higher Tension' : 'Lower Tension'})
+- Education: ${voiceMatrix.education} (${voiceMatrix.education > 0 ? 'More Educational' : 'Less Educational'})
+- Rhythm: ${voiceMatrix.rhythm} (${voiceMatrix.rhythm > 0 ? 'More Varied' : 'More Standard'})
+- Sneaker Culture: ${voiceMatrix.sneakerCulture} (${voiceMatrix.sneakerCulture > 0 ? 'More Insider' : 'More Premium'})
+- Marketplace Accuracy: ${voiceMatrix.marketplaceAccuracy} (${voiceMatrix.marketplaceAccuracy > 0 ? 'More Accurate' : 'Less Accurate'})
+- Expressive vs Candid: ${voiceMatrix.expressiveCandid} (${voiceMatrix.expressiveCandid > 0 ? 'More Expressive' : 'More Candid'})
 
 Content to analyze:
 "${content}"
