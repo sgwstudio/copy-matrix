@@ -62,33 +62,33 @@ export class VoiceAnalyzer {
   private static calculateConsistencyScore(analysis: any, targetVoice: VoiceMatrix): number {
     let score = 100;
     
-    // Formality consistency
+    // Directness consistency (mapped from formality)
     const formalityScore = this.calculateFormalityScore(analysis);
-    score -= Math.abs(formalityScore - targetVoice.formalCasual) * 20;
+    score -= Math.abs(formalityScore - targetVoice.directness) * 20;
     
     // Authority consistency
     const authorityScore = this.calculateAuthorityScore(analysis);
-    score -= Math.abs(authorityScore - targetVoice.authoritativeApproachable) * 20;
+    score -= Math.abs(authorityScore - targetVoice.authority) * 20;
     
-    // Professional consistency
+    // Universality consistency (mapped from professional)
     const professionalScore = this.calculateProfessionalScore(analysis);
-    score -= Math.abs(professionalScore - targetVoice.professionalConversational) * 20;
+    score -= Math.abs(professionalScore - targetVoice.universality) * 20;
     
-    // Tone consistency
+    // Expressive/Candid consistency (mapped from tone)
     const toneScore = this.calculateToneScore(analysis);
-    score -= Math.abs(toneScore - targetVoice.seriousPlayful) * 20;
+    score -= Math.abs(toneScore - targetVoice.expressiveCandid) * 20;
     
-    // Confidence consistency
+    // Tension consistency (mapped from confidence)
     const confidenceScore = this.calculateConfidenceScore(analysis);
-    score -= Math.abs(confidenceScore - targetVoice.confidence) * 15;
+    score -= Math.abs(confidenceScore - targetVoice.tension) * 15;
     
-    // Enthusiasm consistency
+    // Education consistency (mapped from enthusiasm)
     const enthusiasmScore = this.calculateEnthusiasmScore(analysis);
-    score -= Math.abs(enthusiasmScore - targetVoice.enthusiasm) * 15;
+    score -= Math.abs(enthusiasmScore - targetVoice.education) * 15;
     
-    // Empathy consistency
+    // Rhythm consistency (mapped from empathy)
     const empathyScore = this.calculateEmpathyScore(analysis);
-    score -= Math.abs(empathyScore - targetVoice.empathy) * 15;
+    score -= Math.abs(empathyScore - targetVoice.rhythm) * 15;
     
     return Math.max(0, Math.min(100, Math.round(score)));
   }
@@ -96,22 +96,22 @@ export class VoiceAnalyzer {
   private static generateRecommendations(analysis: any, targetVoice: VoiceMatrix): string[] {
     const recommendations: string[] = [];
     
-    if (targetVoice.formalCasual > 0 && analysis.casualWords > analysis.formalWords) {
-      recommendations.push("Use more formal language and avoid contractions");
-    } else if (targetVoice.formalCasual < 0 && analysis.formalWords > analysis.casualWords) {
-      recommendations.push("Use more casual language and contractions");
+    if (targetVoice.directness > 0 && analysis.casualWords > analysis.formalWords) {
+      recommendations.push("Use more direct language and avoid contractions");
+    } else if (targetVoice.directness < 0 && analysis.formalWords > analysis.casualWords) {
+      recommendations.push("Use more nuanced language and contractions");
     }
     
-    if (targetVoice.authoritativeApproachable > 0 && analysis.questionSentences > analysis.imperativeSentences) {
+    if (targetVoice.authority > 0 && analysis.questionSentences > analysis.imperativeSentences) {
       recommendations.push("Use more direct, authoritative statements");
-    } else if (targetVoice.authoritativeApproachable < 0 && analysis.imperativeSentences > analysis.questionSentences) {
+    } else if (targetVoice.authority < 0 && analysis.imperativeSentences > analysis.questionSentences) {
       recommendations.push("Use more questions and collaborative language");
     }
     
-    if (targetVoice.seriousPlayful > 0 && analysis.exclamationMarks > 2) {
-      recommendations.push("Reduce exclamation marks for a more serious tone");
-    } else if (targetVoice.seriousPlayful < 0 && analysis.exclamationMarks < 1) {
-      recommendations.push("Add more enthusiasm with exclamation marks");
+    if (targetVoice.expressiveCandid > 0 && analysis.exclamationMarks > 2) {
+      recommendations.push("Reduce exclamation marks for a more candid tone");
+    } else if (targetVoice.expressiveCandid < 0 && analysis.exclamationMarks < 1) {
+      recommendations.push("Add more expressive language with exclamation marks");
     }
     
     return recommendations;
@@ -120,11 +120,11 @@ export class VoiceAnalyzer {
   private static identifyStrengths(analysis: any, targetVoice: VoiceMatrix): string[] {
     const strengths: string[] = [];
     
-    if (Math.abs(this.calculateFormalityScore(analysis) - targetVoice.formalCasual) < 0.2) {
-      strengths.push("Good formality level");
+    if (Math.abs(this.calculateFormalityScore(analysis) - targetVoice.directness) < 0.2) {
+      strengths.push("Good directness level");
     }
     
-    if (Math.abs(this.calculateAuthorityScore(analysis) - targetVoice.authoritativeApproachable) < 0.2) {
+    if (Math.abs(this.calculateAuthorityScore(analysis) - targetVoice.authority) < 0.2) {
       strengths.push("Appropriate authority level");
     }
     
@@ -134,11 +134,11 @@ export class VoiceAnalyzer {
   private static identifyWeaknesses(analysis: any, targetVoice: VoiceMatrix): string[] {
     const weaknesses: string[] = [];
     
-    if (Math.abs(this.calculateFormalityScore(analysis) - targetVoice.formalCasual) > 0.5) {
-      weaknesses.push("Formality level needs adjustment");
+    if (Math.abs(this.calculateFormalityScore(analysis) - targetVoice.directness) > 0.5) {
+      weaknesses.push("Directness level needs adjustment");
     }
     
-    if (Math.abs(this.calculateAuthorityScore(analysis) - targetVoice.authoritativeApproachable) > 0.5) {
+    if (Math.abs(this.calculateAuthorityScore(analysis) - targetVoice.authority) > 0.5) {
       weaknesses.push("Authority level needs adjustment");
     }
     
