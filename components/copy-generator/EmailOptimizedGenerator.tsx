@@ -453,7 +453,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                             value={getEmailContent().subjectLine || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
-                              newCopy.content.email.subjectLine = e.target.value;
+                              (newCopy.content as any).email.subjectLine = e.target.value;
                               setGeneratedCopy(newCopy);
                             }}
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-2 dark:bg-gray-700 dark:text-white"
@@ -471,7 +471,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                             value={getEmailContent().preheaderText || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
-                              newCopy.content.email.preheaderText = e.target.value;
+                              (newCopy.content as any).email.preheaderText = e.target.value;
                               setGeneratedCopy(newCopy);
                             }}
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-2 dark:bg-gray-700 dark:text-white"
@@ -489,8 +489,8 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                             value={getEmailContent().body?.primaryHeadline || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
-                              if (!newCopy.content.email.body) newCopy.content.email.body = {};
-                              newCopy.content.email.body.primaryHeadline = e.target.value;
+                              if (!(newCopy.content as any).email.body) (newCopy.content as any).email.body = {};
+                              (newCopy.content as any).email.body.primaryHeadline = e.target.value;
                               setGeneratedCopy(newCopy);
                             }}
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-2 dark:bg-gray-700 dark:text-white"
@@ -507,8 +507,8 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                             value={getEmailContent().body?.openingParagraph || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
-                              if (!newCopy.content.email.body) newCopy.content.email.body = {};
-                              newCopy.content.email.body.openingParagraph = e.target.value;
+                              if (!(newCopy.content as any).email.body) (newCopy.content as any).email.body = {};
+                              (newCopy.content as any).email.body.openingParagraph = e.target.value;
                               setGeneratedCopy(newCopy);
                             }}
                             rows={3}
@@ -526,8 +526,8 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                             value={getEmailContent().body?.mainContent || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
-                              if (!newCopy.content.email.body) newCopy.content.email.body = {};
-                              newCopy.content.email.body.mainContent = e.target.value;
+                              if (!(newCopy.content as any).email.body) (newCopy.content as any).email.body = {};
+                              (newCopy.content as any).email.body.mainContent = e.target.value;
                               setGeneratedCopy(newCopy);
                             }}
                             rows={4}
@@ -545,8 +545,8 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                             value={getEmailContent().body?.closing || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
-                              if (!newCopy.content.email.body) newCopy.content.email.body = {};
-                              newCopy.content.email.body.closing = e.target.value;
+                              if (!(newCopy.content as any).email.body) (newCopy.content as any).email.body = {};
+                              (newCopy.content as any).email.body.closing = e.target.value;
                               setGeneratedCopy(newCopy);
                             }}
                             rows={2}
@@ -565,8 +565,8 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                             value={getEmailContent().callToAction?.buttonText || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
-                              if (!newCopy.content.email.callToAction) newCopy.content.email.callToAction = {};
-                              newCopy.content.email.callToAction.buttonText = e.target.value;
+                              if (!(newCopy.content as any).email.callToAction) (newCopy.content as any).email.callToAction = {};
+                              (newCopy.content as any).email.callToAction.buttonText = e.target.value;
                               setGeneratedCopy(newCopy);
                             }}
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-2 dark:bg-gray-700 dark:text-white"
@@ -591,7 +591,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                             value={getPushContent().pushTitle || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
-                              newCopy.content.pushNotification.pushTitle = e.target.value;
+                              (newCopy.content as any).pushNotification.pushTitle = e.target.value;
                               setGeneratedCopy(newCopy);
                             }}
                             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-2 dark:bg-gray-700 dark:text-white"
@@ -608,7 +608,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                             value={getPushContent().pushBody || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
-                              newCopy.content.pushNotification.pushBody = e.target.value;
+                              (newCopy.content as any).pushNotification.pushBody = e.target.value;
                               setGeneratedCopy(newCopy);
                             }}
                             rows={2}
