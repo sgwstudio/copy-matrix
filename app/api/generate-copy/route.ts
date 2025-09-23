@@ -63,9 +63,21 @@ export async function POST(request: NextRequest) {
     const validatedData = GenerateCopySchema.parse(body);
     console.log("Validated data:", validatedData);
 
-    // For now, skip API key validation since we don't have proper user authentication
-    // This allows the app to work in demo mode
-    const userApiKey = process.env.DEMO_GEMINI_API_KEY || "demo-key";
+    // Get user's API key from database
+    let userApiKey = "demo-key"; // fallback
+    
+    if (session?.user?.id) {
+      try {
+        const user = await db.user.findUnique({
+          where: { id: session.user.id },
+          select: { geminiApiKey: true }
+        });
+        userApiKey = user?.geminiApiKey || "demo-key";
+      } catch (error) {
+        console.error("Failed to fetch user API key:", error);
+        // Continue with demo key if database query fails
+      }
+    }
 
     // Create Gemini client with user's API key
     let geminiClient;

@@ -91,6 +91,8 @@ export default function SettingsPage() {
       if (response.ok) {
         setMessage("API key saved successfully!");
         setTimeout(() => setMessage(""), 3000);
+        // Dispatch event to update navigation
+        window.dispatchEvent(new CustomEvent('apiKeyUpdated'));
       } else {
         setMessage("Failed to save API key. Please try again.");
       }

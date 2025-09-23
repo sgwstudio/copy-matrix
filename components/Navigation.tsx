@@ -53,6 +53,16 @@ export const Navigation: React.FC = () => {
     };
 
     checkApiKey();
+
+    // Listen for API key updates
+    const handleApiKeyUpdate = () => {
+      checkApiKey();
+    };
+
+    window.addEventListener('apiKeyUpdated', handleApiKeyUpdate);
+    return () => {
+      window.removeEventListener('apiKeyUpdated', handleApiKeyUpdate);
+    };
   }, [session]);
 
   const getFirstName = (name: string | null | undefined, email: string | null | undefined) => {

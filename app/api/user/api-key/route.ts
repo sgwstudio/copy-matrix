@@ -11,14 +11,21 @@ const ApiKeySchema = z.object({
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
+    console.log("API Key GET - Session:", session?.user?.id);
     
-    if (!session?.user) {
+    if (!session?.user?.id) {
+      console.log("API Key GET - No session, returning null");
       return NextResponse.json({ apiKey: null });
     }
 
-    // For demo mode, return null since we don't have proper user authentication
-    // This allows the app to work without full authentication setup
-    return NextResponse.json({ apiKey: null });
+    // Fetch user's API key from database
+    const user = await db.user.findUnique({
+      where: { id: session.user.id },
+      select: { geminiApiKey: true }
+    });
+
+    console.log("API Key GET - User from DB:", user);
+    return NextResponse.json({ apiKey: user?.geminiApiKey || null });
   } catch (error) {
     console.error("Error fetching API key:", error);
     return NextResponse.json({ apiKey: null });
@@ -29,12 +36,19 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     
-    if (!session?.user) {
+    if (!session?.user?.id) {
       return NextResponse.json({ error: "Please sign in to save your API key" }, { status: 401 });
     }
 
-    // For demo mode, just return success since we don't have proper user authentication
-    // This allows the app to work without full authentication setup
+    const body = await request.json();
+    const { apiKey } = ApiKeySchema.parse(body);
+
+    // Save API key to database
+    await db.user.update({
+      where: { id: session.user.id },
+      data: { geminiApiKey: apiKey }
+    });
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error saving API key:", error);
