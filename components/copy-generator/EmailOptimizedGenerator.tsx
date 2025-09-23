@@ -107,7 +107,7 @@ interface EmailOptimizedGeneratorProps {
 export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = ({ 
   useToneMatrix = true 
 }) => {
-  const [selectedChannel, setSelectedChannel] = useState(EMAIL_CHANNELS[0].id);
+  const [selectedChannel, setSelectedChannel] = useState(EMAIL_CHANNELS[0]!.id);
   const [voiceMatrix, setVoiceMatrix] = useState({
     directness: 0,
     universality: 0,
@@ -125,7 +125,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
   const [showSpecs, setShowSpecs] = useState(false);
   const [activeTab, setActiveTab] = useState<"copy" | "preview">("copy");
 
-  const selectedChannelData = EMAIL_CHANNELS.find(ch => ch.id === selectedChannel);
+  const selectedChannelData = EMAIL_CHANNELS.find(ch => ch.id === selectedChannel) || EMAIL_CHANNELS[0]!;
 
   const handleGenerate = async () => {
     if (!content.trim()) return;

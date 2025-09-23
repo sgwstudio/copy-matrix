@@ -44,7 +44,7 @@ export const CopyGenerator: React.FC<CopyGeneratorProps> = ({
   useToneMatrix = false,
 }) => {
   const [prompt, setPrompt] = useState("");
-  const [selectedChannel, setSelectedChannel] = useState(CHANNELS[0]);
+  const [selectedChannel, setSelectedChannel] = useState(CHANNELS[0]!);
   const [voiceMatrix, setVoiceMatrix] = useState<VoiceMatrixType>(defaultVoiceMatrix);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedContent, setGeneratedContent] = useState<string | null>(null);
@@ -83,11 +83,11 @@ export const CopyGenerator: React.FC<CopyGeneratorProps> = ({
         },
         body: JSON.stringify({
           prompt,
-          channel: selectedChannel.id,
+          channel: selectedChannel?.id || CHANNELS[0]!.id,
           voiceMatrix,
           brandGuidelines,
           voiceSamples,
-          characterLimit: selectedChannel.characterLimit,
+          characterLimit: selectedChannel?.characterLimit || CHANNELS[0]!.characterLimit,
         }),
       });
 
@@ -216,7 +216,7 @@ export const CopyGenerator: React.FC<CopyGeneratorProps> = ({
           <CopyOutput
             content={generatedContent}
             characterCount={characterCount}
-            characterLimit={selectedChannel.characterLimit}
+            characterLimit={selectedChannel?.characterLimit || CHANNELS[0]!.characterLimit}
             voiceConsistencyScore={voiceConsistencyScore}
             suggestions={suggestions}
             channel={selectedChannel}

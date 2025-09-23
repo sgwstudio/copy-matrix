@@ -39,7 +39,7 @@ const HOROSCOPE_THEMES = [
 ];
 
 export const HoroscopeGenerator: React.FC = () => {
-  const [selectedSigns, setSelectedSigns] = useState<string[]>([ZODIAC_SIGNS[0].id]);
+  const [selectedSigns, setSelectedSigns] = useState<string[]>([ZODIAC_SIGNS[0]!.id]);
   const [content, setContent] = useState("");
   const [generatedHoroscopes, setGeneratedHoroscopes] = useState<any>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -113,7 +113,7 @@ export const HoroscopeGenerator: React.FC = () => {
     }
   };
 
-  const selectedZodiacSigns = selectedSigns.map(signId => ZODIAC_SIGNS.find(s => s.id === signId)).filter(Boolean);
+  const selectedZodiacSigns = selectedSigns.map(signId => ZODIAC_SIGNS.find(s => s.id === signId)).filter(Boolean) as Array<{ id: string; name: string; symbol: string; element: string; quality: string; }>;
 
   const toggleSignSelection = (signId: string) => {
     setSelectedSigns(prev => {
