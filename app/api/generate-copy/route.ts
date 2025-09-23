@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Require authentication
-    if (!session?.user?.id) {
+    if (!session?.user) {
       return NextResponse.json(
         { error: "Authentication required. Please sign in to use this feature." },
         { status: 401 }
@@ -63,32 +63,14 @@ export async function POST(request: NextRequest) {
     const validatedData = GenerateCopySchema.parse(body);
     console.log("Validated data:", validatedData);
 
-    // Get user's API key
-    let user;
-    try {
-      user = await db.user.findUnique({
-        where: { id: session.user.id },
-        select: { geminiApiKey: true },
-      });
-    } catch (dbError) {
-      console.error("Database error:", dbError);
-      return NextResponse.json(
-        { error: "Database error. Please try again later." },
-        { status: 500 }
-      );
-    }
-
-    if (!user?.geminiApiKey) {
-      return NextResponse.json(
-        { error: "API key required. Please add your Gemini API key in Settings." },
-        { status: 400 }
-      );
-    }
+    // For now, skip API key validation since we don't have proper user authentication
+    // This allows the app to work in demo mode
+    const userApiKey = process.env.DEMO_GEMINI_API_KEY || "demo-key";
 
     // Create Gemini client with user's API key
     let geminiClient;
     try {
-      geminiClient = new GeminiClient(user.geminiApiKey);
+      geminiClient = new GeminiClient(userApiKey);
     } catch (error) {
       if (error instanceof Error && error.message.includes("API key")) {
         return NextResponse.json(
