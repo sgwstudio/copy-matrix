@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Mail, Star, Layers } from "lucide-react";
+import { Mail, Star, Dna } from "lucide-react";
 
 interface FlowSelectorProps {
   currentMode: "email" | "horoscope" | "multi";
@@ -17,18 +17,18 @@ const flows = [
     color: "#0000FF"
   },
   { 
+    id: "multi", 
+    name: "Voice Test Lab", 
+    icon: Dna, 
+    href: "/dashboard?mode=multi",
+    color: "#0000FF"
+  },
+  { 
     id: "horoscope", 
     name: "Horoscope", 
     icon: Star, 
     href: "/dashboard?mode=horoscope",
     color: "#8800FF"
-  },
-  { 
-    id: "multi", 
-    name: "Voice R&D", 
-    icon: Layers, 
-    href: "/dashboard?mode=multi",
-    color: "#347834"
   },
 ];
 

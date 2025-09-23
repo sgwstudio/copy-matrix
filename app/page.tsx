@@ -11,6 +11,9 @@ import {
   Sparkles,
   Lock,
   Mountain,
+  Mail,
+  Star,
+  Dna,
 } from "lucide-react";
 
 const Home: React.FC = () => {
@@ -62,21 +65,24 @@ const Home: React.FC = () => {
                              className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
                              style={{ backgroundColor: '#0000FF' }}
                            >
+                             <Mail className="h-4 w-4 mr-2" />
                              Sneaker Release
                            </Link>
+        <Link
+          href="/dashboard?mode=multi"
+          className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
+          style={{ backgroundColor: '#0000FF' }}
+        >
+          <Dna className="h-4 w-4 mr-2" />
+          Voice Test Lab
+        </Link>
                            <Link
                              href="/dashboard?mode=horoscope"
                              className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
                              style={{ backgroundColor: '#8800FF' }}
                            >
+                             <Star className="h-4 w-4 mr-2" />
                              Horoscope
-                           </Link>
-                           <Link
-                             href="/dashboard?mode=multi"
-                             className="flex items-center justify-center px-6 py-4 text-white font-semibold rounded-lg transition-colors hover:opacity-90"
-                             style={{ backgroundColor: '#347834' }}
-                           >
-                             Voice R&D
                            </Link>
                          </div>
                 </div>

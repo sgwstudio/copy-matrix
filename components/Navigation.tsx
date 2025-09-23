@@ -1,26 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { Settings, User, ChevronDown, Mail, Star, Layers } from "lucide-react";
+import { Settings, User, ChevronDown, Mail, Star, Dna, LogOut } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState, useEffect, useRef } from "react";
 
 const modes = [
   { id: "email", name: "Sneaker Release", icon: Mail, href: "/dashboard?mode=email" },
+  { id: "multi", name: "Voice Test Lab", icon: Dna, href: "/dashboard?mode=multi" },
   { id: "horoscope", name: "Horoscope", icon: Star, href: "/dashboard?mode=horoscope" },
-  { id: "multi", name: "Voice R&D", icon: Layers, href: "/dashboard?mode=multi" },
 ];
 
 export const Navigation: React.FC = () => {
   const { data: session, status } = useSession();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [hasValidApiKey, setHasValidApiKey] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
+      }
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
+        setIsUserDropdownOpen(false);
       }
     };
 
@@ -50,6 +55,16 @@ export const Navigation: React.FC = () => {
     checkApiKey();
   }, [session]);
 
+  const getFirstName = (name: string | null | undefined, email: string | null | undefined) => {
+    if (name) {
+      return name.split(' ')[0];
+    }
+    if (email) {
+      return email.split('@')[0];
+    }
+    return 'User';
+  };
+
   return (
     <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
       <div className="container mx-auto px-4">
@@ -58,10 +73,11 @@ export const Navigation: React.FC = () => {
             <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white">
               GG Copy Matrix
             </Link>
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
-              <div className="text-sm text-gray-600 dark:text-gray-300 font-medium">
-                {session && hasValidApiKey ? "Real AI Mode" : "Demo Mode"}
-              </div>
+            <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium" style={{ 
+              backgroundColor: session && hasValidApiKey ? 'rgba(52, 120, 52, 0.15)' : 'rgba(255, 0, 255, 0.15)',
+              color: session && hasValidApiKey ? '#347834' : '#FF00FF'
+            }}>
+              {session && hasValidApiKey ? "Real AI Mode" : "Demo Mode"}
               <div 
                 className="w-2 h-2 rounded-full ml-2" 
                 style={{ 
@@ -80,7 +96,7 @@ export const Navigation: React.FC = () => {
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                     className="flex items-center space-x-1 px-3 py-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700"
                   >
-                    <span>Generator</span>
+                    <span>Modes</span>
                     <ChevronDown className="h-4 w-4" />
                   </button>
                   
@@ -102,31 +118,46 @@ export const Navigation: React.FC = () => {
                     </div>
                   )}
                 </div>
-                
-                <Link
-                  href="/settings"
-                  className="flex items-center space-x-1 px-3 py-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700"
-                >
-                  <Settings className="h-4 w-4" />
-                  <span>Settings</span>
-                </Link>
               </>
             ) : null}
             
             {session ? (
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <User className="h-4 w-4" />
-                  <span className="text-sm text-gray-700 dark:text-gray-300">
-                    {session.user?.name || session.user?.email}
-                  </span>
-                </div>
+              <div className="relative" ref={userDropdownRef}>
                 <button
-                  onClick={() => signOut()}
-                  className="flex items-center space-x-1 px-3 py-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700"
+                  onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                  className="flex items-center space-x-2 px-3 py-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700"
                 >
-                  <span>Sign Out</span>
+                  <User className="h-4 w-4" />
+                  <span className="text-sm">
+                    {getFirstName(session.user?.name, session.user?.email)}
+                  </span>
+                  <ChevronDown className="h-4 w-4" />
                 </button>
+                
+                {isUserDropdownOpen && (
+                  <div className="absolute top-full right-0 mt-1 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 z-50">
+                    <div className="py-1">
+                      <Link
+                        href="/settings"
+                        className="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                      >
+                        <Settings className="h-4 w-4" />
+                        <span>Settings</span>
+                      </Link>
+                      <button
+                        onClick={() => {
+                          setIsUserDropdownOpen(false);
+                          signOut();
+                        }}
+                        className="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 w-full text-left"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <button

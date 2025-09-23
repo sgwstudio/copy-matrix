@@ -12,14 +12,15 @@ import {
   Target,
   CheckCircle,
   AlertCircle,
-  Info
+  Info,
+  FileText
 } from "lucide-react";
 
 const EMAIL_CHANNELS = [
   {
     id: "email-pushes",
     name: "Email & Pushes",
-    icon: Mail,
+    icon: "📧",
     description: "Email campaigns with push notifications",
     color: "rgb(0, 0, 255)",
     specifications: {
@@ -57,7 +58,7 @@ const EMAIL_CHANNELS = [
   {
     id: "tiktok",
     name: "TikTok",
-    icon: Video,
+    icon: "🎵",
     description: "Short-form video content",
     color: "rgb(0, 0, 255)",
     specifications: {
@@ -78,7 +79,7 @@ const EMAIL_CHANNELS = [
   {
     id: "instagram",
     name: "Instagram",
-    icon: Camera,
+    icon: "📸",
     description: "Visual content and stories",
     color: "rgb(0, 0, 255)",
     specifications: {
@@ -202,9 +203,10 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
       
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Sneaker Release Copy Generator
-        </h1>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+          <Mail className="h-6 w-6 text-blue-600" />
+          Sneaker Release Generator
+        </h2>
         <p className="text-gray-600 dark:text-gray-400">
           Generate copy optimized for Email & Pushes, TikTok, and Instagram with detailed specifications
         </p>
@@ -213,7 +215,10 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
       {/* Content Input Section - Full Width */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Content Input</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+            <FileText className="h-5 w-5" />
+            Content Input
+          </h3>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
             Describe what you want to create copy for
           </p>
@@ -226,12 +231,9 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
           <button
             onClick={handleGenerate}
             disabled={!content.trim() || isGenerating}
-            className="w-full mt-4 text-white px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ backgroundColor: 'rgb(0, 0, 255)' }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 200)'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgb(0, 0, 255)'}
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
           >
-            {isGenerating ? "Generating..." : "Generate Copy"}
+            {isGenerating ? "Generating..." : "Generate"}
           </button>
         </div>
       </div>
@@ -242,8 +244,8 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
           {/* Channel Selection */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center">
-                <Target className="h-5 w-5 mr-2" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                <Target className="h-5 w-5" />
                 Channel Selection
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
@@ -252,7 +254,6 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
               <div>
               <div className="space-y-3">
                 {EMAIL_CHANNELS.map((channel) => {
-                  const Icon = channel.icon;
                   return (
                     <button
                       key={channel.id}
@@ -268,9 +269,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                       } : {}}
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="p-2 rounded-lg text-white" style={{ backgroundColor: channel.color }}>
-                          <Icon className="h-5 w-5" />
-                        </div>
+                        <span className="text-2xl">{channel.icon}</span>
                         <div className="text-left">
                           <div className="font-medium text-gray-900 dark:text-white">
                             {channel.name}
@@ -291,8 +290,8 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
           {/* Specifications Toggle */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
             <div className="p-6">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                <Info className="h-5 w-5 mr-2" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                <Info className="h-5 w-5" />
                 Channel Specifications
               </h3>
               <button
@@ -308,7 +307,10 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
           {useToneMatrix && (
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
               <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Voice Matrix</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                  <Target className="h-5 w-5" />
+                  Voice Matrix
+                </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
                   Define your brand voice characteristics
                 </p>
@@ -328,8 +330,8 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
           {showSpecs && selectedChannelData && (
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
               <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center">
-                  <selectedChannelData.icon className="h-5 w-5 mr-2" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                  <span className="text-xl">{selectedChannelData.icon}</span>
                   {selectedChannelData.name} Specifications
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
@@ -372,28 +374,39 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
           {generatedCopy && (
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
               <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Generated Copy</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  Generated Copy
+                </h3>
                 
                 {/* Tab Navigation */}
-                <div className="border-b border-gray-200 dark:border-gray-700 mb-6">
-                  <nav className="-mb-px flex space-x-8">
+                <div className="mb-6">
+                  <nav className="flex space-x-4">
                     <button
                       onClick={() => setActiveTab("copy")}
-                      className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                      className={`px-4 py-2 rounded-lg border-2 transition-all font-medium ${
                         activeTab === "copy"
-                          ? "border-2"
-                          : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600"
+                          ? ""
+                          : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
                       }`}
+                      style={activeTab === "copy" ? { 
+                        borderColor: 'rgb(0, 0, 255)', 
+                        backgroundColor: 'rgba(0, 0, 255, 0.05)' 
+                      } : {}}
                     >
                       Copy
                     </button>
                     <button
                       onClick={() => setActiveTab("preview")}
-                      className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                      className={`px-4 py-2 rounded-lg border-2 transition-all font-medium ${
                         activeTab === "preview"
-                          ? "border-2"
-                          : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600"
+                          ? ""
+                          : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
                       }`}
+                      style={activeTab === "preview" ? { 
+                        borderColor: 'rgb(0, 0, 255)', 
+                        backgroundColor: 'rgba(0, 0, 255, 0.05)' 
+                      } : {}}
                     >
                       Preview
                     </button>
@@ -649,7 +662,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                     {/* Email Wireframe */}
                     {selectedChannel === "email-pushes" && generatedCopy.content && generatedCopy.content.email && (
                       <div className="space-y-6">
-                        <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                        <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                           📧 Email Preview
                       </h4>
                       
@@ -763,7 +776,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                   {/* Push Notification Wireframe */}
                   {selectedChannel === "email-pushes" && generatedCopy.content && generatedCopy.content.pushNotification && (
                     <div className="space-y-6">
-                      <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                      <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                         📱 Push Notification Preview
                       </h4>
                       
@@ -833,7 +846,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                   {/* TikTok Wireframe */}
                   {selectedChannel === "tiktok" && generatedCopy.content && (
                     <div className="space-y-6">
-                      <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                      <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                         🎵 TikTok Preview
                       </h4>
                       
@@ -886,7 +899,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                   {/* Instagram Wireframe */}
                   {selectedChannel === "instagram" && generatedCopy.content && (
                     <div className="space-y-6">
-                      <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+                      <h4 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                         📸 Instagram Preview
                       </h4>
                       

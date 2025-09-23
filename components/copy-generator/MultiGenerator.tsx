@@ -6,7 +6,7 @@ import { VoiceMatrix } from "../voice-matrix/VoiceMatrix";
 import { CopyOutput } from "./CopyOutput";
 import { FlowSelector } from "~/components/FlowSelector";
 // Removed ChannelSelector import - using multi-channel selection instead
-import { Copy, Plus, Trash2, RotateCcw, BarChart3, Layers, FileText, Wand2 } from "lucide-react";
+import { Copy, Plus, Trash2, RotateCcw, BarChart3, Dna, FileText, Wand2 } from "lucide-react";
 import { ComparisonView } from "./ComparisonView";
 
 interface MultiGeneratorProps {
@@ -342,23 +342,19 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
   const isGenerating = configs.some(config => config.isGenerating);
 
   return (
-    <div className={`space-y-6 ${className}`}>
+    <div className={`max-w-6xl mx-auto space-y-6 ${className}`}>
       {/* Flow Selector */}
       <FlowSelector currentMode="multi" />
       
       {/* Header */}
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
-          <Layers className="h-6 w-6 text-green-600" />
-          Voice R&D Generator
-        </h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2">
+            <Dna className="h-6 w-6 text-blue-600" />
+            Voice Test Lab
+          </h2>
         <p className="text-gray-600 dark:text-gray-400 mt-2">
           Generate multiple versions with different voice characteristics side-by-side
         </p>
-        <div className="mt-3 inline-flex items-center px-3 py-1 rounded-full text-sm" style={{ backgroundColor: 'rgba(0, 136, 0, 0.1)', color: 'rgb(0, 136, 0)' }}>
-          <span className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: 'rgb(0, 136, 0)' }}></span>
-          {userApiKey ? "AI Mode - Using your Gemini API key" : "Demo Mode - Add your API key in Settings"}
-        </div>
       </div>
 
       {/* Content Input Section */}
@@ -377,25 +373,24 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="Describe what you want to generate..."
-              rows={4}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 dark:bg-gray-700 dark:text-white"
+              className="w-full h-32 p-3 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
             />
           </div>
           
           <button
             onClick={generateAll}
             disabled={isGenerating || !prompt.trim() || selectedChannels.length === 0}
-            className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
           >
             {isGenerating ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                Generating All Versions...
+                Generating...
               </>
             ) : (
               <>
                 <Wand2 className="h-4 w-4" />
-                Generate All Versions
+                Generate
               </>
             )}
           </button>
@@ -407,7 +402,7 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
         <div className="flex items-center justify-between mb-4">
           <div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-              <Layers className="h-5 w-5" />
+              <Dna className="h-5 w-5" />
               Social Media Channels ({selectedChannels.length} selected)
             </h3>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
@@ -417,7 +412,7 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
           <div className="flex gap-2">
             <button
               onClick={selectAllChannels}
-              className="text-xs px-2 py-1 bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded hover:bg-green-200 dark:hover:bg-green-800 transition-colors"
+              className="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors"
             >
               Select All
             </button>
@@ -436,33 +431,27 @@ export const MultiGenerator: React.FC<MultiGeneratorProps> = ({
               <button
                 key={channel.id}
                 onClick={() => toggleChannel(channel)}
-                className={`p-4 rounded-lg border text-left transition-colors ${
+                className={`w-full p-4 rounded-lg border-2 transition-all text-left ${
                   isSelected
-                    ? "bg-green-100 dark:bg-green-900 border-green-300 dark:border-green-700"
-                    : "bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600"
+                    ? ""
+                    : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
                 }`}
+                style={isSelected ? { 
+                  borderColor: 'rgb(0, 0, 255)', 
+                  backgroundColor: 'rgba(0, 0, 255, 0.05)' 
+                } : {}}
               >
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                      isSelected
-                        ? "bg-green-600 border-green-600"
-                        : "border-gray-300 dark:border-gray-600"
-                    }`}>
-                      {isSelected && (
-                        <svg className="w-2 h-2 text-white" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      )}
+                  <div className="flex items-center space-x-3">
+                    <span className="text-2xl">{channel.icon}</span>
+                    <div className="text-left">
+                      <div className="font-medium text-gray-900 dark:text-white">
+                        {channel.name}
+                      </div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        {channel.description}
+                      </div>
                     </div>
-                    <span className="text-lg">{channel.icon}</span>
-                    <div className="font-medium text-sm text-gray-900 dark:text-white">
-                      {channel.name}
-                    </div>
-                  </div>
-                  
-                  <div className="text-xs text-gray-600 dark:text-gray-400">
-                    {channel.description}
                   </div>
                   
                   <div className="space-y-1">
