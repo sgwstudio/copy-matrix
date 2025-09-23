@@ -40,19 +40,19 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({ configs, channel
     );
   }
 
-  const getVoiceCharacteristics = (voiceMatrix: Record<string, number>) => {
+  const getVoiceCharacteristics = (voiceMatrix: BrandVoiceMatrix) => {
     const characteristics = [];
     
-    if (voiceMatrix.directness > 0.5) characteristics.push("Very Direct");
-    else if (voiceMatrix.directness < -0.5) characteristics.push("Very Nuanced");
+    if ((voiceMatrix.directness ?? 0) > 0.5) characteristics.push("Very Direct");
+    else if ((voiceMatrix.directness ?? 0) < -0.5) characteristics.push("Very Nuanced");
     else characteristics.push("Balanced Directness");
 
-    if (voiceMatrix.authority > 0.5) characteristics.push("Confident");
-    else if (voiceMatrix.authority < -0.5) characteristics.push("Humble");
+    if ((voiceMatrix.authority ?? 0) > 0.5) characteristics.push("Confident");
+    else if ((voiceMatrix.authority ?? 0) < -0.5) characteristics.push("Humble");
     else characteristics.push("Balanced Authority");
 
-    if (voiceMatrix.expressiveCandid > 0.5) characteristics.push("Expressive");
-    else if (voiceMatrix.expressiveCandid < -0.5) characteristics.push("Candid");
+    if ((voiceMatrix.expressiveCandid ?? 0) > 0.5) characteristics.push("Expressive");
+    else if ((voiceMatrix.expressiveCandid ?? 0) < -0.5) characteristics.push("Candid");
     else characteristics.push("Balanced Expression");
 
     return characteristics.join(" • ");
