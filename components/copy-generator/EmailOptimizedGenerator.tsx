@@ -482,7 +482,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                           </label>
                           <input
                             type="text"
-                            value={getEmailContent().subjectLine || ""}
+                            value={getEmailContent()?.subjectLine || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
                               newCopy.content.email.subjectLine = e.target.value;
@@ -500,7 +500,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                           </label>
                           <input
                             type="text"
-                            value={getEmailContent().preheaderText || ""}
+                            value={getEmailContent()?.preheaderText || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
                               newCopy.content.email.preheaderText = e.target.value;
@@ -518,7 +518,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                           </label>
                           <input
                             type="text"
-                            value={getEmailContent().body?.primaryHeadline || ""}
+                            value={getEmailContent()?.body?.primaryHeadline || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
                               if (!newCopy.content.email.body) newCopy.content.email.body = { primaryHeadline: "", openingParagraph: "", mainContent: "", closing: "" };
@@ -536,7 +536,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                             Opening Paragraph
                           </label>
                           <textarea
-                            value={getEmailContent().body?.openingParagraph || ""}
+                            value={getEmailContent()?.body?.openingParagraph || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
                               if (!newCopy.content.email.body) newCopy.content.email.body = { primaryHeadline: "", openingParagraph: "", mainContent: "", closing: "" };
@@ -555,7 +555,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                             Main Content
                           </label>
                           <textarea
-                            value={getEmailContent().body?.mainContent || ""}
+                            value={getEmailContent()?.body?.mainContent || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
                               if (!newCopy.content.email.body) newCopy.content.email.body = { primaryHeadline: "", openingParagraph: "", mainContent: "", closing: "" };
@@ -574,7 +574,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                             Closing Paragraph
                           </label>
                           <textarea
-                            value={getEmailContent().body?.closing || ""}
+                            value={getEmailContent()?.body?.closing || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
                               if (!newCopy.content.email.body) newCopy.content.email.body = { primaryHeadline: "", openingParagraph: "", mainContent: "", closing: "" };
@@ -594,7 +594,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                           </label>
                           <input
                             type="text"
-                            value={getEmailContent().callToAction?.buttonText || ""}
+                            value={getEmailContent()?.callToAction?.buttonText || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
                               if (!newCopy.content.email.callToAction) newCopy.content.email.callToAction = { buttonText: "" };
@@ -620,7 +620,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                           </label>
                           <input
                             type="text"
-                            value={getPushContent().pushTitle || ""}
+                            value={getPushContent()?.pushTitle || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
                               newCopy.content.pushNotification.pushTitle = e.target.value;
@@ -637,7 +637,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                             Push Body
                           </label>
                           <textarea
-                            value={getPushContent().pushBody || ""}
+                            value={getPushContent()?.pushBody || ""}
                             onChange={(e) => {
                               const newCopy = { ...generatedCopy };
                               newCopy.content.pushNotification.pushBody = e.target.value;
@@ -725,10 +725,10 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                         {/* Email Subject */}
                         <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-600">
                           <div className="text-lg font-semibold text-gray-900 dark:text-white">
-                            {getEmailContent().subjectLine || "Subject Line"}
+                            {getEmailContent()?.subjectLine || "Subject Line"}
                           </div>
                           <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                            {getEmailContent().preheaderText || "Preheader text appears here"}
+                            {getEmailContent()?.preheaderText || "Preheader text appears here"}
                           </div>
                         </div>
                         
@@ -759,12 +759,12 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                           <div className="space-y-4">
                             {/* Headline */}
                             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                              {getEmailContent().body?.primaryHeadline || "Headline"}
+                              {getEmailContent()?.body?.primaryHeadline || "Headline"}
                             </h1>
                             
                             {/* Opening Paragraph */}
                             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                              {getEmailContent().body?.openingParagraph || "Opening paragraph content..."}
+                              {getEmailContent()?.body?.openingParagraph || "Opening paragraph content..."}
                             </p>
                           </div>
                         </div>
@@ -773,7 +773,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                         <div className="px-4 pb-4">
                           <div className="text-center">
                             <button className="bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 font-semibold px-6 py-3 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors">
-                              {getEmailContent().callToAction?.buttonText || "Shop Now"}
+                              {getEmailContent()?.callToAction?.buttonText || "Shop Now"}
                             </button>
                           </div>
                         </div>
@@ -791,7 +791,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                             </div>
                             <div className="space-y-4">
                               <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                                {getEmailContent().body?.mainContent || "Main content goes here..."}
+                                {getEmailContent()?.body?.mainContent || "Main content goes here..."}
                               </p>
                             </div>
                           </div>
@@ -801,13 +801,13 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                         <div className="px-4 py-6">
                           <div className="space-y-4">
                             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                              {getEmailContent().body?.closing || "Closing paragraph..."}
+                              {getEmailContent()?.body?.closing || "Closing paragraph..."}
                             </p>
                             
                             {/* Final CTA */}
                             <div className="text-center pt-4">
                               <button className="bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300 font-semibold px-8 py-3 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors">
-                                {getEmailContent().callToAction?.buttonText || "Shop Now"}
+                                {getEmailContent()?.callToAction?.buttonText || "Shop Now"}
                               </button>
                             </div>
                           </div>
@@ -871,12 +871,12 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                                   <div className="flex-1 min-w-0">
                                     <div className="flex items-center space-x-2 mb-1">
                                       <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                                        {getPushContent().pushTitle || "Push Title"}
+                                        {getPushContent()?.pushTitle || "Push Title"}
                                       </span>
                                       <span className="text-xs text-gray-500 dark:text-gray-400">now</span>
                                     </div>
                                     <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-                                      {getPushContent().pushBody || "Push notification body text..."}
+                                      {getPushContent()?.pushBody || "Push notification body text..."}
                                     </p>
                                   </div>
                                 </div>
