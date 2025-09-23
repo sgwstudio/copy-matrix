@@ -23,7 +23,7 @@ export default function SettingsPage() {
   }, [status, router]);
 
   useEffect(() => {
-    if (session?.user?.id) {
+    if (session?.user) {
       fetchUserApiKey();
     }
   }, [session]);
