@@ -120,7 +120,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
     expressiveCandid: 0,
   });
   const [content, setContent] = useState("");
-  const [generatedCopy, setGeneratedCopy] = useState<{ content: Record<string, unknown>; voiceConsistencyScore: number; suggestions: string[] } | null>(null);
+  const [generatedCopy, setGeneratedCopy] = useState<{ content: Record<string, unknown>; characterCount: number; voiceConsistencyScore: number; suggestions: string[] } | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSpecs, setShowSpecs] = useState(false);
   const [activeTab, setActiveTab] = useState<"copy" | "preview">("copy");
@@ -174,7 +174,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
 
       let data;
       try {
-        data = await response.json() as { content: string; characterCount: number; voiceConsistencyScore: number; suggestions: string[] };
+        data = await response.json() as { content: Record<string, unknown>; characterCount: number; voiceConsistencyScore: number; suggestions: string[] };
       } catch (parseError) {
         console.error("Failed to parse JSON response:", parseError);
         const responseText = await response.text();
