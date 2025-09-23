@@ -103,3 +103,12 @@
 .dark .slider::-moz-range-track {
   background: #374151;
 }
+
+@keyframes flash {
+  0%, 100% {
+    background-color: #FF00FF;
+  }
+  50% {
+    background-color: #0000FF;
+  }
+}

@@ -37,16 +37,13 @@ const Home: React.FC = () => {
       <section className="flex-1 flex items-center justify-center">
         <div className="text-center max-w-4xl mx-auto px-4">
                   <div className="mb-8">
-                    <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
-                      <div className="inline-flex items-center px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold text-lg rounded-xl bg-gray-50 dark:bg-gray-800">
-                        GG <Sparkles className="ml-2 h-4 w-4" />
+                    <div className="flex justify-center items-center">
+                      <div className="inline-flex items-center px-6 py-3 rounded-full text-lg font-medium" style={{ 
+                        backgroundColor: 'rgba(156, 163, 175, 0.15)',
+                        color: '#6B7280'
+                      }}>
+                        Marcom Annual Summit 2025
                       </div>
-                      <div className="inline-flex items-center px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold text-lg rounded-xl bg-gray-50 dark:bg-gray-800">
-                        Access-Only Platform <Lock className="ml-2 h-4 w-4" />
-                      </div>
-                      <button className="inline-flex items-center px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold text-lg rounded-xl bg-gray-50 dark:bg-gray-800 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700">
-                        Marcom Annual Summit 2025 <Mountain className="ml-2 h-4 w-4" />
-                      </button>
                     </div>
                   </div>
             
@@ -105,7 +102,7 @@ const Home: React.FC = () => {
       <footer className="py-6 text-center text-gray-500 dark:text-gray-400">
         <div>© 2025 GG Copy Matrix. All rights reserved.</div>
         <div className="mt-2 text-sm">Built with Next.js, TypeScript, and Tailwind CSS.</div>
-        <div className="mt-1 text-sm">Vibe Coded by SGW</div>
+            <div className="mt-1 text-sm">Code by SGW</div>
       </footer>
     </main>
   );

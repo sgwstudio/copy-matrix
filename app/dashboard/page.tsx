@@ -21,15 +21,22 @@ const Dashboard: React.FC = () => {
   }, [searchParams]);
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="container mx-auto px-4 py-8">
+        <main className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col">
+          <div className="container mx-auto px-4 py-8 flex-1">
 
-        {/* Generator Component */}
-        {mode === "email" && <EmailOptimizedGenerator useToneMatrix={true} />}
-        {mode === "horoscope" && <HoroscopeGenerator />}
-        {mode === "multi" && <MultiGenerator />}
-      </div>
-    </main>
+            {/* Generator Component */}
+            {mode === "email" && <EmailOptimizedGenerator useToneMatrix={true} />}
+            {mode === "horoscope" && <HoroscopeGenerator />}
+            {mode === "multi" && <MultiGenerator />}
+          </div>
+          
+          {/* Footer */}
+          <footer className="py-6 text-center text-gray-500 dark:text-gray-400">
+            <div>© 2025 GG Copy Matrix. All rights reserved.</div>
+            <div className="mt-2 text-sm">Built with Next.js, TypeScript, and Tailwind CSS.</div>
+            <div className="mt-1 text-sm">Code by SGW</div>
+          </footer>
+        </main>
   );
 };
 

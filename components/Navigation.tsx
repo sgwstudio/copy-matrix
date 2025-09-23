@@ -128,9 +128,9 @@ export const Navigation: React.FC = () => {
                   className="flex items-center space-x-2 px-3 py-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700"
                 >
                   <User className="h-4 w-4" />
-                  <span className="text-sm">
-                    {getFirstName(session.user?.name, session.user?.email)}
-                  </span>
+                      <span> 
+                        {getFirstName(session.user?.name, session.user?.email)} 
+                      </span>
                   <ChevronDown className="h-4 w-4" />
                 </button>
                 

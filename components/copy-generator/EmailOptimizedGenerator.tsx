@@ -13,7 +13,8 @@ import {
   CheckCircle,
   AlertCircle,
   Info,
-  FileText
+  FileText,
+  Wand2
 } from "lucide-react";
 
 const EMAIL_CHANNELS = [
@@ -207,7 +208,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
           <Mail className="h-6 w-6 text-blue-600" />
           Sneaker Release Generator
         </h2>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-gray-600 dark:text-gray-400 mt-2">
           Generate copy optimized for Email & Pushes, TikTok, and Instagram with detailed specifications
         </p>
       </div>
@@ -215,26 +216,41 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
       {/* Content Input Section - Full Width */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
         <div className="p-6">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <FileText className="h-5 w-5" />
             Content Input
           </h3>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
-            Describe what you want to create copy for
-          </p>
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Enter your content idea, product description, or campaign details..."
-            className="w-full h-32 p-3 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
-          />
-          <button
-            onClick={handleGenerate}
-            disabled={!content.trim() || isGenerating}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
-          >
-            {isGenerating ? "Generating..." : "Generate"}
-          </button>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Content Prompt
+              </label>
+              <textarea
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="Enter your content idea, product description, or campaign details..."
+                className="w-full h-32 p-3 border border-gray-300 dark:border-gray-600 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:text-white"
+              />
+            </div>
+            
+            <button
+              onClick={handleGenerate}
+              disabled={!content.trim() || isGenerating}
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+            >
+              {isGenerating ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <Wand2 className="h-4 w-4" />
+                  Generate
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
