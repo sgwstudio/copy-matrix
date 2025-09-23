@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
     });
 
     const result = await geminiClient.generateCopy({
-      prompt: validatedData.prompt || validatedData.content,
+      prompt: validatedData.prompt || validatedData.content || "",
       channel: validatedData.channel,
       voiceMatrix: validatedData.voiceMatrix,
       voiceSettings: validatedData.voiceSettings,
