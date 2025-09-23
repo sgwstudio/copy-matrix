@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Copy, BarChart3, TrendingUp, Users, Target } from "lucide-react";
+import { BrandVoiceMatrix } from "~/lib/gemini-client";
 
 interface ComparisonViewProps {
   configs: Array<{
