@@ -120,7 +120,7 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
     expressiveCandid: 0,
   });
   const [content, setContent] = useState("");
-  const [generatedCopy, setGeneratedCopy] = useState<any>(null);
+  const [generatedCopy, setGeneratedCopy] = useState<{ content: Record<string, unknown>; voiceConsistencyScore: number; suggestions: string[] } | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSpecs, setShowSpecs] = useState(false);
   const [activeTab, setActiveTab] = useState<"copy" | "preview">("copy");
@@ -370,13 +370,13 @@ export const EmailOptimizedGenerator: React.FC<EmailOptimizedGeneratorProps> = (
                                 {subKey.replace(/([A-Z])/g, ' $1').trim()}:
                               </span>
                               <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded text-xs">
-                                {value}
+                                {String(value)}
                               </span>
                             </div>
                           ))
                         ) : (
                           <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded text-xs">
-                            {spec}
+                            {String(spec)}
                           </span>
                         )}
                       </div>

@@ -40,7 +40,7 @@ export const ComparisonView: React.FC<ComparisonViewProps> = ({ configs, channel
     );
   }
 
-  const getVoiceCharacteristics = (voiceMatrix: any) => {
+  const getVoiceCharacteristics = (voiceMatrix: Record<string, number>) => {
     const characteristics = [];
     
     if (voiceMatrix.directness > 0.5) characteristics.push("Very Direct");
