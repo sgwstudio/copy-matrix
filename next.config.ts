@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
     // ppr: true,
     reactCompiler: isProd,
   },
+  // Ensure Server Actions work properly with Next.js 15
+  serverActions: {
+    allowedOrigins: ["localhost:3001", "localhost:3000"],
+  },
   turbopack: {
     rules: {
       '*.svg': {
